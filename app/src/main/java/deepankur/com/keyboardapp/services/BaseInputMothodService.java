@@ -12,9 +12,12 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.List;
 
 import deepankur.com.keyboardapp.R;
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by deepankur on 1/6/17.
@@ -31,6 +34,7 @@ public class BaseInputMothodService extends InputMethodService
 
     @Override
     public View onCreateInputView() {
+        Fabric.with(this, new Crashlytics());
         View view = getLayoutInflater().inflate(R.layout.keyboard, null);
         kv = (KeyboardView) view.findViewById(R.id.keyboardView);
         keyboard = new Keyboard(this, R.xml.qwerty);
