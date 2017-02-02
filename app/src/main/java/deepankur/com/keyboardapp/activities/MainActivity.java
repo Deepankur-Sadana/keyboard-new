@@ -1,7 +1,9 @@
-package deepankur.com.keyboardapp;
+package deepankur.com.keyboardapp.activities;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+
+import deepankur.com.keyboardapp.R;
 
 public class MainActivity extends AppCompatActivity {
 
