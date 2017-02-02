@@ -4,9 +4,30 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true"
     android:background="@android:color/holo_blue_light">
+
+    <LinearLayout
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:padding="8dp"
+        android:background="@android:color/holo_red_light"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:padding="8dp"
+            android:text="1ooo" />
+    </LinearLayout>
+
+
     <android.inputmethodservice.KeyboardView
         android:id="@+id/keyboardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/view"
         android:keyPreviewLayout="@layout/preview" />
+
+
 </RelativeLayout>

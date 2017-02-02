@@ -7,6 +7,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.provider.Settings.SettingNotFoundException;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -30,11 +31,14 @@ public class BaseInputMothodService extends InputMethodService
     private Keyboard keyboard;
 
     private boolean caps = false;
-
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Override
     public View onCreateInputView() {
         Fabric.with(this, new Crashlytics());
+//        if (true) throw new RuntimeException();
         View view = getLayoutInflater().inflate(R.layout.keyboard, null);
         kv = (KeyboardView) view.findViewById(R.id.keyboardView);
         keyboard = new Keyboard(this, R.xml.qwerty);
