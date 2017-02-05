@@ -23,7 +23,7 @@ Thumbs.db
 build/
 library/build
 captures/
-#Misc
+Misc
 commit.txt
 app/src/main/java/com/instalively/android/JsonSender.java
 
