@@ -7,6 +7,8 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.provider.Settings.SettingNotFoundException;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -24,7 +26,7 @@ import io.fabric.sdk.android.Fabric;
  * Created by deepankur on 1/6/17.
  */
 
-public class BaseInputMothodService extends InputMethodService
+public class BaseInputMethodService extends InputMethodService
          implements KeyboardView.OnKeyboardActionListener {
 
     private KeyboardView kv;
@@ -38,7 +40,6 @@ public class BaseInputMothodService extends InputMethodService
     @Override
     public View onCreateInputView() {
         Fabric.with(this, new Crashlytics());
-//        if (true) throw new RuntimeException();
         View view = getLayoutInflater().inflate(R.layout.keyboard, null);
         kv = (KeyboardView) view.findViewById(R.id.keyboardView);
         keyboard = new Keyboard(this, R.xml.qwerty);
@@ -153,5 +154,8 @@ public class BaseInputMothodService extends InputMethodService
 
     @Override
     public void swipeUp() {
+    }
+    public void loadChatFragment() {//pos not required; data has complete info
+
     }
 }

@@ -18,7 +18,7 @@
         </activity>
 
         <service
-            android:name=".services.BaseInputMothodService"
+            android:name=".services.BaseInputMethodService"
             android:label="@string/simple_ime"
             android:permission="android.permission.BIND_INPUT_METHOD">
             <meta-data

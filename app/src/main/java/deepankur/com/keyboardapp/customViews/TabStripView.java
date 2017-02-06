@@ -3,6 +3,7 @@ package deepankur.com.keyboardapp.customViews;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -40,7 +41,36 @@ public class TabStripView extends LinearLayout {
             textView.setPadding(pixel, pixel, pixel, pixel);
             textView.setTextColor(Color.WHITE);
             textView.setTag(keyBoardOptions[i]);
+            textView.setOnClickListener(onClickListener);
             this.addView(textView);
         }
+    }
+
+    private View.OnClickListener onClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            KeyBoardOptions tag = (KeyBoardOptions) v.getTag();
+            if (onOptionClickedListener != null)
+                onOptionClickedListener.onOptionClicked(tag);
+            for (int i = 0; i < TabStripView.this.getChildCount(); i++) {
+                TextView textView = (TextView) TabStripView.this.getChildAt(i);
+                KeyBoardOptions tag1 = (KeyBoardOptions) textView.getTag();
+                textView.setTextColor(tag == tag1 ? Color.BLUE : Color.WHITE);
+            }
+            switch (tag) {
+                case FAVORITE_APPS:
+                    break;
+                case CONTACTS:
+                case CAMERA:
+                case LOCATION:
+                    break;
+            }
+        }
+    };
+
+    OnOptionClickedListener onOptionClickedListener;
+
+    public interface OnOptionClickedListener {
+        void onOptionClicked(KeyBoardOptions keyBoardOptions);
     }
 }
