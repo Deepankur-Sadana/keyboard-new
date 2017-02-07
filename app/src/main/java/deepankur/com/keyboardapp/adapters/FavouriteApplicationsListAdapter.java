@@ -1,15 +1,12 @@
 package deepankur.com.keyboardapp.adapters;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +15,7 @@ import java.util.List;
 
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;
+import deepankur.com.keyboardapp.models.PInfo;
 
 /**
  * Created by deepankur on 30/4/16.
@@ -35,7 +33,9 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     public FavouriteApplicationsListAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
         this.recyclerViewClickInterface = recyclerViewClickInterface;
+        long l1 = System.currentTimeMillis();
         this.pInfoArrayList = getPackages(context);
+        Log.d(TAG, "FavouriteApplicationsListAdapter: " + (System.currentTimeMillis() - l1));
     }
 
 
@@ -110,20 +110,6 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
         }
     }
 
-
-    private class PInfo {
-        private String appname = "";
-        private String pname = "";
-        private String versionName = "";
-        private int versionCode = 0;
-        private Drawable icon;
-        private boolean isChecked = false;
-
-        @SuppressLint("LongLogTag")
-        private void prettyPrint() {
-            Log.d(TAG, appname + "\t" + pname + "\t" + versionName + "\t" + versionCode);
-        }
-    }
 
     private ArrayList<PInfo> getPackages(Context context) {
         ArrayList<PInfo> apps = getInstalledApps(context, false); /* false = no system packages */
