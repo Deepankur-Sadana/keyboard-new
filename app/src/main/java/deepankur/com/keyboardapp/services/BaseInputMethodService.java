@@ -1,25 +1,22 @@
 package deepankur.com.keyboardapp.services;
 
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.provider.Settings.SettingNotFoundException;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
 import com.crashlytics.android.Crashlytics;
 
-import java.util.List;
-
 import deepankur.com.keyboardapp.R;
+import deepankur.com.keyboardapp.enums.KeyBoardOptions;
+import deepankur.com.keyboardapp.keyboardCustomViews.ViewController;
 import io.fabric.sdk.android.Fabric;
 
 /**
@@ -27,12 +24,13 @@ import io.fabric.sdk.android.Fabric;
  */
 
 public class BaseInputMethodService extends InputMethodService
-         implements KeyboardView.OnKeyboardActionListener {
+        implements KeyboardView.OnKeyboardActionListener {
 
     private KeyboardView kv;
     private Keyboard keyboard;
 
     private boolean caps = false;
+
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -42,10 +40,76 @@ public class BaseInputMethodService extends InputMethodService
         Fabric.with(this, new Crashlytics());
         View view = getLayoutInflater().inflate(R.layout.keyboard, null);
         kv = (KeyboardView) view.findViewById(R.id.keyboardView);
+        kv.setTag(KeyBoardOptions.QWERTY);
         keyboard = new Keyboard(this, R.xml.qwerty);
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
+        new ViewController(this, view);
         return view;
+    }
+
+    @Override
+    public void onStartInputView(EditorInfo info, boolean restarting) {
+        super.onStartInputView(info, restarting);
+    }
+
+    @Override
+    public void onFinishInput() {
+        super.onFinishInput();
+    }
+
+    @Override
+    public void onStartCandidatesView(EditorInfo info, boolean restarting) {
+        // Intentionally empty
+    }
+
+    @Override
+    public void onFinishCandidatesView(boolean finishingInput) {
+    }
+
+    @Override
+    public boolean onShowInputRequested(int flags, boolean configChange) {
+        return super.onShowInputRequested(flags, configChange);
+    }
+
+    @Override
+    public void showWindow(boolean showInput) {
+        super.showWindow(showInput);
+    }
+
+    @Override
+    public void hideWindow() {
+        super.hideWindow();
+    }
+
+    @Override
+    public void onWindowShown() {
+        super.onWindowShown();
+    }
+
+    @Override
+    public void onWindowHidden() {
+        super.onWindowHidden();
+    }
+
+    @Override
+    public void onBindInput() {
+        super.onBindInput();
+    }
+
+    @Override
+    public void onUnbindInput() {
+        super.onUnbindInput();
+    }
+
+    @Override
+    public void onStartInput(EditorInfo attribute, boolean restarting) {
+        super.onStartInput(attribute, restarting);
+    }
+
+    @Override
+    public void onFinishInputView(boolean finishingInput) {
+        super.onFinishInputView(finishingInput);
     }
 
 
@@ -107,34 +171,22 @@ public class BaseInputMethodService extends InputMethodService
         }
     }
 
-    final String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
 
-    void getAllPackages() {
-        final PackageManager pm = getPackageManager();
-        //get a list of installed apps.
-        List<ApplicationInfo> packages = pm.getInstalledApplications(PackageManager.GET_META_DATA);
-
-        for (ApplicationInfo packageInfo : packages) {
-            Log.d(TAG, "Installed package :" + packageInfo.packageName);
-            Log.d(TAG, "Source dir : " + packageInfo.sourceDir);
-            Log.d(TAG, "Launch Activity :" + pm.getLaunchIntentForPackage(packageInfo.packageName));
-        }
-        // the getLaunchIntentForPackage returns an intent that you can use with startActivity()
-    }
 
     @Override
     public void onPress(int primaryCode) {
-        Log.d(TAG, "onPress: "+primaryCode);
+        Log.d(TAG, "onPress: " + primaryCode);
     }
 
     @Override
     public void onRelease(int primaryCode) {
-        Log.d(TAG, "onRelease: "+primaryCode);
+        Log.d(TAG, "onRelease: " + primaryCode);
     }
 
     @Override
     public void onText(CharSequence text) {
-        Log.d(TAG, "onText: "+text);
+        Log.d(TAG, "onText: " + text);
     }
 
     @Override
@@ -154,8 +206,6 @@ public class BaseInputMethodService extends InputMethodService
 
     @Override
     public void swipeUp() {
-    }
-    public void loadChatFragment() {//pos not required; data has complete info
-
+        Log.d(TAG, "swipeUp: ");
     }
 }

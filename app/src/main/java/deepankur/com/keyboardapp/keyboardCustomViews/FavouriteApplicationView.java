@@ -31,8 +31,7 @@ public class FavouriteApplicationView extends RelativeLayout {
     }
 
     private void init(Context context) {
-        this.setBackgroundColor(Color.BLUE);
-        this.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        this.setBackgroundColor(Color.WHITE);
         RecyclerView recyclerView = new RecyclerView(context);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
         recyclerView.setAdapter(new FavouriteApplicationsListAdapter(context, null));

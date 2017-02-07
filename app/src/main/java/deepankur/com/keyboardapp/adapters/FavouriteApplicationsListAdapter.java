@@ -1,9 +1,11 @@
 package deepankur.com.keyboardapp.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +27,7 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     private Context context;
     private static final int TYPE_HEADER = 11111;
     private static final int TYPE_ITEM = 55555;
+    private static final String TAG = "FavouriteApplicationsListAdapter";
 
     private RecyclerViewClickInterface recyclerViewClickInterface;
     private ArrayList<PInfo> pInfoArrayList;
@@ -41,7 +44,7 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
 
         if (viewType == TYPE_ITEM)
             return new VHItem(LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.card_shortcut_applications, parent, false));
+                    .inflate(R.layout.card_favourite_applications, parent, false));
 
         if (viewType == TYPE_HEADER)
             return new VHHeader(new TextView(context));
@@ -87,20 +90,13 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     private class VHItem extends RecyclerView.ViewHolder {
         TextView name;
         ImageView imageView;
-        CheckBox checkBox;
         View rootView;
 
         VHItem(View itemView) {
             super(itemView);
             rootView = itemView;
-            checkBox = (CheckBox) rootView.findViewById(R.id.checkbox);
-            rootView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    checkBox.setChecked(!checkBox.isChecked());
-                }
-            });
-
+            imageView = ((ImageView) rootView.findViewById(R.id.fav_applicationIV));
+            name = (TextView) rootView.findViewById(R.id.fav_applicationTV);
         }
     }
 
@@ -123,8 +119,9 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
         private Drawable icon;
         private boolean isChecked = false;
 
+        @SuppressLint("LongLogTag")
         private void prettyPrint() {
-//            Log.v(appname + "\t" + pname + "\t" + versionName + "\t" + versionCode);
+            Log.d(TAG, appname + "\t" + pname + "\t" + versionName + "\t" + versionCode);
         }
     }
 
