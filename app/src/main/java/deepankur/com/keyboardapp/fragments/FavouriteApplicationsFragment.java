@@ -1,4 +1,4 @@
-package deepankur.com.keyboardapp;
+package deepankur.com.keyboardapp.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.adapters.AllApplicationsListAdapter;
 import deepankur.com.keyboardapp.fragments.BaseFragment;
 import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;

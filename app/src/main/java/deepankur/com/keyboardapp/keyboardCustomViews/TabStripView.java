@@ -1,4 +1,4 @@
-package deepankur.com.keyboardapp.customViews;
+package deepankur.com.keyboardapp.keyboardCustomViews;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -68,7 +68,11 @@ public class TabStripView extends LinearLayout {
         }
     };
 
-    OnOptionClickedListener onOptionClickedListener;
+    private OnOptionClickedListener onOptionClickedListener;
+
+    public void setOnOptionClickedListener(OnOptionClickedListener onOptionClickedListener) {
+        this.onOptionClickedListener = onOptionClickedListener;
+    }
 
     public interface OnOptionClickedListener {
         void onOptionClicked(KeyBoardOptions keyBoardOptions);

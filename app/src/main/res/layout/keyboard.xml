@@ -5,7 +5,7 @@
     android:layout_alignParentBottom="true"
     android:background="@android:color/holo_blue_light">
 
-    <deepankur.com.keyboardapp.customViews.TabStripView
+    <deepankur.com.keyboardapp.keyboardCustomViews.TabStripView
         android:id="@+id/tabsStrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
