@@ -15,6 +15,7 @@ import android.view.inputmethod.InputConnection;
 import com.crashlytics.android.Crashlytics;
 
 import deepankur.com.keyboardapp.R;
+import deepankur.com.keyboardapp.adapters.FavouriteApplicationsListAdapter;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
 import deepankur.com.keyboardapp.keyboardCustomViews.ViewController;
 import io.fabric.sdk.android.Fabric;
@@ -45,6 +46,7 @@ public class BaseInputMethodService extends InputMethodService
         kv.setKeyboard(keyboard);
         kv.setOnKeyboardActionListener(this);
         new ViewController(this, view);
+        FavouriteApplicationsListAdapter.setPackages(this);
         return view;
     }
 

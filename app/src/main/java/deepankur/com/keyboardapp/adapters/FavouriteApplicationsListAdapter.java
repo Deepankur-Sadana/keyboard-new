@@ -2,6 +2,7 @@ package deepankur.com.keyboardapp.adapters;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -28,13 +29,13 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     private static final String TAG = "FavouriteApplicationsListAdapter";
 
     private RecyclerViewClickInterface recyclerViewClickInterface;
-    private ArrayList<PInfo> pInfoArrayList;
+    private static ArrayList<PInfo> pInfoArrayList;
 
     public FavouriteApplicationsListAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
         this.recyclerViewClickInterface = recyclerViewClickInterface;
         long l1 = System.currentTimeMillis();
-        this.pInfoArrayList = getPackages(context);
+        setPackages(context);
         Log.d(TAG, "FavouriteApplicationsListAdapter: " + (System.currentTimeMillis() - l1));
     }
 
@@ -110,8 +111,12 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
         }
     }
 
+    public static void setPackages(Context context) {
+        if (pInfoArrayList == null)
+            new GetPackageTask(context, pInfoArrayList).execute();
+    }
 
-    private ArrayList<PInfo> getPackages(Context context) {
+    private static ArrayList<PInfo> getPackages(Context context) {
         ArrayList<PInfo> apps = getInstalledApps(context, false); /* false = no system packages */
         final int max = apps.size();
         for (int i = 0; i < max; i++) {
@@ -120,7 +125,7 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
         return apps;
     }
 
-    private ArrayList<PInfo> getInstalledApps(Context context, boolean getSysPackages) {
+    private static ArrayList<PInfo> getInstalledApps(Context context, boolean getSysPackages) {
         ArrayList<PInfo> res = new ArrayList<>();
         List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(0);
         for (int i = 0; i < packs.size(); i++) {
@@ -137,5 +142,23 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
             res.add(newInfo);
         }
         return res;
+    }
+
+    private static class GetPackageTask extends AsyncTask<Void, Void, Void> {
+
+        private Context context;
+        private ArrayList<PInfo> pInfos;
+
+        GetPackageTask(Context context, ArrayList<PInfo> pInfos) {
+            this.context = context;
+            this.pInfos = pInfos;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            this.pInfos = getPackages(context);
+            return null;
+        }
     }
 }

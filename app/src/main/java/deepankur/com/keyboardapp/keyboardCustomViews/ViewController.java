@@ -8,6 +8,7 @@ import android.widget.FrameLayout;
 
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
+import deepankur.com.keyboardapp.interfaces.Refreshable;
 
 /**
  * Created by deepankur on 2/7/17.
@@ -55,6 +56,7 @@ public class ViewController {
                 boolean exists = false;
                 FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.containerFrame);
                 for (int i = 0; i < frameLayout.getChildCount(); i++) {
+
                     if (keyBoardOptions == frameLayout.getChildAt(i).getTag()) {
                         exists = true;
                         break;
@@ -64,7 +66,10 @@ public class ViewController {
                 if (!exists) {
                     addView(frameLayout, keyBoardOptions);
                 } else {
-                    frameLayout.bringChildToFront(frameLayout.findViewWithTag(keyBoardOptions));
+                    View viewWithTag = frameLayout.findViewWithTag(keyBoardOptions);
+                    frameLayout.bringChildToFront(viewWithTag);
+                    if (viewWithTag instanceof Refreshable)
+                        ((Refreshable) viewWithTag).doRefresh();
                 }
                 break;
             }
