@@ -24,11 +24,6 @@ public class ViewController {
         this.rootView = rootView;
         this.tabStripView = (TabStripView) rootView.findViewById(R.id.tabsStrip);
         this.context = context;
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-            }
-        }, 3000);
         init(context, rootView);
     }
 
