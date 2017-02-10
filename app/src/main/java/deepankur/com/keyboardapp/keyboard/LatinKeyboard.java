@@ -24,6 +24,8 @@ import android.inputmethodservice.Keyboard;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 
+import deepankur.com.keyboardapp.R;
+
 public class LatinKeyboard extends Keyboard {
 
     private Key mEnterKey;
