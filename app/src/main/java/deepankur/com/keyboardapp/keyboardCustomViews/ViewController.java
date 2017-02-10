@@ -74,6 +74,7 @@ public class ViewController {
     private void addView(FrameLayout frameLayout, KeyBoardOptions keyBoardOptions) {
         if (keyBoardOptions == KeyBoardOptions.FAVORITE_APPS) {
             final FavouriteApplicationView favouriteApplicationView = new FavouriteApplicationView(context);
+            favouriteApplicationView.setTag(keyBoardOptions);
             frameLayout.addView(favouriteApplicationView);
             Log.d(TAG, "addView: " + rootView.getHeight());
 //            favouriteApplicationView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, rootView.getHeight()));

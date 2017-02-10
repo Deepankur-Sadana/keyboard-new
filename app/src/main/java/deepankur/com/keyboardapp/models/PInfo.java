@@ -19,6 +19,6 @@ public class PInfo {
 
     @SuppressLint("LongLogTag")
     public void prettyPrint() {
-        Log.d("PInfo", appname + "\t" + pname + "\t" + versionName + "\t" + versionCode);
+//        Log.d("PInfo", appname + "\t" + pname + "\t" + versionName + "\t" + versionCode);
     }
 }

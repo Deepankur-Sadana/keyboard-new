@@ -29,16 +29,15 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     private static final String TAG = "FavouriteApplicationsListAdapter";
 
     private RecyclerViewClickInterface recyclerViewClickInterface;
-    private static ArrayList<PInfo> pInfoArrayList;
+    private static ArrayList<PInfo> pInfoArrayList = new ArrayList<>();
 
     public FavouriteApplicationsListAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
         this.recyclerViewClickInterface = recyclerViewClickInterface;
         long l1 = System.currentTimeMillis();
-        setPackages(context);
+        setPackages(context, this);
         Log.d(TAG, "FavouriteApplicationsListAdapter: " + (System.currentTimeMillis() - l1));
     }
-
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -60,6 +59,7 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
             PInfo pInfo = pInfoArrayList.get(position);
             ((VHItem) holder).imageView.setImageDrawable(pInfo.icon);
             ((VHItem) holder).name.setText(pInfo.appname);
+            ((VHItem) holder).rootView.setTag(pInfo.pname);
         }
 
     }
@@ -67,7 +67,7 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
 
     @Override
     public int getItemCount() {
-        return (pInfoArrayList == null ? 0 : pInfoArrayList.size());
+        return (pInfoArrayList.size());
     }
 
     /**
@@ -79,6 +79,10 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public int getItemViewType(int position) {
         return TYPE_ITEM;
+    }
+
+    public void refresh() {
+        Log.d(TAG, "refresh: ");
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -98,6 +102,13 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
             rootView = itemView;
             imageView = ((ImageView) rootView.findViewById(R.id.fav_applicationIV));
             name = (TextView) rootView.findViewById(R.id.fav_applicationTV);
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (recyclerViewClickInterface!=null)
+                        recyclerViewClickInterface.onItemClick(-1, rootView.getTag());
+                }
+            });
         }
     }
 
@@ -112,8 +123,12 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     }
 
     public static void setPackages(Context context) {
-        if (pInfoArrayList == null)
-            new GetPackageTask(context, pInfoArrayList).execute();
+        setPackages(context, null);
+    }
+
+    private static void setPackages(Context context, RecyclerView.Adapter adapter) {
+        new GetPackageTask(context, pInfoArrayList, null).execute();
+
     }
 
     private static ArrayList<PInfo> getPackages(Context context) {
@@ -148,17 +163,29 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
 
         private Context context;
         private ArrayList<PInfo> pInfos;
+        private RecyclerView.Adapter adapter;
 
-        GetPackageTask(Context context, ArrayList<PInfo> pInfos) {
+        GetPackageTask(Context context, ArrayList<PInfo> pInfos, RecyclerView.Adapter adapter) {
             this.context = context;
             this.pInfos = pInfos;
+            this.adapter = adapter;
         }
 
 
         @Override
         protected Void doInBackground(Void... params) {
-            this.pInfos = getPackages(context);
+            ArrayList<PInfo> packages = getPackages(context);
+            this.pInfos.clear();
+            this.pInfos.addAll(packages);
+            packages.clear();
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (adapter != null)
+                adapter.notifyDataSetChanged();
         }
     }
 }

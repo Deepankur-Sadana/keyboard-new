@@ -1,6 +1,7 @@
 package deepankur.com.keyboardapp.keyboardCustomViews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -9,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import deepankur.com.keyboardapp.adapters.FavouriteApplicationsListAdapter;
+import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;
 import deepankur.com.keyboardapp.interfaces.Refreshable;
 
 /**
@@ -33,11 +35,18 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
 
     private FavouriteApplicationsListAdapter favouriteApplicationsListAdapter;
 
-    private void init(Context context) {
+    private void init(final Context context) {
         this.setBackgroundColor(Color.WHITE);
         RecyclerView recyclerView = new RecyclerView(context);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
-        favouriteApplicationsListAdapter = new FavouriteApplicationsListAdapter(context, null);
+        favouriteApplicationsListAdapter = new FavouriteApplicationsListAdapter(context, new RecyclerViewClickInterface() {
+            @Override
+            public void onItemClick(int extras, Object data) {
+                String packageName = (String) data;
+                Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
+                context.startActivity(LaunchIntent);
+            }
+        });
         recyclerView.setAdapter(favouriteApplicationsListAdapter);
         recyclerView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         this.addView(recyclerView);
@@ -47,6 +56,7 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
     @Override
     public boolean doRefresh() {
         if (favouriteApplicationsListAdapter != null) {
+            favouriteApplicationsListAdapter.refresh();
             favouriteApplicationsListAdapter.notifyDataSetChanged();
             return true;
         }
