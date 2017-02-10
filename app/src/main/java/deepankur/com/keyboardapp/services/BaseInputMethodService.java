@@ -53,11 +53,13 @@ public class BaseInputMethodService extends InputMethodService
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
+        Log.d(TAG, "onStartInputView: ");
     }
 
     @Override
     public void onFinishInput() {
         super.onFinishInput();
+        Log.d(TAG, "onFinishInput: ");
     }
 
     @Override
@@ -67,51 +69,61 @@ public class BaseInputMethodService extends InputMethodService
 
     @Override
     public void onFinishCandidatesView(boolean finishingInput) {
+        Log.d(TAG, "onFinishCandidatesView: " + finishingInput);
     }
 
     @Override
     public boolean onShowInputRequested(int flags, boolean configChange) {
+        Log.d(TAG, "onShowInputRequested: flags " + flags + " configchange " + configChange);
         return super.onShowInputRequested(flags, configChange);
     }
 
     @Override
     public void showWindow(boolean showInput) {
+        Log.d(TAG, "showWindow: " + showInput);
         super.showWindow(showInput);
     }
 
     @Override
     public void hideWindow() {
         super.hideWindow();
+        Log.d(TAG, "hideWindow: ");
     }
 
     @Override
     public void onWindowShown() {
         super.onWindowShown();
+        Log.d(TAG, "onWindowShown: ");
     }
 
     @Override
     public void onWindowHidden() {
         super.onWindowHidden();
+        Log.d(TAG, "onWindowHidden: ");
     }
 
     @Override
     public void onBindInput() {
         super.onBindInput();
+        Log.d(TAG, "onBindInput: ");
     }
 
     @Override
     public void onUnbindInput() {
         super.onUnbindInput();
+        Log.d(TAG, "onUnbindInput: ");
     }
 
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
         super.onStartInput(attribute, restarting);
+        Log.d(TAG, "onStartInput: attribute " + attribute + " restarting " + restarting);
     }
 
     @Override
     public void onFinishInputView(boolean finishingInput) {
         super.onFinishInputView(finishingInput);
+        Log.d(TAG, "onFinishInputView: " + finishingInput);
     }
 
 
@@ -150,6 +162,12 @@ public class BaseInputMethodService extends InputMethodService
 
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
+        String s = "";
+        for (int i : keyCodes) {
+            s += i;
+            s += ", ";
+        }
+        Log.d(TAG, "onKey: " + primaryCode + "keyCodes " + s);
         InputConnection ic = getCurrentInputConnection();
         playClick(primaryCode);
         switch (primaryCode) {
