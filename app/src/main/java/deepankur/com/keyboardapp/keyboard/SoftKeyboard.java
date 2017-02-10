@@ -137,7 +137,7 @@ public class SoftKeyboard extends InputMethodService
         View v =  getLayoutInflater().inflate(R.layout.input, null);
         mInputView = (LatinKeyboardView) v.findViewById(R.id.keyboard);
         mInputView.setOnKeyboardActionListener(this);
-        mInputView.setPreviewEnabled(false);
+        mInputView.setPreviewEnabled(true);
         setLatinKeyboard(mQwertyKeyboard);
         return v;
     }
