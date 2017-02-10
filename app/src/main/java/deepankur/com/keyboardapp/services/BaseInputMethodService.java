@@ -53,7 +53,10 @@ public class BaseInputMethodService extends InputMethodService
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        Log.d(TAG, "onStartInputView: ");
+        switch (info.inputType) {
+
+        }
+        Log.d(TAG, "onStartInputView: " + info.inputType + " restarting " + restarting);
     }
 
     @Override

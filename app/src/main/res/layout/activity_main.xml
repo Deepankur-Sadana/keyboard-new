@@ -11,8 +11,25 @@
     tools:context="deepankur.com.keyboardapp.activities.MainActivity">
 
     <EditText
-        android:inputType="textEmailAddress"
+        android:id="@+id/one"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:inputType="textEmailAddress"
         android:text="Hello World!" />
+
+    <EditText
+        android:id="@+id/two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/one"
+        android:inputType="number"
+        android:text="number" />
+
+    <EditText
+        android:id="@+id/three"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/two"
+        android:inputType="numberPassword"
+        android:text="password" />
 </RelativeLayout>
