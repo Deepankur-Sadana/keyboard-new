@@ -86,9 +86,9 @@ public class CandidateView extends View {
         
         setBackgroundColor(r.getColor(R.color.candidate_background));
         
-        mColorNormal = r.getColor(R.color.candidate_normal);
-        mColorRecommended = r.getColor(R.color.candidate_recommended);
-        mColorOther = r.getColor(R.color.candidate_other);
+        mColorNormal = r.getColor(android.R.color.holo_orange_dark);
+        mColorRecommended = r.getColor(android.R.color.holo_red_light);
+        mColorOther = r.getColor(android.R.color.holo_green_light);
         mVerticalPadding = r.getDimensionPixelSize(R.dimen.candidate_vertical_padding);
         
         mPaint = new Paint();
