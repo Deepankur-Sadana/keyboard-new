@@ -22,6 +22,7 @@ import android.graphics.Color;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.media.AudioManager;
 import android.os.IBinder;
 import android.text.InputType;
 import android.text.method.MetaKeyKeyListener;
@@ -550,6 +551,7 @@ public class SoftKeyboard extends InputMethodService
 
     public void onKey(int primaryCode, int[] keyCodes) {
         Log.d("Test", "KEYCODE: " + primaryCode);
+        playClick(primaryCode);
         if (isWordSeparator(primaryCode)) {
             // Handle separator
             if (mComposing.length() > 0) {
@@ -580,6 +582,23 @@ public class SoftKeyboard extends InputMethodService
             }
         } else {
             handleCharacter(primaryCode, keyCodes);
+        }
+    }
+    private void playClick(int keyCode) {
+        AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
+        switch (keyCode) {
+            case 32:
+                am.playSoundEffect(AudioManager.FX_KEYPRESS_SPACEBAR);
+                break;
+            case Keyboard.KEYCODE_DONE:
+            case 10:
+                am.playSoundEffect(AudioManager.FX_KEYPRESS_RETURN);
+                break;
+            case Keyboard.KEYCODE_DELETE:
+                am.playSoundEffect(AudioManager.FX_KEYPRESS_DELETE);
+                break;
+            default:
+                am.playSoundEffect(AudioManager.FX_KEYPRESS_STANDARD);
         }
     }
 
