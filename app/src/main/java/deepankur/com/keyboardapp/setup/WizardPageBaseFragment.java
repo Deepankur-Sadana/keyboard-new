@@ -59,16 +59,20 @@ public abstract class WizardPageBaseFragment extends Fragment {
         final View thisStepCompleted = getView().findViewById(R.id.this_step_complete);
         final View thisStepNeedsSetup = getView().findViewById(R.id.this_step_needs_setup);
 
-        previousStepNotCompleted.setVisibility(View.GONE);
-        thisStepCompleted.setVisibility(View.GONE);
-        thisStepNeedsSetup.setVisibility(View.GONE);
+        try {
+            previousStepNotCompleted.setVisibility(View.GONE);
+            thisStepCompleted.setVisibility(View.GONE);
+            thisStepNeedsSetup.setVisibility(View.GONE);
 
-        if (!isStepPreConditionDone(getActivity())) {
-            previousStepNotCompleted.setVisibility(View.VISIBLE);
-        } else if (isStepCompleted(getActivity())) {
-            thisStepCompleted.setVisibility(View.VISIBLE);
-        } else {
-            thisStepNeedsSetup.setVisibility(View.VISIBLE);
+            if (!isStepPreConditionDone(getActivity())) {
+                previousStepNotCompleted.setVisibility(View.VISIBLE);
+            } else if (isStepCompleted(getActivity())) {
+                thisStepCompleted.setVisibility(View.VISIBLE);
+            } else {
+                thisStepNeedsSetup.setVisibility(View.VISIBLE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

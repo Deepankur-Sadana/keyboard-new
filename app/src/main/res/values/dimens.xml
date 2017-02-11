@@ -5,5 +5,11 @@
     <dimen name="key_height">52dip</dimen>
     <dimen name="candidate_font_height">20sp</dimen>
     <dimen name="candidate_vertical_padding">16sp</dimen>
+    <dimen name="comfortable_min_row_height">44dp</dimen>
+    <!-- Global content UI padding, bottom -->
+    <dimen name="global_content_padding_bottom">4dp</dimen>
+    <!-- Global content UI padding, sides -->
     <dimen name="global_content_padding_side">16dp</dimen>
+    <dimen name="font_size_small_text">12sp</dimen>
+
 </resources>

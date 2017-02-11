@@ -18,8 +18,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:scaleType="centerInside"
-        android:src="@drawable/ic_wizard_enabled_off"
-        />
+        android:src="@drawable/ic_wizard_enabled_off" />
 
     <LinearLayout
         android:id="@+id/previous_step_not_complete"

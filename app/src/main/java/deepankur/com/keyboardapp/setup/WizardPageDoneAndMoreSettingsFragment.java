@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 
 import deepankur.com.keyboardapp.R;
 
@@ -16,7 +17,8 @@ public class WizardPageDoneAndMoreSettingsFragment extends WizardPageBaseFragmen
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.keyboard_setup_wizard_page_additional_settings_layout, container, false);
+        return new FrameLayout(getActivity());
+//        return inflater.inflate(R.layout.keyboard_setup_wizard_page_additional_settings_layout, container, false);
     }
 
     @Override
