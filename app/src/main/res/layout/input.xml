@@ -4,15 +4,28 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true">
 
-    <deepankur.com.keyboardapp.keyboard.LatinKeyboardView
-        android:id="@+id/keyboard"
+    <deepankur.com.keyboardapp.keyboardCustomViews.TabStripView
+        android:id="@+id/tabsStrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#110202"
-        android:keyBackground="@drawable/key_background"
-        android:keyPreviewLayout="@layout/preview"
-        android:keyTextColor="#fff"
-        android:paddingTop="0dp"
-        android:popupLayout="@layout/keyboard_popup_layout" />
+        android:background="@android:color/darker_gray"
+        android:orientation="horizontal"
+        android:padding="8dp" />
 
+    <FrameLayout
+        android:id="@+id/containerFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabsStrip">
+        <deepankur.com.keyboardapp.keyboard.LatinKeyboardView
+            android:id="@+id/keyboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#110202"
+            android:keyBackground="@drawable/key_background"
+            android:keyPreviewLayout="@layout/preview"
+            android:keyTextColor="#fff"
+            android:paddingTop="0dp"
+            android:popupLayout="@layout/keyboard_popup_layout" />
+    </FrameLayout>
 </RelativeLayout>
