@@ -1,7 +1,6 @@
 package deepankur.com.keyboardapp.keyboardCustomViews;
 
 import android.content.Context;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -23,6 +22,13 @@ public class ViewController {
     public ViewController(final Context context, final View rootView) {
         this.rootView = rootView;
         this.tabStripView = (TabStripView) rootView.findViewById(R.id.tabsStrip);
+        this.context = context;
+        init(context, rootView);
+    }
+
+    public ViewController(final Context context, final View rootView, TabStripView tabStripView) {
+        this.rootView = rootView;
+        this.tabStripView = tabStripView;
         this.context = context;
         init(context, rootView);
     }
@@ -78,7 +84,7 @@ public class ViewController {
             frameLayout.addView(favouriteApplicationView);
             Log.d(TAG, "addView: " + rootView.getHeight());
 //            favouriteApplicationView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, rootView.getHeight()));
-            favouriteApplicationView.getLayoutParams().height = rootView.findViewById(R.id.keyboardView).getHeight();
+            favouriteApplicationView.getLayoutParams().height = rootView.findViewById(R.id.keyboard).getHeight();
 
         }
     }

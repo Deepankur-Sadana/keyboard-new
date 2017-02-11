@@ -46,7 +46,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import deepankur.com.keyboardapp.R;
+import deepankur.com.keyboardapp.enums.KeyBoardOptions;
 import deepankur.com.keyboardapp.keyboardCustomViews.TabStripView;
+import deepankur.com.keyboardapp.keyboardCustomViews.ViewController;
 import utils.AppLibrary;
 
 /**
@@ -139,8 +141,10 @@ public class SoftKeyboard extends InputMethodService
     public View onCreateInputView() {
         View v = getLayoutInflater().inflate(R.layout.input, null);
         mInputView = (LatinKeyboardView) v.findViewById(R.id.keyboard);
+        mInputView.setTag(KeyBoardOptions.QWERTY);
         mInputView.setOnKeyboardActionListener(this);
         mInputView.setPreviewEnabled(true);
+        new ViewController(this, v);
         setLatinKeyboard(mQwertyKeyboard);
         return v;
     }
