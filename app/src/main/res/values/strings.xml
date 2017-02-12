@@ -54,6 +54,6 @@
     <string name="setup_wizard_step_three_action_themes">Select theme…</string>
     <string name="setup_wizard_step_three_action_all_settings">Configure everything else…</string>
     <string name="ime_crashed_title">AnySoftKeyboard Crashed!</string>
-    <string name="not_configured_with_click_here">AnySoftKeyboard is not fully set-up for use. Click here to set up.</string>
+    <string name="not_configured_with_click_here">Keyboard_APP is not fully set-up for use. Click here to set up.</string>
     <string name="not_configured_with_just_click_here">Click here</string>
 </resources>
