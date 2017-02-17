@@ -4,6 +4,8 @@ I# Local configuration file (sdk path, etc)
 #built application files
 *.apk
 *.ap_
+.idea/
+*.idea/
 
 # Windows thumbnail db
 Thumbs.db
