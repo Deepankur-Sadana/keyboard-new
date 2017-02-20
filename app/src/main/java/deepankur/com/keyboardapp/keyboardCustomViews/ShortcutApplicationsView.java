@@ -17,6 +17,7 @@ public class ShortcutApplicationsView extends FrameLayout {
 
     private RecyclerView mRecyclerView;
     private PreProgrammableShortcutsAdapter mAdapter;
+    private FrameLayout dialogFrame;
 
     public ShortcutApplicationsView(Context context) {
         super(context);
@@ -34,12 +35,13 @@ public class ShortcutApplicationsView extends FrameLayout {
     }
 
     private void init(Context context) {
-        View v = inflate(context, R.layout.keyboard_view_pre_programmed_shotcuts, null);
-        this.mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
-        if (this.mAdapter==null){
+        View rootView = inflate(context, R.layout.keyboard_view_pre_programmed_shotcuts, null);
+        this.mRecyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        this.dialogFrame = (FrameLayout) rootView.findViewById(R.id.add_shortcut_dialog);
+        if (this.mAdapter == null) {
 
         }
         this.removeAllViews();
-        this.addView(v);
+        this.addView(rootView);
     }
 }

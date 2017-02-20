@@ -48,7 +48,7 @@ public class PreProgrammableShortcutsAdapter extends BaseRecylerAdapter<Recycler
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VHItem) {
             VHItem itemHolder = (VHItem) holder;
-            
+
         }
     }
 
