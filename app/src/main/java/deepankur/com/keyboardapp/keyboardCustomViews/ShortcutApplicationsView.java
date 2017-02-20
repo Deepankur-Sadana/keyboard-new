@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import deepankur.com.keyboardapp.R;
-import deepankur.com.keyboardapp.adapters.PreProgrammableShortcutsAdapter;
+import deepankur.com.keyboardapp.adapters.ClipboardAdapter;
 
 /**
  * Created by deepankursadana on 17/02/17.
@@ -16,7 +16,7 @@ import deepankur.com.keyboardapp.adapters.PreProgrammableShortcutsAdapter;
 public class ShortcutApplicationsView extends FrameLayout {
 
     private RecyclerView mRecyclerView;
-    private PreProgrammableShortcutsAdapter mAdapter;
+    private ClipboardAdapter mAdapter;
 
     public ShortcutApplicationsView(Context context) {
         super(context);
@@ -34,7 +34,7 @@ public class ShortcutApplicationsView extends FrameLayout {
     }
 
     private void init(Context context) {
-        View v = inflate(context, R.layout.keyboard_view_pre_programmed_shotcuts, null);
+        View v = inflate(context, R.layout.keyboard_view_clipboard, null);
         this.mRecyclerView = (RecyclerView) v.findViewById(R.id.recyclerView);
         if (this.mAdapter==null){
 

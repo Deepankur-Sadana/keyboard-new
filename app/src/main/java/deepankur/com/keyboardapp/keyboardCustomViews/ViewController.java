@@ -83,9 +83,12 @@ public class ViewController {
             favouriteApplicationView.setTag(keyBoardOptions);
             frameLayout.addView(favouriteApplicationView);
             Log.d(TAG, "addView: " + rootView.getHeight());
-//            favouriteApplicationView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, rootView.getHeight()));
             favouriteApplicationView.getLayoutParams().height = rootView.findViewById(R.id.keyboard).getHeight();
-
+        } else if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD) {
+            final ClipBoardView clipBoardView = new ClipBoardView(context);
+            clipBoardView.setTag(keyBoardOptions);
+            frameLayout.addView(clipBoardView);
+            clipBoardView.getLayoutParams().height = rootView.findViewById(R.id.keyboard).getHeight();
         }
     }
 

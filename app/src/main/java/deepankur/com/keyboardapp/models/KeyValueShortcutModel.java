@@ -6,7 +6,7 @@ package deepankur.com.keyboardapp.models;
 
 
 
-public class KeyValueShortcut {
+public class KeyValueShortcutModel {
 
     int id;
     String note;
@@ -14,15 +14,15 @@ public class KeyValueShortcut {
     String created_at;
 
     // constructors
-    public KeyValueShortcut() {
+    public KeyValueShortcutModel() {
     }
 
-    public KeyValueShortcut(String note, int status) {
+    public KeyValueShortcutModel(String note, int status) {
         this.note = note;
         this.status = status;
     }
 
-    public KeyValueShortcut(int id, String note, int status) {
+    public KeyValueShortcutModel(int id, String note, int status) {
         this.id = id;
         this.note = note;
         this.status = status;

@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import deepankur.com.keyboardapp.models.KeyValueShortcut;
+import deepankur.com.keyboardapp.models.KeyValueShortcutModel;
 import deepankur.com.keyboardapp.models.Tag;
 
 /**
@@ -52,7 +52,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String KEY_TAG_ID = "tag_id";
 
     // Table Create Statements
-    // KeyValueShortcut table create statement
+    // KeyValueShortcutModel table create statement
     private static final String CREATE_TABLE_TODO = "CREATE TABLE "
             + TABLE_TODO + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TODO
             + " TEXT," + KEY_STATUS + " INTEGER," + KEY_CREATED_AT
@@ -98,7 +98,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Creating a todo
      */
-    public long createToDo(KeyValueShortcut todo, long[] tag_ids) {
+    public long createToDo(KeyValueShortcutModel todo, long[] tag_ids) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -120,7 +120,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * get single todo
      */
-    public KeyValueShortcut getTodo(long todo_id) {
+    public KeyValueShortcutModel getTodo(long todo_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_TODO + " WHERE "
@@ -133,7 +133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null)
             c.moveToFirst();
 
-        KeyValueShortcut td = new KeyValueShortcut();
+        KeyValueShortcutModel td = new KeyValueShortcutModel();
         td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
         td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
@@ -144,8 +144,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting all todos
      */
-    public List<KeyValueShortcut> getAllToDos() {
-        List<KeyValueShortcut> todos = new ArrayList<KeyValueShortcut>();
+    public List<KeyValueShortcutModel> getAllToDos() {
+        List<KeyValueShortcutModel> todos = new ArrayList<KeyValueShortcutModel>();
         String selectQuery = "SELECT  * FROM " + TABLE_TODO;
 
         Log.e(LOG, selectQuery);
@@ -156,7 +156,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                KeyValueShortcut td = new KeyValueShortcut();
+                KeyValueShortcutModel td = new KeyValueShortcutModel();
                 td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
                 td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
@@ -172,8 +172,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting all todos under single tag
      */
-    public List<KeyValueShortcut> getAllToDosByTag(String tag_name) {
-        List<KeyValueShortcut> todos = new ArrayList<KeyValueShortcut>();
+    public List<KeyValueShortcutModel> getAllToDosByTag(String tag_name) {
+        List<KeyValueShortcutModel> todos = new ArrayList<KeyValueShortcutModel>();
 
         String selectQuery = "SELECT  * FROM " + TABLE_TODO + " td, "
                 + TABLE_TAG + " tg, " + TABLE_TODO_TAG + " tt WHERE tg."
@@ -189,7 +189,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                KeyValueShortcut td = new KeyValueShortcut();
+                KeyValueShortcutModel td = new KeyValueShortcutModel();
                 td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
                 td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
@@ -220,7 +220,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updating a todo
      */
-    public int updateToDo(KeyValueShortcut todo) {
+    public int updateToDo(KeyValueShortcutModel todo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -309,10 +309,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // check if todos under this tag should also be deleted
         if (should_delete_all_tag_todos) {
             // get all todos under this tag
-            List<KeyValueShortcut> allTagToDos = getAllToDosByTag(tag.getTagName());
+            List<KeyValueShortcutModel> allTagToDos = getAllToDosByTag(tag.getTagName());
 
             // delete all todos
-            for (KeyValueShortcut keyValueShortcut : allTagToDos) {
+            for (KeyValueShortcutModel keyValueShortcut : allTagToDos) {
                 // delete keyValueShortcut
                 deleteToDo(keyValueShortcut.getId());
             }
