@@ -9,19 +9,19 @@ import java.util.ArrayList;
 
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;
-import deepankur.com.keyboardapp.models.KeyValueShortcut;
+import deepankur.com.keyboardapp.models.KeyValueShortcutModel;
 
 /**
  * Created by deepankursadana on 17/02/17.
  */
 
-public class PreProgrammableShortcutsAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder> {
+public class ClipboardAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder> {
 
     private Context context;
-    private ArrayList<KeyValueShortcut> keyValueShortcuts;
+    private ArrayList<KeyValueShortcutModel> keyValueShortcuts;
     private RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public PreProgrammableShortcutsAdapter(Context context, ArrayList<KeyValueShortcut> keyValueShortcuts, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public ClipboardAdapter(Context context, ArrayList<KeyValueShortcutModel> keyValueShortcuts, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
         this.keyValueShortcuts = keyValueShortcuts;
         this.recyclerViewClickInterface = recyclerViewClickInterface;
@@ -41,7 +41,7 @@ public class PreProgrammableShortcutsAdapter extends BaseRecylerAdapter<Recycler
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_HOLDER)
             return new VHItem(View.inflate(parent.getContext(), R.layout.card_pre_programmable, null));
-        return new VHItem(View.inflate(parent.getContext(), R.layout.keyboard_view_pre_programmed_shotcuts, null));
+        return new VHItem(View.inflate(parent.getContext(), R.layout.keyboard_view_clipboard, null));
     }
 
     @Override

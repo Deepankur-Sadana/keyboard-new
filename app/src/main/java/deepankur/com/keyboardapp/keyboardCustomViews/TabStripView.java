@@ -30,7 +30,7 @@ public class TabStripView extends LinearLayout {
         init(context);
     }
 
-    private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS};
+    private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD};
 
     private void init(Context context) {
         int pixel = (int) AppLibrary.convertDpToPixel(8, context);
