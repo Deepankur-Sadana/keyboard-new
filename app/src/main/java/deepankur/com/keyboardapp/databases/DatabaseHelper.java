@@ -13,46 +13,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import deepankur.com.keyboardapp.models.KeyValueShortcutModel;
+import deepankur.com.keyboardapp.models.ClipBoardItemModel;
 import deepankur.com.keyboardapp.models.Tag;
 
 /**
  * Created by deepankursadana on 17/02/17.
  */
 
-public class DatabaseHelper extends SQLiteOpenHelper {
-
-    // Logcat tag
-    private static final String LOG = DatabaseHelper.class.getName();
-
-    // Database Version
-    private static final int DATABASE_VERSION = 1;
-
-    // Database Name
-    private static final String DATABASE_NAME = "contactsManager";
-
-    // Table Names
-    private static final String TABLE_TODO = "todos";
-    private static final String TABLE_TAG = "tags";
-    private static final String TABLE_TODO_TAG = "todo_tags";
-
-    // Common column names
-    private static final String KEY_ID = "id";
-    private static final String KEY_CREATED_AT = "created_at";
-
-    // NOTES Table - column nmaes
-    private static final String KEY_TODO = "todo";
-    private static final String KEY_STATUS = "status";
-
-    // TAGS Table - column names
-    private static final String KEY_TAG_NAME = "tag_name";
-
-    // NOTE_TAGS Table - column names
-    private static final String KEY_TODO_ID = "todo_id";
-    private static final String KEY_TAG_ID = "tag_id";
+public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
 
     // Table Create Statements
-    // KeyValueShortcutModel table create statement
+    // ClipBoardItemModel table create statement
     private static final String CREATE_TABLE_TODO = "CREATE TABLE "
             + TABLE_TODO + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TODO
             + " TEXT," + KEY_STATUS + " INTEGER," + KEY_CREATED_AT
@@ -69,8 +40,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             + KEY_TODO_ID + " INTEGER," + KEY_TAG_ID + " INTEGER,"
             + KEY_CREATED_AT + " DATETIME" + ")";
 
-    public DatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
+    }
+
+    private static DatabaseHelper sDatabaseHelper;
+
+    public static DatabaseHelper getDataBaseInstance(Context context) {
+        if (sDatabaseHelper == null)
+            sDatabaseHelper = new DatabaseHelper(context);
+        return sDatabaseHelper;
     }
 
     @Override
@@ -98,7 +77,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Creating a todo
      */
-    public long createToDo(KeyValueShortcutModel todo, long[] tag_ids) {
+    public long createToDo(ClipBoardItemModel todo, long[] tag_ids) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -120,7 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * get single todo
      */
-    public KeyValueShortcutModel getTodo(long todo_id) {
+    public ClipBoardItemModel getTodo(long todo_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
         String selectQuery = "SELECT  * FROM " + TABLE_TODO + " WHERE "
@@ -133,7 +112,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         if (c != null)
             c.moveToFirst();
 
-        KeyValueShortcutModel td = new KeyValueShortcutModel();
+        ClipBoardItemModel td = new ClipBoardItemModel();
         td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
         td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
         td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
@@ -144,8 +123,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting all todos
      */
-    public List<KeyValueShortcutModel> getAllToDos() {
-        List<KeyValueShortcutModel> todos = new ArrayList<KeyValueShortcutModel>();
+    public List<ClipBoardItemModel> getAllToDos() {
+        List<ClipBoardItemModel> todos = new ArrayList<ClipBoardItemModel>();
         String selectQuery = "SELECT  * FROM " + TABLE_TODO;
 
         Log.e(LOG, selectQuery);
@@ -156,7 +135,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                KeyValueShortcutModel td = new KeyValueShortcutModel();
+                ClipBoardItemModel td = new ClipBoardItemModel();
                 td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
                 td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
@@ -172,8 +151,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * getting all todos under single tag
      */
-    public List<KeyValueShortcutModel> getAllToDosByTag(String tag_name) {
-        List<KeyValueShortcutModel> todos = new ArrayList<KeyValueShortcutModel>();
+    public List<ClipBoardItemModel> getAllToDosByTag(String tag_name) {
+        List<ClipBoardItemModel> todos = new ArrayList<ClipBoardItemModel>();
 
         String selectQuery = "SELECT  * FROM " + TABLE_TODO + " td, "
                 + TABLE_TAG + " tg, " + TABLE_TODO_TAG + " tt WHERE tg."
@@ -189,7 +168,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // looping through all rows and adding to list
         if (c.moveToFirst()) {
             do {
-                KeyValueShortcutModel td = new KeyValueShortcutModel();
+                ClipBoardItemModel td = new ClipBoardItemModel();
                 td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
                 td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
                 td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
@@ -220,7 +199,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     /**
      * Updating a todo
      */
-    public int updateToDo(KeyValueShortcutModel todo) {
+    public int updateToDo(ClipBoardItemModel todo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
@@ -263,7 +242,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      * getting all tags
      */
     public List<Tag> getAllTags() {
-        List<Tag> tags = new ArrayList<Tag>();
+        List<Tag> tags = new ArrayList<>();
         String selectQuery = "SELECT  * FROM " + TABLE_TAG;
 
         Log.e(LOG, selectQuery);
@@ -309,10 +288,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         // check if todos under this tag should also be deleted
         if (should_delete_all_tag_todos) {
             // get all todos under this tag
-            List<KeyValueShortcutModel> allTagToDos = getAllToDosByTag(tag.getTagName());
+            List<ClipBoardItemModel> allTagToDos = getAllToDosByTag(tag.getTagName());
 
             // delete all todos
-            for (KeyValueShortcutModel keyValueShortcut : allTagToDos) {
+            for (ClipBoardItemModel keyValueShortcut : allTagToDos) {
                 // delete keyValueShortcut
                 deleteToDo(keyValueShortcut.getId());
             }

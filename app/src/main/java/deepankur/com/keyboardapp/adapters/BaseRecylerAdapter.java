@@ -26,11 +26,10 @@ abstract class BaseRecylerAdapter<VH extends RecyclerView.ViewHolder> extends Re
         }
     }
 
-    public class VHHeader extends RecyclerView.ViewHolder {
+    public static class VHHeader extends RecyclerView.ViewHolder {
 
         public VHHeader(View v) {
             super(v);
-            initItemView(v);
         }
     }
 
@@ -51,7 +50,6 @@ abstract class BaseRecylerAdapter<VH extends RecyclerView.ViewHolder> extends Re
 
     void initHeaderView(View headerView) {
     }
-
 
 
     @Override

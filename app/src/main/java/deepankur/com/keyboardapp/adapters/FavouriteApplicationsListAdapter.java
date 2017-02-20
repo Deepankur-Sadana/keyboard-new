@@ -105,8 +105,8 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
             rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (recyclerViewClickInterface!=null)
-                        recyclerViewClickInterface.onItemClick(-1, rootView.getTag());
+                    if (recyclerViewClickInterface != null)
+                        recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, -1, rootView.getTag());
                 }
             });
         }

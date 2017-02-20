@@ -41,7 +41,7 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
         favouriteApplicationsListAdapter = new FavouriteApplicationsListAdapter(context, new RecyclerViewClickInterface() {
             @Override
-            public void onItemClick(int extras, Object data) {
+            public void onItemClick(int clickType, int extras, Object data) {
                 String packageName = (String) data;
                 Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
                 context.startActivity(LaunchIntent);
