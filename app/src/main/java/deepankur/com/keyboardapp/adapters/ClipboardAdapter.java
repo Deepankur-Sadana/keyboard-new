@@ -14,11 +14,14 @@ import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;
 import deepankur.com.keyboardapp.models.ClipBoardItemModel;
 
+import static deepankur.com.keyboardapp.adapters.BaseRecylerAdapter.HEADER_HOLDER;
+import static deepankur.com.keyboardapp.adapters.BaseRecylerAdapter.ITEM_HOLDER;
+
 /**
  * Created by deepankursadana on 17/02/17.
  */
 
-public class ClipboardAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder> {
+public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private ArrayList<ClipBoardItemModel> clipBoardItemsList;
@@ -32,15 +35,6 @@ public class ClipboardAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder
         this.recyclerViewClickInterface = recyclerViewClickInterface;
     }
 
-    @Override
-    void initItemView(View itemView) {
-        itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
-    }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -76,7 +70,7 @@ public class ClipboardAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder
         return position == 0 ? HEADER_HOLDER : ITEM_HOLDER;
     }
 
-    private class VHHeader extends BaseRecylerAdapter.VHHeader {
+    private class VHHeader extends RecyclerView.ViewHolder {
         View rootView;
 
         VHHeader(View v) {
@@ -93,7 +87,7 @@ public class ClipboardAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder
         }
     }
 
-    private class VHItem extends BaseRecylerAdapter.VHItem {
+    private class VHItem extends RecyclerView.ViewHolder{
         View rootView;
         TextView itemKeyTv;
 
