@@ -5,7 +5,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -24,6 +24,7 @@ public class ClipboardAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder
     private ArrayList<ClipBoardItemModel> clipBoardItemsList;
     private RecyclerViewClickInterface recyclerViewClickInterface;
     private static final int ACTION_CREATE_NEW = 55;
+//    public static final int HEADER_CLICKED = 11, ITEM_CLICKED = 22;
 
     public ClipboardAdapter(Context context, ArrayList<ClipBoardItemModel> keyValueShortcuts, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
@@ -45,8 +46,11 @@ public class ClipboardAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == ITEM_HOLDER)
             return new VHItem(View.inflate(parent.getContext(), R.layout.card_clipboard, null));
-        else if (viewType == HEADER_HOLDER)
-            return new VHHeader(new ImageButton(parent.getContext()));
+        else if (viewType == HEADER_HOLDER) {
+            ImageView imageView = new ImageView(parent.getContext());
+            imageView.setImageResource(android.R.drawable.ic_input_add);
+            return new VHHeader(imageView);
+        }
         throw new IllegalArgumentException("view type " + viewType + " not supported in: " + TAG);
     }
 
@@ -72,16 +76,24 @@ public class ClipboardAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder
         return position == 0 ? HEADER_HOLDER : ITEM_HOLDER;
     }
 
-    private static class VHHeader extends BaseRecylerAdapter.VHHeader {
-
+    private class VHHeader extends BaseRecylerAdapter.VHHeader {
+        View rootView;
 
         VHHeader(View v) {
             super(v);
-
+            rootView = v;
+            v.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (recyclerViewClickInterface != null) {
+                        recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, HEADER_HOLDER, null);
+                    }
+                }
+            });
         }
     }
 
-    private static class VHItem extends BaseRecylerAdapter.VHItem {
+    private class VHItem extends BaseRecylerAdapter.VHItem {
         View rootView;
         TextView itemKeyTv;
 
@@ -93,12 +105,15 @@ public class ClipboardAdapter extends BaseRecylerAdapter<RecyclerView.ViewHolder
                 @Override
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: new clipboard item adding request");
+                    if (recyclerViewClickInterface != null)
+                        recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, ITEM_HOLDER, v.getTag());
                 }
             });
             v.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
                     Log.d(TAG, "onLongClick: ");
+                    recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, ITEM_HOLDER, v.getTag());
                     return true;
                 }
             });

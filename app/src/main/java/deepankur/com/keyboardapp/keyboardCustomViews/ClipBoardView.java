@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import deepankur.com.keyboardapp.R;
+import deepankur.com.keyboardapp.adapters.BaseRecylerAdapter;
 import deepankur.com.keyboardapp.adapters.ClipboardAdapter;
 import deepankur.com.keyboardapp.databases.DatabaseHelper;
 import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;
@@ -41,22 +42,49 @@ public class ClipBoardView extends FrameLayout implements Refreshable {
         init(context);
     }
 
+    View rootView;
+    private FrameLayout addItemFrame;
+
     private void init(Context context) {
-        View rootView = inflate(context, R.layout.keyboard_view_clipboard, null);
+        rootView = inflate(context, R.layout.keyboard_view_clipboard, null);
         this.addView(rootView);
         this.context = context;
-        mRecycler = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        mRecycler.setLayoutManager(new GridLayoutManager(context, 3));
+        this.mRecycler = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        this.mRecycler.setLayoutManager(new GridLayoutManager(context, 3));
+        this.addItemFrame = (FrameLayout) rootView.findViewById(R.id.add_clipboard_item_dialog);
         clipboardAdapter = new ClipboardAdapter(context, getAllClipboardItems(context), clickInterface);
         mRecycler.setAdapter(clipboardAdapter);
     }
 
+    /**
+     * extras will denote the type of viewHolder clicked
+     */
     private RecyclerViewClickInterface clickInterface = new RecyclerViewClickInterface() {
         @Override
-        public void onItemClick(int clickType, int extras, Object data) {
+        public void onItemClick(int clickType, int holderType, Object data) {
+            if (holderType == BaseRecylerAdapter.HEADER_HOLDER) {
+                onAddNewItemClicked();
 
+            } else if (holderType == BaseRecylerAdapter.ITEM_HOLDER) {
+                if (clickType == CLICK_TYPE_NORMAL) {
+
+                } else if (clickType == CLICK_TYPE_LONG_PRESS) {
+
+                }
+            }
         }
     };
+
+    private void onAddNewItemClicked(){
+        addItemFrame.removeAllViews();
+        AddClipboardItemView addClipboardItemView = new AddClipboardItemView(context);
+        addItemFrame.addView(addClipboardItemView);
+        addClipboardItemView.getLayoutParams().height = ViewController.KEYBOARD_HEIGHT;
+    }
+
+    private void openDialogForNewClipboardItem() {
+
+    }
 
     private ArrayList<ClipBoardItemModel> clipboardItemsList;
 
@@ -78,6 +106,7 @@ public class ClipBoardView extends FrameLayout implements Refreshable {
 
     private Context context;
     private final String TAG = getClass().getSimpleName();
+
 
     private void requestAddItem(ClipBoardItemModel keyValueShortcutModel) {
         long toDo = getDatabaseHelper().createToDo(keyValueShortcutModel, new long[0]);

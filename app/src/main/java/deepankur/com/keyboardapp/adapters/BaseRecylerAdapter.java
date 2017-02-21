@@ -8,8 +8,8 @@ import android.view.ViewGroup;
  * Created by deepankursadana on 17/02/17.
  */
 
-abstract class BaseRecylerAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
-    static final int ITEM_HOLDER = 11, HEADER_HOLDER = 22, FOOTER_HOLDER = 33;
+public abstract class BaseRecylerAdapter<VH extends RecyclerView.ViewHolder> extends RecyclerView.Adapter<VH> {
+   public static final int ITEM_HOLDER = 11, HEADER_HOLDER = 22, FOOTER_HOLDER = 33;
 
     public static class VH extends RecyclerView.ViewHolder {
 
