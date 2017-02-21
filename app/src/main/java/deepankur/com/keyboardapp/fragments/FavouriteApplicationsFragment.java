@@ -31,7 +31,7 @@ public class FavouriteApplicationsFragment extends BaseFragment {
         recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         recyclerView.setAdapter(new AllApplicationsListAdapter(getActivity(), new RecyclerViewClickInterface() {
             @Override
-            public void onItemClick(int extras, Object data) {
+            public void onItemClick(int clickType,int extras, Object data) {
 
             }
         }));

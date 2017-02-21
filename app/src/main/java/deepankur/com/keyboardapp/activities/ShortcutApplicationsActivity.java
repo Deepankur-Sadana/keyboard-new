@@ -28,7 +28,7 @@ public class ShortcutApplicationsActivity extends BaseActivity {
         super.onResume();
         AllApplicationsListAdapter adapter = new AllApplicationsListAdapter(this, new RecyclerViewClickInterface() {
             @Override
-            public void onItemClick(int extras, Object data) {
+            public void onItemClick(int clickType,int extras, Object data) {
 
 
             }
