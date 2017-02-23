@@ -14,7 +14,7 @@
         android:padding="8dp" />
 
     <FrameLayout
-        android:id="@+id/containerFrame"
+        android:id="@+id/keyboardContainer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tabsStrip">
@@ -24,6 +24,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:keyPreviewLayout="@layout/preview" />
-
     </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/fragmentContainerFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabsStrip" />
 </RelativeLayout>

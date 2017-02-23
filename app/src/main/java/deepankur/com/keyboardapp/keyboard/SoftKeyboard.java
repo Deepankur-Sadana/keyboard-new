@@ -793,7 +793,7 @@ public class SoftKeyboard extends InputMethodService
 
 
     public void onPress(int primaryCode) {
-        Log.d(TAG, "onPress: ");
+        Log.d(TAG, "onPress: "+primaryCode);
 
     }
 

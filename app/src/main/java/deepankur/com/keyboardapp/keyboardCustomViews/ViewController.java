@@ -38,7 +38,11 @@ public class ViewController {
         tabStripView.setOnOptionClickedListener(new TabStripView.OnOptionClickedListener() {
             @Override
             public void onOptionClicked(KeyBoardOptions keyBoardOptions) {
-                checkAndAddViewIfNotPresent(context, rootView, keyBoardOptions);
+
+                toggleKeyboardViews(keyBoardOptions == KeyBoardOptions.QWERTY);
+                if (keyBoardOptions != KeyBoardOptions.QWERTY)
+                    checkAndAddViewIfNotPresent(context, rootView, keyBoardOptions);
+
                 switch (keyBoardOptions) {
                     case QWERTY:
                         break;
@@ -49,13 +53,22 @@ public class ViewController {
         });
     }
 
+    /**
+     * As we have keyboard and fragments in a different prent groups we can control their
+     * visibility from here
+     */
+    private void toggleKeyboardViews(boolean showKeyboard) {
+        rootView.findViewById(R.id.keyboardContainer).setVisibility(showKeyboard ? View.VISIBLE : View.GONE);
+        rootView.findViewById(R.id.fragmentContainerFrame).setVisibility(!showKeyboard ? View.VISIBLE : View.GONE);
+
+    }
 
     private void checkAndAddViewIfNotPresent(Context context, View rootView, KeyBoardOptions keyBoardOptions) {
         KeyBoardOptions[] values = KeyBoardOptions.values();
         for (KeyBoardOptions option : values) {
             if (option == keyBoardOptions) {
                 boolean exists = false;
-                FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.containerFrame);
+                FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.fragmentContainerFrame);
                 for (int i = 0; i < frameLayout.getChildCount(); i++) {
 
                     if (keyBoardOptions == frameLayout.getChildAt(i).getTag()) {
@@ -83,16 +96,20 @@ public class ViewController {
             favouriteApplicationView.setTag(keyBoardOptions);
             frameLayout.addView(favouriteApplicationView);
             Log.d(TAG, "addView: " + rootView.getHeight());
-            favouriteApplicationView.getLayoutParams().height = rootView.findViewById(R.id.keyboard).getHeight();
-            KEYBOARD_HEIGHT = rootView.findViewById(R.id.keyboard).getHeight();
+            favouriteApplicationView.getLayoutParams().height = getKeyboardHeight();
         } else if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD) {
             final ClipBoardView clipBoardView = new ClipBoardView(context);
             clipBoardView.setTag(keyBoardOptions);
             frameLayout.addView(clipBoardView);
-            clipBoardView.getLayoutParams().height = rootView.findViewById(R.id.keyboard).getHeight();
+            clipBoardView.getLayoutParams().height = getKeyboardHeight();
         }
     }
 
-    public static int KEYBOARD_HEIGHT;
+    private int getKeyboardHeight() {
+        KEYBOARD_HEIGHT = rootView.findViewById(R.id.keyboard).getHeight();
+        return KEYBOARD_HEIGHT;
+    }
+
+    static int KEYBOARD_HEIGHT;
 
 }
