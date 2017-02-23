@@ -1,19 +1,3 @@
-/*
- * Copyright (C) 2008-2009 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package deepankur.com.keyboardapp.keyboard;
 
 import android.app.Dialog;
@@ -25,6 +9,7 @@ import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.text.InputType;
+import android.text.TextUtils;
 import android.text.method.MetaKeyKeyListener;
 import android.util.Log;
 import android.view.KeyCharacterMap;
@@ -46,6 +31,7 @@ import android.view.textservice.TextServicesManager;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
 import deepankur.com.keyboardapp.keyboardCustomViews.TabStripView;
@@ -107,6 +93,7 @@ public class SoftKeyboard extends InputMethodService
     @Override
     public void onCreate() {
         super.onCreate();
+        EventBus.getDefault().register(this);
         mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         mWordSeparators = getResources().getString(R.string.word_separators);
         final TextServicesManager tsm = (TextServicesManager) getSystemService(
@@ -849,5 +836,33 @@ public class SoftKeyboard extends InputMethodService
         }
         Log.d("SoftKeyboard", "SUGGESTIONS: " + sb.toString());
         setSuggestions(sb, true, true);
+    }
+
+
+    private void aVoid(){
+        if (getCurrentInputConnection() != null) {
+            CharSequence textAfter = getCurrentInputConnection().getTextAfterCursor(1024, 0);
+            if (!TextUtils.isEmpty(textAfter)) {
+                int newPosition = 1;
+                while (newPosition < textAfter.length()) {
+                    char chatAt = textAfter.charAt(newPosition);
+                    if (chatAt == '\n' || chatAt == '\r') {
+                        break;
+                    }
+                    newPosition++;
+                }
+                if (newPosition > textAfter.length())
+                    newPosition = textAfter.length();
+                try {
+                    CharSequence textBefore = getCurrentInputConnection().getTextBeforeCursor(Integer.MAX_VALUE, 0);
+                    if (!TextUtils.isEmpty(textBefore)) {
+                        newPosition = newPosition + textBefore.length();
+                    }
+                    getCurrentInputConnection().setSelection(newPosition, newPosition);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 }

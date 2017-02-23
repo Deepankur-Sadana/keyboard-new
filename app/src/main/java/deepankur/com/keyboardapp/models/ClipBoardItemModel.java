@@ -5,26 +5,30 @@ package deepankur.com.keyboardapp.models;
  */
 
 
-
 public class ClipBoardItemModel {
 
     int id;
-    String note;
+    String title;
+    String description;
     int status;
     String created_at;
+
+    public String getTitle() {
+        return title;
+    }
 
     // constructors
     public ClipBoardItemModel() {
     }
 
-    public ClipBoardItemModel(String note, int status) {
-        this.note = note;
+    public ClipBoardItemModel(String description, int status) {
+        this.description = description;
         this.status = status;
     }
 
-    public ClipBoardItemModel(int id, String note, int status) {
+    public ClipBoardItemModel(int id, String description, int status) {
         this.id = id;
-        this.note = note;
+        this.description = description;
         this.status = status;
     }
 
@@ -33,15 +37,15 @@ public class ClipBoardItemModel {
         this.id = id;
     }
 
-    public void setNote(String note) {
-        this.note = note;
+    public void setNote(String description) {
+        this.description = description;
     }
 
     public void setStatus(int status) {
         this.status = status;
     }
 
-    public void setCreatedAt(String created_at){
+    public void setCreatedAt(String created_at) {
         this.created_at = created_at;
     }
 
@@ -51,7 +55,7 @@ public class ClipBoardItemModel {
     }
 
     public String getNote() {
-        return this.note;
+        return this.description;
     }
 
     public int getStatus() {

@@ -3,6 +3,7 @@ package deepankur.com.keyboardapp.keyboardCustomViews;
 import android.content.Context;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
 import deepankur.com.keyboardapp.R;
@@ -64,6 +65,9 @@ public class ViewController {
     }
 
     private void checkAndAddViewIfNotPresent(Context context, View rootView, KeyBoardOptions keyBoardOptions) {
+        if (keyBoardOptions == KeyBoardOptions.QWERTY) {//if qwerty is selected set all the views to normal height
+            setHeightToMatchKeyboard(rootView.findViewById(R.id.fragmentContainerFrame));
+        }
         KeyBoardOptions[] values = KeyBoardOptions.values();
         for (KeyBoardOptions option : values) {
             if (option == keyBoardOptions) {
@@ -96,13 +100,17 @@ public class ViewController {
             favouriteApplicationView.setTag(keyBoardOptions);
             frameLayout.addView(favouriteApplicationView);
             Log.d(TAG, "addView: " + rootView.getHeight());
-            favouriteApplicationView.getLayoutParams().height = getKeyboardHeight();
+            favouriteApplicationView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         } else if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD) {
             final ClipBoardView clipBoardView = new ClipBoardView(context);
             clipBoardView.setTag(keyBoardOptions);
             frameLayout.addView(clipBoardView);
-            clipBoardView.getLayoutParams().height = getKeyboardHeight();
+            clipBoardView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
         }
+    }
+
+    private void setHeightToMatchKeyboard(View v) {
+        v.getLayoutParams().height = getKeyboardHeight();
     }
 
     private int getKeyboardHeight() {

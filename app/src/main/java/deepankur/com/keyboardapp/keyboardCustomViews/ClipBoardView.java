@@ -77,7 +77,7 @@ public class ClipBoardView extends FrameLayout implements Refreshable {
 
     private void onAddNewItemClicked(){
         addItemFrame.removeAllViews();
-        AddClipboardItemView addClipboardItemView = new AddClipboardItemView(context);
+        AddEditClipboardItemView addClipboardItemView = new AddEditClipboardItemView(context);
         addItemFrame.addView(addClipboardItemView);
         addClipboardItemView.getLayoutParams().height = ViewController.KEYBOARD_HEIGHT;
     }
