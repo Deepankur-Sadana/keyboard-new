@@ -24,6 +24,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.Keyboard.Key;
 import android.inputmethodservice.KeyboardView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.inputmethod.InputMethodSubtype;
 
 import java.util.List;
@@ -42,8 +43,11 @@ public class LatinKeyboardView extends KeyboardView {
         super(context, attrs, defStyle);
     }
 
+    static final String TAG = LatinKeyboardView.class.getSimpleName();
+
     @Override
     protected boolean onLongPress(Key key) {
+        Log.d(TAG, "onLongPress: " + key.toString());
         if (key.codes[0] == Keyboard.KEYCODE_CANCEL) {
             getOnKeyboardActionListener().onKey(KEYCODE_OPTIONS, null);
             return true;
@@ -57,7 +61,7 @@ public class LatinKeyboardView extends KeyboardView {
     }
 
     void setSubtypeOnSpaceKey(final InputMethodSubtype subtype) {
-        final LatinKeyboard keyboard = (LatinKeyboard)getKeyboard();
+        final LatinKeyboard keyboard = (LatinKeyboard) getKeyboard();
         //keyboard.setSpaceIcon(getResources().getDrawable(subtype.getIconResId()));
         invalidateAllKeys();
     }
@@ -72,8 +76,8 @@ public class LatinKeyboardView extends KeyboardView {
         paint.setColor(Color.LTGRAY);
 
         List<Key> keys = getKeyboard().getKeys();
-        for(Key key: keys) {
-            if(key.label != null) {
+        for (Key key : keys) {
+            if (key.label != null) {
                 if (key.label.equals("q")) {
                     canvas.drawText("1", key.x + (key.width - 25), key.y + 40, paint);
                 } else if (key.label.equals("w")) {

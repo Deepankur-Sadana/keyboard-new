@@ -57,6 +57,7 @@ import utils.AppLibrary;
  * focused on simplicity over completeness, so it should in no way be considered
  * to be a complete soft keyboard implementation.  Its purpose is to provide
  * a basic example for how you would get started writing an input method, to
+ * <p>
  * be fleshed out as appropriate.
  */
 public class SoftKeyboard extends InputMethodService
@@ -549,41 +550,7 @@ public class SoftKeyboard extends InputMethodService
 
     // Implementation of KeyboardViewListener
 
-    public void onKey(int primaryCode, int[] keyCodes) {
-        Log.d("Test", "KEYCODE: " + primaryCode);
-        playClick(primaryCode);
-        if (isWordSeparator(primaryCode)) {
-            // Handle separator
-            if (mComposing.length() > 0) {
-                commitTyped(getCurrentInputConnection());
-            }
-            sendKey(primaryCode);
-            updateShiftKeyState(getCurrentInputEditorInfo());
-        } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
-            handleBackspace();
-        } else if (primaryCode == Keyboard.KEYCODE_SHIFT) {
-            handleShift();
-        } else if (primaryCode == Keyboard.KEYCODE_CANCEL) {
-            handleClose();
-            return;
-        } else if (primaryCode == LatinKeyboardView.KEYCODE_LANGUAGE_SWITCH) {
-            handleLanguageSwitch();
-            return;
-        } else if (primaryCode == LatinKeyboardView.KEYCODE_OPTIONS) {
-            // Show a menu or somethin'
-        } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE
-                && mInputView != null) {
-            Keyboard current = mInputView.getKeyboard();
-            if (current == mSymbolsKeyboard || current == mSymbolsShiftedKeyboard) {
-                setLatinKeyboard(mQwertyKeyboard);
-            } else {
-                setLatinKeyboard(mSymbolsKeyboard);
-                mSymbolsKeyboard.setShifted(false);
-            }
-        } else {
-            handleCharacter(primaryCode, keyCodes);
-        }
-    }
+
     private void playClick(int keyCode) {
         AudioManager am = (AudioManager) getSystemService(AUDIO_SERVICE);
         switch (keyCode) {
@@ -602,17 +569,6 @@ public class SoftKeyboard extends InputMethodService
         }
     }
 
-    public void onText(CharSequence text) {
-        InputConnection ic = getCurrentInputConnection();
-        if (ic == null) return;
-        ic.beginBatchEdit();
-        if (mComposing.length() > 0) {
-            commitTyped(ic);
-        }
-        ic.commitText(text, 0);
-        ic.endBatchEdit();
-        updateShiftKeyState(getCurrentInputEditorInfo());
-    }
 
     /**
      * Update the list of available candidates from the current composing
@@ -771,23 +727,78 @@ public class SoftKeyboard extends InputMethodService
         }
     }
 
+    final static String TAG = SoftKeyboard.class.getSimpleName();
+    public void onKey(int primaryCode, int[] keyCodes) {
+
+        Log.d(TAG, "KEYCODE: " + primaryCode);
+        playClick(primaryCode);
+        if (isWordSeparator(primaryCode)) {
+            // Handle separator
+            if (mComposing.length() > 0) {
+                commitTyped(getCurrentInputConnection());
+            }
+            sendKey(primaryCode);
+            updateShiftKeyState(getCurrentInputEditorInfo());
+        } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
+            handleBackspace();
+        } else if (primaryCode == Keyboard.KEYCODE_SHIFT) {
+            handleShift();
+        } else if (primaryCode == Keyboard.KEYCODE_CANCEL) {
+            handleClose();
+            return;
+        } else if (primaryCode == LatinKeyboardView.KEYCODE_LANGUAGE_SWITCH) {
+            handleLanguageSwitch();
+            return;
+        } else if (primaryCode == LatinKeyboardView.KEYCODE_OPTIONS) {
+            // Show a menu or somethin'
+        } else if (primaryCode == Keyboard.KEYCODE_MODE_CHANGE
+                && mInputView != null) {
+            Keyboard current = mInputView.getKeyboard();
+            if (current == mSymbolsKeyboard || current == mSymbolsShiftedKeyboard) {
+                setLatinKeyboard(mQwertyKeyboard);
+            } else {
+                setLatinKeyboard(mSymbolsKeyboard);
+                mSymbolsKeyboard.setShifted(false);
+            }
+        } else {
+            handleCharacter(primaryCode, keyCodes);
+        }
+    }
+
+    public void onText(CharSequence text) {
+        InputConnection ic = getCurrentInputConnection();
+        if (ic == null) return;
+        ic.beginBatchEdit();
+        if (mComposing.length() > 0) {
+            commitTyped(ic);
+        }
+        ic.commitText(text, 0);
+        ic.endBatchEdit();
+        updateShiftKeyState(getCurrentInputEditorInfo());
+    }
+
     public void swipeLeft() {
-        Log.d("SoftKeyboard", "Swipe left");
+        Log.d(TAG, "Swipe left");
         handleBackspace();
     }
 
     public void swipeDown() {
+        Log.d(TAG, "swipeDown: ");
         handleClose();
     }
 
     public void swipeUp() {
+        Log.d(TAG, "swipeUp: ");
     }
 
+
     public void onPress(int primaryCode) {
+        Log.d(TAG, "onPress: ");
 
     }
 
     public void onRelease(int primaryCode) {
+        Log.d(TAG, "onRelease: " + primaryCode);
 
     }
 
