@@ -25,7 +25,7 @@
             android:text="SAVE"
             android:textColor="@android:color/white" />
 
-        <TextView
+        <EditText
             android:id="@+id/titleTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,10 +38,10 @@
             android:paddingStart="16dp"
             android:textColor="@android:color/black" />
 
-        <TextView
+        <EditText
             android:id="@+id/descriptionTV"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@id/titleTV"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"

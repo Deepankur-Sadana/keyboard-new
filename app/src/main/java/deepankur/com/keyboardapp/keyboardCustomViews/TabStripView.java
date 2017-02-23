@@ -63,6 +63,7 @@ public class TabStripView extends LinearLayout {
                 case CONTACTS:
                 case CAMERA:
                 case LOCATION:
+                default:
                     break;
             }
         }
