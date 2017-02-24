@@ -4,19 +4,22 @@ import android.content.Context;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import de.greenrobot.event.EventBus;
+import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
+import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
+import deepankur.com.keyboardapp.interfaces.Recyclable;
 import deepankur.com.keyboardapp.interfaces.Refreshable;
 
 /**
  * Created by deepankur on 2/7/17.
  */
 
-public class ViewController {
+public class ViewController implements GreenBotMessageKeyIds {
     private TabStripView tabStripView;
     private Context context;
     private View rootView;
@@ -38,6 +41,7 @@ public class ViewController {
 
 
     private void init(final Context context, final View rootView) {
+        EventBus.getDefault().register(this);
         rootView.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -66,24 +70,39 @@ public class ViewController {
     private void adjustViews(KeyBoardOptions keyBoardOptions) {
         RelativeLayout.LayoutParams keyBoardFrameParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.keyboardContainer).getLayoutParams();
         int frameToShow;
+        keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
         if (keyBoardOptions == KeyBoardOptions.QWERTY) {
-            keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
+//            keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
             frameToShow = R.id.keyboardContainer;
         } else {//non qwerty
-            if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD)
-                keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.fragmentContainerFrame);
-            else keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
-
+//            if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD)
+//                keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.fragmentContainerFrame);
+//            else
+//                keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
             frameToShow = R.id.fragmentContainerFrame;
         }
 
         ((RelativeLayout) rootView).bringChildToFront(rootView.findViewById(frameToShow));
-
-        rootView.findViewById(R.id.keyboardContainer).setLayoutParams(keyBoardFrameParams);
-
-        rootView.requestLayout();
-        rootView.invalidate();
     }
+
+    public void onEvent(MessageEvent messageEvent) {
+        Log.d(TAG, "onEvent: " + messageEvent);
+        if (messageEvent.getMessageType() == POPUP_KEYBOARD_FOR_IN_APP_EDITING)
+            bringKeyboardToFrameContainerBottom();
+        else if (messageEvent.getMessageType() == ON_IN_APP_EDITING_FINISHED)
+            enterNormalKeyboardMode();
+    }
+
+    private void bringKeyboardToFrameContainerBottom() {
+        RelativeLayout.LayoutParams keyBoardFrameParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.keyboardContainer).getLayoutParams();
+        keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.fragmentContainerFrame);
+    }
+
+    private void enterNormalKeyboardMode() {
+        RelativeLayout.LayoutParams keyBoardFrameParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.keyboardContainer).getLayoutParams();
+        keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
+    }
+
 
     private void checkAndAddViewIfNotPresent(Context context, View rootView, KeyBoardOptions keyBoardOptions) {
         if (keyBoardOptions == KeyBoardOptions.QWERTY) {//if qwerty is selected set all the views to normal height
@@ -95,10 +114,11 @@ public class ViewController {
                 boolean exists = false;
                 FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.fragmentContainerFrame);
                 for (int i = 0; i < frameLayout.getChildCount(); i++) {
-
-                    if (keyBoardOptions == frameLayout.getChildAt(i).getTag()) {
+                    if (keyBoardOptions == frameLayout.getChildAt(i).getTag()) {//the one we are looking for
                         exists = true;
-                        break;
+                    } else {// pause everything else
+                        if (frameLayout.getChildAt(i) instanceof Recyclable)
+                            ((Recyclable) frameLayout.getChildAt(i)).onRestInBackground();
                     }
 
                 }
@@ -130,21 +150,6 @@ public class ViewController {
         }
     }
 
-
-
-    private void recursiveLoopChildren(ViewGroup parent) {
-        for (int i = parent.getChildCount() - 1; i >= 0; i--) {
-            final View child = parent.getChildAt(i);
-            if (child instanceof ViewGroup) {
-                recursiveLoopChildren((ViewGroup) child);
-                // DO SOMETHING WITH VIEWGROUP, AFTER CHILDREN HAS BEEN LOOPED
-            } else {
-                if (child != null) {
-                    // DO SOMETHING WITH VIEW
-                }
-            }
-        }
-    }
 
     private void setHeightToMatchKeyboard(View v) {
         v.getLayoutParams().height = getKeyboardHeight();

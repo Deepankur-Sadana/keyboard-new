@@ -27,10 +27,6 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable {
     public static final int ADD = 0, EDIT = 1;
     private ClipBoardItemModel clipBoardItemModel;
 
-    public void setClipBoardItemModel(ClipBoardItemModel clipBoardItemModel) {
-        this.clipBoardItemModel = clipBoardItemModel;
-    }
-
     public AddEditClipboardItemView(Context context) {
         super(context);
         init(context);

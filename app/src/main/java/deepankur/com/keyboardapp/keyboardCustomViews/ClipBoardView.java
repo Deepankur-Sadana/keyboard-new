@@ -11,10 +11,14 @@ import android.widget.FrameLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.adapters.BaseRecylerAdapter;
 import deepankur.com.keyboardapp.adapters.ClipboardAdapter;
 import deepankur.com.keyboardapp.databases.DatabaseHelper;
+import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
+import deepankur.com.keyboardapp.interfaces.Recyclable;
 import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;
 import deepankur.com.keyboardapp.interfaces.Refreshable;
 import deepankur.com.keyboardapp.models.ClipBoardItemModel;
@@ -23,7 +27,7 @@ import deepankur.com.keyboardapp.models.ClipBoardItemModel;
  * Created by deepankur on 2/19/17.
  */
 
-public class ClipBoardView extends FrameLayout implements Refreshable {
+public class ClipBoardView extends FrameLayout implements Refreshable, Recyclable, GreenBotMessageKeyIds {
     private RecyclerView mRecycler;
     private ClipboardAdapter clipboardAdapter;
 
@@ -75,11 +79,13 @@ public class ClipBoardView extends FrameLayout implements Refreshable {
         }
     };
 
-    private void onAddNewItemClicked(){
+    private void onAddNewItemClicked() {
         addItemFrame.removeAllViews();
         AddEditClipboardItemView addClipboardItemView = new AddEditClipboardItemView(context);
         addItemFrame.addView(addClipboardItemView);
         addClipboardItemView.getLayoutParams().height = ViewController.KEYBOARD_HEIGHT;
+        EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING,null));
+
     }
 
     private void openDialogForNewClipboardItem() {
@@ -128,5 +134,11 @@ public class ClipBoardView extends FrameLayout implements Refreshable {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void onRestInBackground() {
+        if (rootView != null)
+            ((FrameLayout) rootView.findViewById(R.id.add_clipboard_item_dialog)).removeAllViews();
     }
 }

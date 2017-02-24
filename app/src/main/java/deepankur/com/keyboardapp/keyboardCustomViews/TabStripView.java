@@ -46,6 +46,7 @@ public class TabStripView extends LinearLayout {
         }
     }
 
+    private KeyBoardOptions mCurrentKeyboardOption, mPreviousKeyboardOprion;
     private View.OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
