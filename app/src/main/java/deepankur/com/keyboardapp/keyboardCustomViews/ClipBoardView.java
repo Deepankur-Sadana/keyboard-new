@@ -1,6 +1,7 @@
 package deepankur.com.keyboardapp.keyboardCustomViews;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
@@ -67,30 +68,30 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
         @Override
         public void onItemClick(int clickType, int holderType, Object data) {
             if (holderType == BaseRecylerAdapter.HEADER_HOLDER) {
-                onAddNewItemClicked();
+                loadClipboardItemEditorView(AddEditClipboardItemView.ADD, null);
 
             } else if (holderType == BaseRecylerAdapter.ITEM_HOLDER) {
                 if (clickType == CLICK_TYPE_NORMAL) {
 
                 } else if (clickType == CLICK_TYPE_LONG_PRESS) {
+                    loadClipboardItemEditorView(AddEditClipboardItemView.EDIT, (ClipBoardItemModel) data);
 
                 }
             }
         }
     };
 
-    private void onAddNewItemClicked() {
+
+    private void loadClipboardItemEditorView(int actionType, @Nullable ClipBoardItemModel clipBoardItemModel) {
         addItemFrame.removeAllViews();
         AddEditClipboardItemView addClipboardItemView = new AddEditClipboardItemView(context);
+        addClipboardItemView.setACTION_TYPE(actionType);
+        if (clipBoardItemModel != null)
+            addClipboardItemView.setClipBoardItemModel(clipBoardItemModel);
         addItemFrame.addView(addClipboardItemView);
-        addClipboardItemView.getLayoutParams().height = ViewController.KEYBOARD_HEIGHT;
-        EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING,null));
-
+        EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
     }
 
-    private void openDialogForNewClipboardItem() {
-
-    }
 
     private ArrayList<ClipBoardItemModel> clipboardItemsList;
 

@@ -56,7 +56,7 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ClipBoardItemModel clipBoardItem = clipBoardItemsList.get(position + 1);
             VHItem itemHolder = (VHItem) holder;
             itemHolder.itemKeyTv.setText(clipBoardItem.getNote());
-
+            itemHolder.rootView.setTag(clipBoardItem);
         }
     }
 

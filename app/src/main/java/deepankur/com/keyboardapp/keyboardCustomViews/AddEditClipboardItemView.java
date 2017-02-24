@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import de.greenrobot.event.EventBus;
 import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.cache.ClipBoardCache;
@@ -45,6 +46,8 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable {
     private EditText titleEt, descriptionEt;
 
     private void init(Context context) {
+        EventBus.getDefault().register(this);
+
         View rootView = inflate(context, R.layout.clipboard_add_item, null);
         this.removeAllViews();
         this.addView(rootView);
@@ -100,5 +103,13 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable {
             descriptionEt.setText(titleEt.getText() + s);
         }
         return false;
+    }
+
+    public void setACTION_TYPE(int ACTION_TYPE) {
+        this.ACTION_TYPE = ACTION_TYPE;
+    }
+
+    public void setClipBoardItemModel(ClipBoardItemModel clipBoardItemModel) {
+        this.clipBoardItemModel = clipBoardItemModel;
     }
 }

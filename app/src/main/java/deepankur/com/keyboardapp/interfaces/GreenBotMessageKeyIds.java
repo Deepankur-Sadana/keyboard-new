@@ -7,4 +7,5 @@ package deepankur.com.keyboardapp.interfaces;
 public interface GreenBotMessageKeyIds {
     int POPUP_KEYBOARD_FOR_IN_APP_EDITING = 1;
     int ON_IN_APP_EDITING_FINISHED = 2;
+    int ON_IN_APP_TEXT_TO_COMMIT = 3;
 }

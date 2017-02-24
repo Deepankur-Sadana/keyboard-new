@@ -37,6 +37,7 @@ import de.greenrobot.event.EventBus;
 import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
+import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
 import deepankur.com.keyboardapp.keyboardCustomViews.TabStripView;
 import deepankur.com.keyboardapp.keyboardCustomViews.ViewController;
 import io.fabric.sdk.android.Fabric;
@@ -51,7 +52,7 @@ import utils.AppLibrary;
  * be fleshed out as appropriate.
  */
 public class SoftKeyboard extends InputMethodService
-        implements KeyboardView.OnKeyboardActionListener, SpellCheckerSession.SpellCheckerSessionListener {
+        implements KeyboardView.OnKeyboardActionListener, SpellCheckerSession.SpellCheckerSessionListener, GreenBotMessageKeyIds {
     static final boolean DEBUG = false;
 
     /**
@@ -105,10 +106,11 @@ public class SoftKeyboard extends InputMethodService
         mScs = tsm.newSpellCheckerSession(null, null, this, true);
     }
 
-//    @Subscribe
+    //    @Subscribe
     public void onEventMainThread(MessageEvent event) {
 
     }
+
     /**
      * This is the point where you can do all of your UI initialization.  It
      * is called after creation and any configuration change.
@@ -216,7 +218,7 @@ public class SoftKeyboard extends InputMethodService
                 // be doing predictive text (showing candidates as the
                 // user types).
                 mCurKeyboard = mQwertyKeyboard;
-                mPredictionOn = true;
+                mPredictionOn = false;//Todo recently changed this from true
 
                 // We now look for a few special variations of text that will
                 // modify our behavior.
@@ -635,6 +637,17 @@ public class SoftKeyboard extends InputMethodService
         }
     }
 
+
+    private boolean mInAppEditing = false;
+
+    public void onEvent(MessageEvent messageEvent) {
+        Log.d(TAG, "onEvent: " + messageEvent);
+        if (messageEvent.getMessageType() == POPUP_KEYBOARD_FOR_IN_APP_EDITING)
+            mInAppEditing = true;
+        else if (messageEvent.getMessageType() == ON_IN_APP_EDITING_FINISHED)
+            mInAppEditing = false;
+    }
+
     private void handleCharacter(int primaryCode, int[] keyCodes) {
         if (isInputViewShown()) {
             if (mInputView.isShifted()) {
@@ -647,10 +660,14 @@ public class SoftKeyboard extends InputMethodService
             updateShiftKeyState(getCurrentInputEditorInfo());
             updateCandidates();
         } else {
-            getCurrentInputConnection().commitText(
-                    String.valueOf((char) primaryCode), 1);
+            if (!mInAppEditing)
+                getCurrentInputConnection().commitText(String.valueOf((char) primaryCode), 1);
+            else
+                EventBus.getDefault().post(new MessageEvent(ON_IN_APP_TEXT_TO_COMMIT, String.valueOf((char) primaryCode)));
+
         }
     }
+
 
     private void handleClose() {
         commitTyped(getCurrentInputConnection());
@@ -724,6 +741,7 @@ public class SoftKeyboard extends InputMethodService
     }
 
     final static String TAG = SoftKeyboard.class.getSimpleName();
+
     public void onKey(int primaryCode, int[] keyCodes) {
 
         Log.d(TAG, "KEYCODE: " + primaryCode);
@@ -789,7 +807,7 @@ public class SoftKeyboard extends InputMethodService
 
 
     public void onPress(int primaryCode) {
-        Log.d(TAG, "onPress: "+primaryCode);
+        Log.d(TAG, "onPress: " + primaryCode);
 
     }
 
@@ -848,7 +866,7 @@ public class SoftKeyboard extends InputMethodService
     }
 
 
-    private void aVoid(){
+    private void aVoid() {
         if (getCurrentInputConnection() != null) {
             CharSequence textAfter = getCurrentInputConnection().getTextAfterCursor(1024, 0);
             if (!TextUtils.isEmpty(textAfter)) {
