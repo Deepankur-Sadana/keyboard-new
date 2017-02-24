@@ -100,7 +100,7 @@ public class ViewController {
             favouriteApplicationView.setTag(keyBoardOptions);
             frameLayout.addView(favouriteApplicationView);
             Log.d(TAG, "addView: " + rootView.getHeight());
-            favouriteApplicationView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+            favouriteApplicationView.getLayoutParams().height = getKeyboardHeight();
         } else if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD) {
             final ClipBoardView clipBoardView = new ClipBoardView(context);
             clipBoardView.setTag(keyBoardOptions);

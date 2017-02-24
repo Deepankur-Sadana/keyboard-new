@@ -1,5 +1,6 @@
 package deepankur.com.keyboardapp.keyboardCustomViews;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -21,10 +22,14 @@ import deepankur.com.keyboardapp.models.ClipBoardItemModel;
 public class AddEditClipboardItemView extends FrameLayout implements Reachable {
 
     private Context context;
-    static final String TAG = AddEditClipboardItemView.class.getSimpleName();
-    int ACTION_TYPE;
-    final int ADD = 0, EDIT = 1;
-    ClipBoardItemModel clipBoardItemModel;
+    private static final String TAG = AddEditClipboardItemView.class.getSimpleName();
+    private int ACTION_TYPE;
+    public static final int ADD = 0, EDIT = 1;
+    private ClipBoardItemModel clipBoardItemModel;
+
+    public void setClipBoardItemModel(ClipBoardItemModel clipBoardItemModel) {
+        this.clipBoardItemModel = clipBoardItemModel;
+    }
 
     public AddEditClipboardItemView(Context context) {
         super(context);
@@ -87,6 +92,7 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable {
         }
     };
 
+    @SuppressLint("SetTextI18n")
     @Override
     public boolean onEvent(MessageEvent messageEvent) {
         Log.d(TAG, "onEvent: ");

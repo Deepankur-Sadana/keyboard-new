@@ -38,15 +38,15 @@ public class BaseInputMethodService extends InputMethodService
 
     @Override
     public View onCreateInputView() {
-        Fabric.with(this, new Crashlytics());
+//        Fabric.with(this, new Crashlytics());
         View view = getLayoutInflater().inflate(R.layout.keyboard, null);
-        kv = (KeyboardView) view.findViewById(R.id.keyboardView);
-        kv.setTag(KeyBoardOptions.QWERTY);
-        keyboard = new Keyboard(this, R.xml.qwerty);
-        kv.setKeyboard(keyboard);
-        kv.setOnKeyboardActionListener(this);
-        new ViewController(this, view);
-        FavouriteApplicationsListAdapter.setPackages(this);
+//        kv = (KeyboardView) view.findViewById(R.id.keyboardView);
+//        kv.setTag(KeyBoardOptions.QWERTY);
+//        keyboard = new Keyboard(this, R.xml.qwerty);
+//        kv.setKeyboard(keyboard);
+//        kv.setOnKeyboardActionListener(this);
+//        new ViewController(this, view);
+//        FavouriteApplicationsListAdapter.setPackages(this);
         return view;
     }
 

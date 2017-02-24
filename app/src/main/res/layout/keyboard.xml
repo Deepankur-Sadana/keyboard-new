@@ -5,30 +5,30 @@
     android:layout_alignParentBottom="true"
     android:background="@android:color/holo_blue_light">
 
-    <deepankur.com.keyboardapp.keyboardCustomViews.TabStripView
-        android:id="@+id/tabsStrip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@android:color/darker_gray"
-        android:orientation="horizontal"
-        android:padding="8dp" />
+    <!--<deepankur.com.keyboardapp.keyboardCustomViews.TabStripView-->
+        <!--android:id="@+id/tabsStrip"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@android:color/darker_gray"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:padding="8dp" />-->
 
-    <FrameLayout
-        android:id="@+id/keyboardContainer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tabsStrip">
+    <!--<FrameLayout-->
+        <!--android:id="@+id/keyboardContainer"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/tabsStrip">-->
 
-        <android.inputmethodservice.KeyboardView
-            android:id="@+id/keyboardView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:keyPreviewLayout="@layout/preview" />
-    </FrameLayout>
+        <!--<android.inputmethodservice.KeyboardView-->
+            <!--android:id="@+id/keyboardView"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:keyPreviewLayout="@layout/preview" />-->
+    <!--</FrameLayout>-->
 
-    <FrameLayout
-        android:id="@+id/fragmentContainerFrame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tabsStrip" />
+    <!--<FrameLayout-->
+        <!--android:id="@+id/fragmentContainerFrame"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/tabsStrip" />-->
 </RelativeLayout>

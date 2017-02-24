@@ -28,14 +28,18 @@ import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
 
+import com.crashlytics.android.Crashlytics;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
 import deepankur.com.keyboardapp.keyboardCustomViews.TabStripView;
 import deepankur.com.keyboardapp.keyboardCustomViews.ViewController;
+import io.fabric.sdk.android.Fabric;
 import utils.AppLibrary;
 
 /**
@@ -101,6 +105,10 @@ public class SoftKeyboard extends InputMethodService
         mScs = tsm.newSpellCheckerSession(null, null, this, true);
     }
 
+//    @Subscribe
+    public void onEventMainThread(MessageEvent event) {
+
+    }
     /**
      * This is the point where you can do all of your UI initialization.  It
      * is called after creation and any configuration change.
@@ -128,6 +136,7 @@ public class SoftKeyboard extends InputMethodService
      */
     @Override
     public View onCreateInputView() {
+        Fabric.with(this, new Crashlytics());
         View v = getLayoutInflater().inflate(R.layout.input, null);
         mInputView = (LatinKeyboardView) v.findViewById(R.id.keyboard);
         mInputView.setTag(KeyBoardOptions.QWERTY);
