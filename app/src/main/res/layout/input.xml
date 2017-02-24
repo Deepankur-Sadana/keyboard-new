@@ -12,6 +12,13 @@
         android:orientation="horizontal"
         android:padding="8dp" />
 
+
+    <FrameLayout
+        android:id="@+id/fragmentContainerFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tabsStrip" />
+
     <FrameLayout
         android:id="@+id/keyboardContainer"
         android:layout_width="match_parent"
@@ -29,10 +36,4 @@
             android:paddingTop="0dp"
             android:popupLayout="@layout/keyboard_popup_layout" />
     </FrameLayout>
-
-    <FrameLayout
-        android:id="@+id/fragmentContainerFrame"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/tabsStrip" />
 </RelativeLayout>

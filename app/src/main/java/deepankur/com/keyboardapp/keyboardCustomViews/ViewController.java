@@ -2,9 +2,11 @@ package deepankur.com.keyboardapp.keyboardCustomViews;
 
 import android.content.Context;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
 
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
@@ -36,13 +38,20 @@ public class ViewController {
 
 
     private void init(final Context context, final View rootView) {
+        rootView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                return true;
+            }
+        });
         tabStripView.setOnOptionClickedListener(new TabStripView.OnOptionClickedListener() {
             @Override
             public void onOptionClicked(KeyBoardOptions keyBoardOptions) {
 
-                toggleKeyboardViews(keyBoardOptions == KeyBoardOptions.QWERTY);
                 if (keyBoardOptions != KeyBoardOptions.QWERTY)
                     checkAndAddViewIfNotPresent(context, rootView, keyBoardOptions);
+
+                adjustViews(keyBoardOptions);
 
                 switch (keyBoardOptions) {
                     case QWERTY:
@@ -54,14 +63,26 @@ public class ViewController {
         });
     }
 
-    /**
-     * As we have keyboard and fragments in a different prent groups we can control their
-     * visibility from here
-     */
-    private void toggleKeyboardViews(boolean showKeyboard) {
-        rootView.findViewById(R.id.keyboardContainer).setVisibility(showKeyboard ? View.VISIBLE : View.GONE);
-        rootView.findViewById(R.id.fragmentContainerFrame).setVisibility(!showKeyboard ? View.VISIBLE : View.GONE);
+    private void adjustViews(KeyBoardOptions keyBoardOptions) {
+        RelativeLayout.LayoutParams keyBoardFrameParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.keyboardContainer).getLayoutParams();
+        int frameToShow;
+        if (keyBoardOptions == KeyBoardOptions.QWERTY) {
+            keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
+            frameToShow = R.id.keyboardContainer;
+        } else {//non qwerty
+            if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD)
+                keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.fragmentContainerFrame);
+            else keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
 
+            frameToShow = R.id.fragmentContainerFrame;
+        }
+
+        ((RelativeLayout) rootView).bringChildToFront(rootView.findViewById(frameToShow));
+
+        rootView.findViewById(R.id.keyboardContainer).setLayoutParams(keyBoardFrameParams);
+
+        rootView.requestLayout();
+        rootView.invalidate();
     }
 
     private void checkAndAddViewIfNotPresent(Context context, View rootView, KeyBoardOptions keyBoardOptions) {
@@ -105,7 +126,23 @@ public class ViewController {
             final ClipBoardView clipBoardView = new ClipBoardView(context);
             clipBoardView.setTag(keyBoardOptions);
             frameLayout.addView(clipBoardView);
-            clipBoardView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+            clipBoardView.getLayoutParams().height = getKeyboardHeight();
+        }
+    }
+
+
+
+    private void recursiveLoopChildren(ViewGroup parent) {
+        for (int i = parent.getChildCount() - 1; i >= 0; i--) {
+            final View child = parent.getChildAt(i);
+            if (child instanceof ViewGroup) {
+                recursiveLoopChildren((ViewGroup) child);
+                // DO SOMETHING WITH VIEWGROUP, AFTER CHILDREN HAS BEEN LOOPED
+            } else {
+                if (child != null) {
+                    // DO SOMETHING WITH VIEW
+                }
+            }
         }
     }
 
