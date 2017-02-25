@@ -12,6 +12,7 @@ import android.view.inputmethod.CorrectionInfo;
 import android.view.inputmethod.ExtractedText;
 import android.view.inputmethod.ExtractedTextRequest;
 import android.view.inputmethod.InputConnection;
+import android.widget.EditText;
 import android.widget.TextView;
 
 /**
@@ -22,17 +23,18 @@ public class CustomInputConnection extends BaseInputConnection {
     private static final boolean DEBUG = false;
     private static final String TAG = "CustomInputConnection";
 
-    private final TextView mTextView;
+    private final EditText mTextView;
 
     // Keeps track of nested begin/end batch edit to ensure this connection always has a
     // balanced impact on its associated TextView.
     // A negative value means that this connection has been finished by the InputMethodManager.
     private int mBatchEditNesting;
 
-    public CustomInputConnection(TextView textview) {
+    public CustomInputConnection(EditText textview) {
         super(textview, true);
         mTextView = textview;
     }
+
 
     @Override
     public Editable getEditable() {
