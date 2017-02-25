@@ -31,6 +31,7 @@ import android.view.textservice.TextServicesManager;
 import com.crashlytics.android.Crashlytics;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
@@ -173,6 +174,8 @@ public class SoftKeyboard extends InputMethodService
         return null;
     }
 
+    HashMap<EditorInfo, Boolean> storedOriginalEditorInfo = new HashMap<>();
+
     /**
      * This is the main point where we do our initialization of the input method
      * to begin operating on an application.  At this point we have been
@@ -181,6 +184,10 @@ public class SoftKeyboard extends InputMethodService
      */
     @Override
     public void onStartInput(EditorInfo attribute, boolean restarting) {
+        Log.d(TAG, "onStartInput: " + attribute + " restarting " + restarting + " imeOption " + attribute.imeOptions);
+        storedOriginalEditorInfo.clear();
+        storedOriginalEditorInfo.put(attribute, restarting);
+
         super.onStartInput(attribute, restarting);
 
         // Reset our state.  We want to do this even if restarting, because
@@ -603,6 +610,7 @@ public class SoftKeyboard extends InputMethodService
 
     private void handleBackspace() {
         final int length = mComposing.length();
+        Log.d(TAG, "handleBackspace: " + mComposing + " " + length);
         if (length > 1) {
             mComposing.delete(length - 1, length);
             getCurrentInputConnection().setComposingText(mComposing, 1);
@@ -662,7 +670,7 @@ public class SoftKeyboard extends InputMethodService
             updateCandidates();
         } else {
 //            if (!mInAppEditing)
-                getCurrentInputConnection().commitText(String.valueOf((char) primaryCode), 1);
+            getCurrentInputConnection().commitText(String.valueOf((char) primaryCode), 1);
 //            else
 //                EventBus.getDefault().post(new MessageEvent(ON_IN_APP_TEXT_TO_COMMIT, String.valueOf((char) primaryCode)));
 
@@ -802,7 +810,7 @@ public class SoftKeyboard extends InputMethodService
     }
 
     public void onText(CharSequence text) {
-        Log.d(TAG, "onText: "+text);
+        Log.d(TAG, "onText: " + text);
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
         ic.beginBatchEdit();
@@ -904,5 +912,11 @@ public class SoftKeyboard extends InputMethodService
                 }
             }
         }
+    }
+
+    public InputConnection getCurrentInputConnection() {
+        if (mInAppEditing)
+            return InAppEditingController.getInstance().getEditTextInputConnection();
+        return super.getCurrentInputConnection();
     }
 }

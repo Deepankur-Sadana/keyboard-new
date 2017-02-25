@@ -5,9 +5,12 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 import deepankur.com.keyboardapp.InAppEditingController;
@@ -79,8 +82,23 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
             descriptionEt.setText(clipBoardItemModel.getNote());
         }
         titleEt.requestFocus();
+        titleEt.setOnEditorActionListener(editorActionListener);
+        descriptionEt.setOnEditorActionListener(editorActionListener);
     }
 
+
+    EditText.OnEditorActionListener editorActionListener = new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            Log.d(TAG, "onEditorAction: " + actionId);
+
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                //do here your stuff f
+                return true;
+            }
+            return false;
+        }
+    };
     private View.OnFocusChangeListener focusChangeListener = new OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {

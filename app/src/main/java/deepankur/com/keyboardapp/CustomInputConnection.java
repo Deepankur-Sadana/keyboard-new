@@ -6,6 +6,7 @@ import android.text.Spanned;
 import android.text.method.KeyListener;
 import android.text.style.SuggestionSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.inputmethod.BaseInputConnection;
 import android.view.inputmethod.CompletionInfo;
 import android.view.inputmethod.CorrectionInfo;
@@ -30,11 +31,17 @@ public class CustomInputConnection extends BaseInputConnection {
     // A negative value means that this connection has been finished by the InputMethodManager.
     private int mBatchEditNesting;
 
-    public CustomInputConnection(EditText textview) {
-        super(textview, true);
-        mTextView = textview;
+    public CustomInputConnection(EditText editText) {
+        super(editText, true);
+        mTextView = editText;
     }
 
+    public boolean sendKeyEvent(KeyEvent event) {
+        Log.d(TAG, "sendKeyEvent: " + event);
+//        this.mIMM.dispatchKeyEventFromInputMethod(mTextView, event);
+        super.sendKeyEvent(event);
+        return false;
+    }
 
     @Override
     public Editable getEditable() {
@@ -47,7 +54,7 @@ public class CustomInputConnection extends BaseInputConnection {
 
     @Override
     public boolean beginBatchEdit() {
-        synchronized(this) {
+        synchronized (this) {
             if (mBatchEditNesting >= 0) {
                 mTextView.beginBatchEdit();
                 mBatchEditNesting++;
@@ -59,7 +66,7 @@ public class CustomInputConnection extends BaseInputConnection {
 
     @Override
     public boolean endBatchEdit() {
-        synchronized(this) {
+        synchronized (this) {
             if (mBatchEditNesting > 0) {
                 // When the connection is reset by the InputMethodManager and reportFinish
                 // is called, some endBatchEdit calls may still be asynchronously received from the
@@ -144,7 +151,7 @@ public class CustomInputConnection extends BaseInputConnection {
         if (mTextView != null) {
             ExtractedText et = new ExtractedText();
             if (mTextView.extractText(request, et)) {
-                if ((flags&GET_EXTRACTED_TEXT_MONITOR) != 0) {
+                if ((flags & GET_EXTRACTED_TEXT_MONITOR) != 0) {
 //                    mTextView.setExtracting(request);
                 }
                 return et;
