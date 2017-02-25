@@ -404,7 +404,7 @@ public class SoftKeyboard extends InputMethodService
      */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-
+        Log.d(TAG, "onKeyDown: keycode " + keyCode + " event: " + event);
         switch (keyCode) {
             case KeyEvent.KEYCODE_BACK:
                 // The InputMethodService already takes care of the back
@@ -474,6 +474,7 @@ public class SoftKeyboard extends InputMethodService
      */
     @Override
     public boolean onKeyUp(int keyCode, KeyEvent event) {
+        Log.d(TAG, "onKeyUp: keycode " + keyCode + " event: " + event);
         // If we want to do transformations on text being entered with a hard
         // keyboard, we need to process the up events to update the meta key
         // state we are tracking.
@@ -483,8 +484,6 @@ public class SoftKeyboard extends InputMethodService
                         keyCode, event);
             }
         }
-
-
         return super.onKeyUp(keyCode, event);
     }
 
