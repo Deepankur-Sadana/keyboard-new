@@ -17,6 +17,7 @@ import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.adapters.BaseRecylerAdapter;
 import deepankur.com.keyboardapp.adapters.ClipboardAdapter;
+import deepankur.com.keyboardapp.cache.ClipBoardCache;
 import deepankur.com.keyboardapp.databases.DatabaseHelper;
 import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
 import deepankur.com.keyboardapp.interfaces.Recyclable;
@@ -52,6 +53,7 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
 
     private void init(Context context) {
         rootView = inflate(context, R.layout.keyboard_view_clipboard, null);
+        ClipBoardCache.getInstance().addListener(clipBoardDataListener);
         this.addView(rootView);
         this.context = context;
         this.mRecycler = (RecyclerView) rootView.findViewById(R.id.recyclerView);
@@ -145,4 +147,18 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
         if (rootView != null)
             ((FrameLayout) rootView.findViewById(R.id.add_clipboard_item_dialog)).removeAllViews();
     }
+
+    private ClipBoardCache.ClipBoardDataListener clipBoardDataListener = new ClipBoardCache.ClipBoardDataListener() {
+        @Override
+        public void onItemAdded(ClipBoardItemModel clipBoardItemModel) {
+            if (clipboardAdapter != null)
+                clipboardAdapter.notifyDataSetChanged();
+        }
+
+        @Override
+        public void onItemEdited(ClipBoardItemModel clipBoardItemModel) {
+            if (clipboardAdapter != null)
+                clipboardAdapter.notifyDataSetChanged();
+        }
+    };
 }

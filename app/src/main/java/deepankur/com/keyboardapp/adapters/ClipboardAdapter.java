@@ -11,6 +11,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import deepankur.com.keyboardapp.R;
+import deepankur.com.keyboardapp.cache.ClipBoardCache;
 import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;
 import deepankur.com.keyboardapp.models.ClipBoardItemModel;
 
@@ -31,7 +32,7 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public ClipboardAdapter(Context context, ArrayList<ClipBoardItemModel> keyValueShortcuts, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
-        this.clipBoardItemsList = keyValueShortcuts;
+        this.clipBoardItemsList = ClipBoardCache.getInstance().getAllClipboardModels();
         this.recyclerViewClickInterface = recyclerViewClickInterface;
     }
 
@@ -52,8 +53,9 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         if (holder instanceof VHItem) {
-            ClipBoardItemModel clipBoardItem = clipBoardItemsList.get(position + 1);
+            ClipBoardItemModel clipBoardItem = clipBoardItemsList.get(position - 1);
             VHItem itemHolder = (VHItem) holder;
             itemHolder.itemKeyTv.setText(clipBoardItem.getNote());
             itemHolder.rootView.setTag(clipBoardItem);
@@ -87,7 +89,7 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         }
     }
 
-    private class VHItem extends RecyclerView.ViewHolder{
+    private class VHItem extends RecyclerView.ViewHolder {
         View rootView;
         TextView itemKeyTv;
 

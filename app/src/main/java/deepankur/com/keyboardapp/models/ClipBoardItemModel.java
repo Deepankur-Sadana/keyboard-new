@@ -49,6 +49,10 @@ public class ClipBoardItemModel {
         this.created_at = created_at;
     }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     // getters
     public long getId() {
         return this.id;

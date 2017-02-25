@@ -70,6 +70,9 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
                     if (ACTION_TYPE == EDIT) {
                         ClipBoardCache.getInstance().update(clipBoardItemModel);
                     } else if (ACTION_TYPE == ADD) {
+                        ClipBoardItemModel clipBoardItemModel = new ClipBoardItemModel();
+                        clipBoardItemModel.setNote(descriptionEt.getText().toString());
+                        clipBoardItemModel.setTitle(titleEt.getText().toString());
                         ClipBoardCache.getInstance().addItem(clipBoardItemModel);
                     }
                     ((FrameLayout) AddEditClipboardItemView.this.getParent()).removeView(AddEditClipboardItemView.this);

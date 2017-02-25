@@ -52,7 +52,7 @@ public class ClipBoardCache {
     }
 
 
-    interface ClipBoardDataListener {
+   public interface ClipBoardDataListener {
         void onItemAdded(ClipBoardItemModel clipBoardItemModel);
 
         void onItemEdited(ClipBoardItemModel clipBoardItemModel);
