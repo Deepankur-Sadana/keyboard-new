@@ -15,6 +15,7 @@
     </FrameLayout>
 
     <EditText
+        android:text="asdfghjkl ghcmhgcmhgcv"
         android:layout_gravity="top"
         android:hint="enter"
         android:layout_width="match_parent"

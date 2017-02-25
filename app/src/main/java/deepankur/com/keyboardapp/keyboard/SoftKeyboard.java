@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
+import deepankur.com.keyboardapp.InAppEditingController;
 import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
@@ -660,10 +661,10 @@ public class SoftKeyboard extends InputMethodService
             updateShiftKeyState(getCurrentInputEditorInfo());
             updateCandidates();
         } else {
-            if (!mInAppEditing)
+//            if (!mInAppEditing)
                 getCurrentInputConnection().commitText(String.valueOf((char) primaryCode), 1);
-            else
-                EventBus.getDefault().post(new MessageEvent(ON_IN_APP_TEXT_TO_COMMIT, String.valueOf((char) primaryCode)));
+//            else
+//                EventBus.getDefault().post(new MessageEvent(ON_IN_APP_TEXT_TO_COMMIT, String.valueOf((char) primaryCode)));
 
         }
     }
@@ -753,14 +754,20 @@ public class SoftKeyboard extends InputMethodService
     }
 
     public void onKey(int primaryCode, int[] keyCodes) {
-
-        if (mComposing.length() > 0) {
-            throw new RuntimeException("asdmndassk");
-        } else {
-            Log.d(TAG, "onKey: OK");
-        }
         Log.d(TAG, "onKey KEYCODE: " + primaryCode);
         playClick(primaryCode);
+
+//        if (mInAppEditing){
+//            InAppEditingController.getInstance().onKey(primaryCode, keyCodes);
+//            return;
+//        }
+
+//        if (mComposing.length() > 0) {
+//            throw new RuntimeException("asdmndassk");
+//        } else {
+//            Log.d(TAG, "onKey: OK");
+//        }
+
         if (isWordSeparator(primaryCode)) {
             // Handle separator
             if (mComposing.length() > 0) {

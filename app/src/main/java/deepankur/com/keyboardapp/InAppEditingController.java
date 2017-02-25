@@ -1,5 +1,6 @@
 package deepankur.com.keyboardapp;
 
+import android.util.Log;
 import android.widget.EditText;
 
 /**
@@ -7,6 +8,10 @@ import android.widget.EditText;
  */
 public class InAppEditingController {
     private static InAppEditingController ourInstance;
+    private final static String TAG = InAppEditingController.class.getSimpleName();
+
+    private InAppEditingController() {
+    }
 
     public static InAppEditingController getInstance() {
         if (ourInstance == null)
@@ -14,10 +19,17 @@ public class InAppEditingController {
         return ourInstance;
     }
 
-    private static EditText editText;
-    public static void setEditText(EditText editText){
-        InAppEditingController.editText = editText;
+    private EditText editText;
+
+    public void setEditText(EditText editText) {
+        this.editText = editText;
     }
-    private InAppEditingController() {
+
+    public void onKey(int primaryCode, int[] keyCodes) {
+        Log.d(TAG, "onKey: feeding " + primaryCode + " to: " + editText);
+    }
+
+    private void feedKey(int primaryCode,EditText editText) {
+        String previousText = editText.getText().toString();
     }
 }

@@ -100,13 +100,13 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
     @Override
     public boolean onEvent(MessageEvent messageEvent) {
         Log.d(TAG, "onEvent: ");
-        Object message = messageEvent.getMessage();
-        String s = (String) message;
-        if (titleEt.hasFocus()) {
-            titleEt.setText(titleEt.getText() + s);
-        } else if (descriptionEt.hasFocus()) {
-            descriptionEt.setText(titleEt.getText() + s);
-        }
+//        Object message = messageEvent.getMessage();
+//        String s = (String) message;
+//        if (titleEt.hasFocus()) {
+//            titleEt.setText(titleEt.getText() + s);
+//        } else if (descriptionEt.hasFocus()) {
+//            descriptionEt.setText(titleEt.getText() + s);
+//        }
         return false;
     }
 
