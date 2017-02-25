@@ -56,5 +56,7 @@ public class ClipBoardCache {
         void onItemAdded(ClipBoardItemModel clipBoardItemModel);
 
         void onItemEdited(ClipBoardItemModel clipBoardItemModel);
+
+       void onListChanged();
     }
 }

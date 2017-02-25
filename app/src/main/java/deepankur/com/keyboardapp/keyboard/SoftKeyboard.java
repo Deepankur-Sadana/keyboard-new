@@ -654,6 +654,9 @@ public class SoftKeyboard extends InputMethodService
             mInAppEditing = true;
         else if (messageEvent.getMessageType() == ON_IN_APP_EDITING_FINISHED)
             mInAppEditing = false;
+        else if (messageEvent.getMessageType() == ON_CLIPBOARD_ITEM_SELECTED) {
+            Log.d(TAG, "onEvent: " + messageEvent.getMessage());
+        }
     }
 
     private void handleCharacter(int primaryCode, int[] keyCodes) {

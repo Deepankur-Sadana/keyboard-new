@@ -10,8 +10,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
+import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.cache.ClipBoardCache;
+import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
 import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;
 import deepankur.com.keyboardapp.models.ClipBoardItemModel;
 
@@ -22,13 +25,12 @@ import static deepankur.com.keyboardapp.adapters.BaseRecylerAdapter.ITEM_HOLDER;
  * Created by deepankursadana on 17/02/17.
  */
 
-public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements GreenBotMessageKeyIds {
 
     private Context context;
     private ArrayList<ClipBoardItemModel> clipBoardItemsList;
     private RecyclerViewClickInterface recyclerViewClickInterface;
     private static final int ACTION_CREATE_NEW = 55;
-//    public static final int HEADER_CLICKED = 11, ITEM_CLICKED = 22;
 
     public ClipboardAdapter(Context context, ArrayList<ClipBoardItemModel> keyValueShortcuts, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
@@ -103,6 +105,8 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     Log.d(TAG, "onClick: new clipboard item adding request");
                     if (recyclerViewClickInterface != null)
                         recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, ITEM_HOLDER, v.getTag());
+
+                    EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, ((ClipBoardItemModel) rootView.getTag()).getNote()));
                 }
             });
             v.setOnLongClickListener(new View.OnLongClickListener() {

@@ -160,5 +160,11 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
             if (clipboardAdapter != null)
                 clipboardAdapter.notifyDataSetChanged();
         }
+
+        @Override
+        public void onListChanged() {
+            if (clipboardAdapter != null)
+                clipboardAdapter.notifyDataSetChanged();
+        }
     };
 }
