@@ -10,9 +10,11 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 
 import de.greenrobot.event.EventBus;
+import deepankur.com.keyboardapp.InAppEditingController;
 import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.cache.ClipBoardCache;
+import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
 import deepankur.com.keyboardapp.interfaces.Reachable;
 import deepankur.com.keyboardapp.models.ClipBoardItemModel;
 
@@ -20,7 +22,7 @@ import deepankur.com.keyboardapp.models.ClipBoardItemModel;
  * Created by deepankursadana on 21/02/17.
  */
 
-public class AddEditClipboardItemView extends FrameLayout implements Reachable {
+public class AddEditClipboardItemView extends FrameLayout implements Reachable, GreenBotMessageKeyIds {
 
     private Context context;
     private static final String TAG = AddEditClipboardItemView.class.getSimpleName();
@@ -68,6 +70,7 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable {
                         ClipBoardCache.getInstance().addItem(clipBoardItemModel);
                     }
                     ((FrameLayout) AddEditClipboardItemView.this.getParent()).removeView(AddEditClipboardItemView.this);
+                    EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
                 }
             }
         });
@@ -75,11 +78,13 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable {
             titleEt.setText(clipBoardItemModel.getTitle());
             descriptionEt.setText(clipBoardItemModel.getNote());
         }
+        titleEt.requestFocus();
     }
 
     private View.OnFocusChangeListener focusChangeListener = new OnFocusChangeListener() {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
+            InAppEditingController.getInstance().setEditText((EditText) v);
             switch (v.getId()) {
                 case R.id.titleTV:
                     Log.d(TAG, "onFocusChange: title " + hasFocus);

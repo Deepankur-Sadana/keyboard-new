@@ -52,6 +52,8 @@ public class ViewController implements GreenBotMessageKeyIds {
             @Override
             public void onOptionClicked(KeyBoardOptions keyBoardOptions) {
 
+                EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
+
                 if (keyBoardOptions != KeyBoardOptions.QWERTY)
                     checkAndAddViewIfNotPresent(context, rootView, keyBoardOptions);
 

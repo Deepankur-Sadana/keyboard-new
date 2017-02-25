@@ -14,6 +14,11 @@
         android:clipToPadding="false">
     </FrameLayout>
 
+    <EditText
+        android:layout_gravity="top"
+        android:hint="enter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
     <!--<FrameLayout-->
         <!--android:orientation="vertical"-->
         <!--android:layout_width="@dimen/drawer_width"-->

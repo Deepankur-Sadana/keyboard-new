@@ -137,6 +137,9 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
         return false;
     }
 
+    /**
+     * we remove add/edit clipboard item when user switches to any  other option
+     */
     @Override
     public void onRestInBackground() {
         if (rootView != null)

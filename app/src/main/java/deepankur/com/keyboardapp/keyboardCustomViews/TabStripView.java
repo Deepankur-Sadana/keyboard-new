@@ -46,11 +46,14 @@ public class TabStripView extends LinearLayout {
         }
     }
 
-    private KeyBoardOptions mCurrentKeyboardOption, mPreviousKeyboardOprion;
+    private KeyBoardOptions mCurrentKeyboardOption = KeyBoardOptions.QWERTY;
     private View.OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
             KeyBoardOptions tag = (KeyBoardOptions) v.getTag();
+            if (tag == mCurrentKeyboardOption)
+                return;
+            mCurrentKeyboardOption = tag;
             if (onOptionClickedListener != null)
                 onOptionClickedListener.onOptionClicked(tag);
             for (int i = 0; i < TabStripView.this.getChildCount(); i++) {

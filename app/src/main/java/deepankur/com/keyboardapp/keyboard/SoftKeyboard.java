@@ -423,7 +423,7 @@ public class SoftKeyboard extends InputMethodService
 
             case KeyEvent.KEYCODE_ENTER:
                 // Let the underlying text editor always handle these.
-                return false;
+                return true;
             default:
                 // For all other keys, if we want to do transformations on
                 // text being entered with a hard keyboard, we need to process
@@ -434,7 +434,7 @@ public class SoftKeyboard extends InputMethodService
                             && (event.getMetaState()&KeyEvent.META_ALT_ON) != 0) {
                         // A silly example: in our input method, Alt+Space
                         // is a shortcut for 'android' in lower case.
-                        InputConnection ic = getCurrentInputConnection();
+                        InputConnection ic = getCurrentInputConnect);
                         if (ic != null) {
                             // First, tell the editor that it is no longer in the
                             // shift state, since we are consuming this.
@@ -742,9 +742,24 @@ public class SoftKeyboard extends InputMethodService
 
     final static String TAG = SoftKeyboard.class.getSimpleName();
 
+    public void onPress(int primaryCode) {
+        Log.d(TAG, "onPress: " + primaryCode);
+
+    }
+
+    public void onRelease(int primaryCode) {
+        Log.d(TAG, "onRelease: " + primaryCode);
+
+    }
+
     public void onKey(int primaryCode, int[] keyCodes) {
 
-        Log.d(TAG, "KEYCODE: " + primaryCode);
+        if (mComposing.length() > 0) {
+            throw new RuntimeException("asdmndassk");
+        } else {
+            Log.d(TAG, "onKey: OK");
+        }
+        Log.d(TAG, "onKey KEYCODE: " + primaryCode);
         playClick(primaryCode);
         if (isWordSeparator(primaryCode)) {
             // Handle separator
@@ -780,6 +795,7 @@ public class SoftKeyboard extends InputMethodService
     }
 
     public void onText(CharSequence text) {
+        Log.d(TAG, "onText: "+text);
         InputConnection ic = getCurrentInputConnection();
         if (ic == null) return;
         ic.beginBatchEdit();
@@ -805,16 +821,6 @@ public class SoftKeyboard extends InputMethodService
         Log.d(TAG, "swipeUp: ");
     }
 
-
-    public void onPress(int primaryCode) {
-        Log.d(TAG, "onPress: " + primaryCode);
-
-    }
-
-    public void onRelease(int primaryCode) {
-        Log.d(TAG, "onRelease: " + primaryCode);
-
-    }
 
     /**
      * http://www.tutorialspoint.com/android/android_spelling_checker.htm
