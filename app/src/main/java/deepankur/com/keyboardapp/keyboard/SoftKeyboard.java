@@ -33,6 +33,7 @@ import com.crashlytics.android.Crashlytics;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import de.greenrobot.event.EventBus;
 import deepankur.com.keyboardapp.InAppEditingController;
@@ -655,9 +656,13 @@ public class SoftKeyboard extends InputMethodService
         else if (messageEvent.getMessageType() == ON_IN_APP_EDITING_FINISHED)
             mInAppEditing = false;
         else if (messageEvent.getMessageType() == ON_CLIPBOARD_ITEM_SELECTED) {
-            String s= (String) messageEvent.getMessage();
+            String s = (String) messageEvent.getMessage();
             Log.d(TAG, "onEvent: " + s);
-            getCurrentInputConnection().commitText(s,1);
+            getCurrentInputConnection().commitText(s, 1);
+        } else if (messageEvent.getMessageType() == EDIT_TEXT_FOCUS_CHANGED) {
+            for (Map.Entry<EditorInfo, Boolean> entry : storedOriginalEditorInfo.entrySet()) {
+                onStartInput(entry.getKey(), entry.getValue());
+            }
         }
     }
 
