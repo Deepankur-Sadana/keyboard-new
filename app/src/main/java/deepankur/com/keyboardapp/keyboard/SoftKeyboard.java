@@ -226,7 +226,7 @@ public class SoftKeyboard extends InputMethodService
                 // be doing predictive text (showing candidates as the
                 // user types).
                 mCurKeyboard = mQwertyKeyboard;
-                mPredictionOn = false;//Todo recently changed this from true
+                mPredictionOn = true;//Todo recently changed this from true
 
                 // We now look for a few special variations of text that will
                 // modify our behavior.
