@@ -1,11 +1,10 @@
 package deepankur.com.keyboardapp.keyboardCustomViews;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import de.greenrobot.event.EventBus;
 import deepankur.com.keyboardapp.MessageEvent;
@@ -40,13 +39,13 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         int pixel = (int) AppLibrary.convertDpToPixel(8, context);
         this.setPadding(pixel, pixel, pixel, pixel);
         for (int i = 0; i < keyBoardOptions.length; i++) {
-            TextView textView = new TextView(context);
-            textView.setText(String.valueOf(i + 1));
-            textView.setPadding(pixel, pixel, pixel, pixel);
-            textView.setTextColor(Color.WHITE);
-            textView.setTag(keyBoardOptions[i]);
-            textView.setOnClickListener(onClickListener);
-            this.addView(textView);
+            ImageView imageView = new ImageView(context);
+            imageView.setPadding(pixel, pixel, pixel, pixel);
+            imageView.setImageResource(android.R.drawable.ic_menu_add);
+            imageView.setTag(keyBoardOptions[i]);
+            imageView.setOnClickListener(onClickListener);
+            imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? 1f : 0.3f);
+            this.addView(imageView);
         }
     }
 
@@ -73,9 +72,9 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         if (onOptionClickedListener != null)
             onOptionClickedListener.onOptionClicked(tag);
         for (int i = 0; i < TabStripView.this.getChildCount(); i++) {
-            TextView textView = (TextView) TabStripView.this.getChildAt(i);
-            KeyBoardOptions tag1 = (KeyBoardOptions) textView.getTag();
-            textView.setTextColor(tag == tag1 ? Color.BLUE : Color.WHITE);
+            ImageView imageView = (ImageView) TabStripView.this.getChildAt(i);
+            KeyBoardOptions tag1 = (KeyBoardOptions) imageView.getTag();
+            imageView.setAlpha(tag == tag1 ? 1f : 0.3f);
         }
         switch (tag) {
             case FAVORITE_APPS:
