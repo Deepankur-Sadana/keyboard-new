@@ -24,10 +24,14 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
 
     // Table Create Statements
     // ClipBoardItemModel table create statement
-    private static final String CREATE_TABLE_TODO = "CREATE TABLE "
-            + TABLE_TODO + "(" + KEY_ID + " INTEGER PRIMARY KEY," + KEY_TODO
-            + " TEXT," + KEY_STATUS + " INTEGER," + KEY_CREATED_AT
-            + " DATETIME" + ")";
+    private static final String CREATE_TABLE_CLIPBOARD = "CREATE TABLE "
+            + TABLE_CLIPBOARD + "(" +
+            KEY_ID + " INTEGER PRIMARY KEY," +
+            KEY_TITLE + " TEXT," +
+            KEY_DESCRIPTION + " TEXT," +
+            KEY_STATUS + " INTEGER," +
+            KEY_CREATED_AT + " DATETIME"
+            + ")";
 
     // Tag table create statement
     private static final String CREATE_TABLE_TAG = "CREATE TABLE " + TABLE_TAG
@@ -35,9 +39,9 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
             + KEY_CREATED_AT + " DATETIME" + ")";
 
     // todo_tag table create statement
-    private static final String CREATE_TABLE_TODO_TAG = "CREATE TABLE "
-            + TABLE_TODO_TAG + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
-            + KEY_TODO_ID + " INTEGER," + KEY_TAG_ID + " INTEGER,"
+    private static final String CREATE_TABLE_CLIPBOARD_TAG = "CREATE TABLE "
+            + TABLE_CLIPBOARD_TAG + "(" + KEY_ID + " INTEGER PRIMARY KEY,"
+            + KEY_CLIPBOARD_ID + " INTEGER," + KEY_TAG_ID + " INTEGER,"
             + KEY_CREATED_AT + " DATETIME" + ")";
 
     private DatabaseHelper(Context context) {
@@ -45,28 +49,32 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
     }
 
     private static DatabaseHelper sDatabaseHelper;
-    public synchronized static DatabaseHelper getDataBaseHelper(Context context){
-        if (sDatabaseHelper==null)
+
+    public synchronized static DatabaseHelper getDataBaseHelper(Context context) {
+        if (sDatabaseHelper == null)
             sDatabaseHelper = new DatabaseHelper(context);
         return sDatabaseHelper;
     }
 
 
+    private static final String TAG = DatabaseHelper.class.getSimpleName();
     @Override
     public void onCreate(SQLiteDatabase db) {
 
+        Log.d(TAG, "onCreate: ");
         // creating required tables
-        db.execSQL(CREATE_TABLE_TODO);
+        db.execSQL(CREATE_TABLE_CLIPBOARD);
         db.execSQL(CREATE_TABLE_TAG);
-        db.execSQL(CREATE_TABLE_TODO_TAG);
+        db.execSQL(CREATE_TABLE_CLIPBOARD_TAG);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        Log.d(TAG, "onUpgrade: " + db);
         // on upgrade drop older tables
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLIPBOARD);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TAG);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_TODO_TAG);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_CLIPBOARD_TAG);
 
         // create new tables
         onCreate(db);
@@ -77,20 +85,21 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
     /**
      * Creating a todo
      */
-    public long createToDo(ClipBoardItemModel todo, long[] tag_ids) {
+    public long createClipboardItem(ClipBoardItemModel todo, long[] tag_ids) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_TODO, todo.getNote());
         values.put(KEY_STATUS, todo.getStatus());
         values.put(KEY_CREATED_AT, getDateTime());
+        values.put(KEY_TITLE, todo.getTitle());
+        values.put(KEY_DESCRIPTION, todo.getDescription());
 
         // insert row
-        long todo_id = db.insert(TABLE_TODO, null, values);
+        long todo_id = db.insert(TABLE_CLIPBOARD, null, values);
 
         // insert tag_ids
         for (long tag_id : tag_ids) {
-            createTodoTag(todo_id, tag_id);
+            createClipboardTag(todo_id, tag_id);
         }
 
         return todo_id;
@@ -102,7 +111,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
     public ClipBoardItemModel getTodo(long todo_id) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_TODO + " WHERE "
+        String selectQuery = "SELECT  * FROM " + TABLE_CLIPBOARD + " WHERE "
                 + KEY_ID + " = " + todo_id;
 
         Log.e(LOG, selectQuery);
@@ -114,7 +123,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
 
         ClipBoardItemModel td = new ClipBoardItemModel();
         td.setId(c.getInt(c.getColumnIndex(KEY_ID)));
-        td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
+        td.setDescription((c.getString(c.getColumnIndex(KEY_DESCRIPTION))));
         td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
         return td;
@@ -125,7 +134,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
      */
     public List<ClipBoardItemModel> getAllToDos() {
         List<ClipBoardItemModel> todos = new ArrayList<ClipBoardItemModel>();
-        String selectQuery = "SELECT  * FROM " + TABLE_TODO;
+        String selectQuery = "SELECT  * FROM " + TABLE_CLIPBOARD;
 
         Log.e(LOG, selectQuery);
 
@@ -137,7 +146,8 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
             do {
                 ClipBoardItemModel td = new ClipBoardItemModel();
                 td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-                td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
+                td.setDescription((c.getString(c.getColumnIndex(KEY_DESCRIPTION))));
+                td.setTitle((c.getString(c.getColumnIndex(KEY_TITLE))));
                 td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
                 // adding to todo list
@@ -154,11 +164,11 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
     public List<ClipBoardItemModel> getAllToDosByTag(String tag_name) {
         List<ClipBoardItemModel> todos = new ArrayList<ClipBoardItemModel>();
 
-        String selectQuery = "SELECT  * FROM " + TABLE_TODO + " td, "
-                + TABLE_TAG + " tg, " + TABLE_TODO_TAG + " tt WHERE tg."
+        String selectQuery = "SELECT  * FROM " + TABLE_CLIPBOARD + " td, "
+                + TABLE_TAG + " tg, " + TABLE_CLIPBOARD_TAG + " tt WHERE tg."
                 + KEY_TAG_NAME + " = '" + tag_name + "'" + " AND tg." + KEY_ID
                 + " = " + "tt." + KEY_TAG_ID + " AND td." + KEY_ID + " = "
-                + "tt." + KEY_TODO_ID;
+                + "tt." + KEY_CLIPBOARD_ID;
 
         Log.e(LOG, selectQuery);
 
@@ -170,7 +180,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
             do {
                 ClipBoardItemModel td = new ClipBoardItemModel();
                 td.setId(c.getInt((c.getColumnIndex(KEY_ID))));
-                td.setNote((c.getString(c.getColumnIndex(KEY_TODO))));
+                td.setDescription((c.getString(c.getColumnIndex(KEY_DESCRIPTION))));
                 td.setCreatedAt(c.getString(c.getColumnIndex(KEY_CREATED_AT)));
 
                 // adding to todo list
@@ -185,7 +195,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
      * getting todo count
      */
     public int getToDoCount() {
-        String countQuery = "SELECT  * FROM " + TABLE_TODO;
+        String countQuery = "SELECT  * FROM " + TABLE_CLIPBOARD;
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(countQuery, null);
 
@@ -203,11 +213,12 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_TODO, todo.getNote());
+        values.put(KEY_DESCRIPTION, todo.getDescription());
+        values.put(KEY_TAG_ID, todo.getTitle());
         values.put(KEY_STATUS, todo.getStatus());
 
         // updating row
-        return db.update(TABLE_TODO, values, KEY_ID + " = ?",
+        return db.update(TABLE_CLIPBOARD, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(todo.getId())});
     }
 
@@ -216,7 +227,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
      */
     public void deleteToDo(long tado_id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_TODO, KEY_ID + " = ?",
+        db.delete(TABLE_CLIPBOARD, KEY_ID + " = ?",
                 new String[]{String.valueOf(tado_id)});
     }
 
@@ -307,15 +318,15 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
     /**
      * Creating todo_tag
      */
-    public long createTodoTag(long todo_id, long tag_id) {
+    public long createClipboardTag(long todo_id, long tag_id) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(KEY_TODO_ID, todo_id);
+        values.put(KEY_CLIPBOARD_ID, todo_id);
         values.put(KEY_TAG_ID, tag_id);
         values.put(KEY_CREATED_AT, getDateTime());
 
-        long id = db.insert(TABLE_TODO_TAG, null, values);
+        long id = db.insert(TABLE_CLIPBOARD_TAG, null, values);
 
         return id;
     }
@@ -330,7 +341,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
         values.put(KEY_TAG_ID, tag_id);
 
         // updating row
-        return db.update(TABLE_TODO, values, KEY_ID + " = ?",
+        return db.update(TABLE_CLIPBOARD, values, KEY_ID + " = ?",
                 new String[]{String.valueOf(id)});
     }
 
@@ -339,7 +350,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
      */
     public void deleteToDoTag(long id) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(TABLE_TODO, KEY_ID + " = ?",
+        db.delete(TABLE_CLIPBOARD, KEY_ID + " = ?",
                 new String[]{String.valueOf(id)});
     }
 

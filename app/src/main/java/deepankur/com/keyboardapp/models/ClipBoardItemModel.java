@@ -37,7 +37,7 @@ public class ClipBoardItemModel {
         this.id = id;
     }
 
-    public void setNote(String description) {
+    public void setDescription(String description) {
         this.description = description;
     }
 
@@ -58,7 +58,7 @@ public class ClipBoardItemModel {
         return this.id;
     }
 
-    public String getNote() {
+    public String getDescription() {
         return this.description;
     }
 

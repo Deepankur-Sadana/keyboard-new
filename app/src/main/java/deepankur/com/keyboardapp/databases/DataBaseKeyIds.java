@@ -15,22 +15,24 @@ public interface DataBaseKeyIds {
     String DATABASE_NAME = "contactsManager";
 
     // Table Names
-    String TABLE_TODO = "todos";
+    String TABLE_CLIPBOARD = "clipboard";
     String TABLE_TAG = "tags";
-    String TABLE_TODO_TAG = "todo_tags";
+    String TABLE_CLIPBOARD_TAG = "todo_tags";
 
     // Common column names
     String KEY_ID = "id";
     String KEY_CREATED_AT = "created_at";
 
     // NOTES Table - column nmaes
-    String KEY_TODO = "todo";
+//    String KEY_CLIPBOARD = "todo";
     String KEY_STATUS = "status";
+    String KEY_TITLE="title";
+    String KEY_DESCRIPTION = "description";
 
     // TAGS Table - column names
     String KEY_TAG_NAME = "tag_name";
 
     // NOTE_TAGS Table - column names
-    String KEY_TODO_ID = "todo_id";
+    String KEY_CLIPBOARD_ID = "todo_id";
     String KEY_TAG_ID = "tag_id";
 }

@@ -1,6 +1,7 @@
 package deepankur.com.keyboardapp.cache;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,7 +35,8 @@ public class ClipBoardCache {
     public void addItem(ClipBoardItemModel clipBoardItemModel) {
         clipBoardItemModels.add(clipBoardItemModel);
 //        clipBoardItemModel.setId(System.currentTimeMillis());
-        getDatabaseHelper().createToDo(clipBoardItemModel, new long[0]);
+        long clipboardItem = getDatabaseHelper().createClipboardItem(clipBoardItemModel, new long[0]);
+        Log.d(TAG, "addItem: " + clipboardItem);
 
         for (ClipBoardDataListener l : clipBoardDataListeners) {
             l.onItemAdded(clipBoardItemModel);

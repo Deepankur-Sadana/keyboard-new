@@ -71,7 +71,7 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
                         ClipBoardCache.getInstance().update(clipBoardItemModel);
                     } else if (ACTION_TYPE == ADD) {
                         ClipBoardItemModel clipBoardItemModel = new ClipBoardItemModel();
-                        clipBoardItemModel.setNote(descriptionEt.getText().toString());
+                        clipBoardItemModel.setDescription(descriptionEt.getText().toString());
                         clipBoardItemModel.setTitle(titleEt.getText().toString());
                         ClipBoardCache.getInstance().addItem(clipBoardItemModel);
                     }
@@ -82,7 +82,7 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
         });
         if (ACTION_TYPE == EDIT) {
             titleEt.setText(clipBoardItemModel.getTitle());
-            descriptionEt.setText(clipBoardItemModel.getNote());
+            descriptionEt.setText(clipBoardItemModel.getDescription());
         }
         titleEt.requestFocus();
         titleEt.setOnEditorActionListener(editorActionListener);
@@ -133,6 +133,7 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
     }
 
     public void setACTION_TYPE(int ACTION_TYPE) {
+        Log.d(TAG, "setACTION_TYPE: ");
         this.ACTION_TYPE = ACTION_TYPE;
     }
 

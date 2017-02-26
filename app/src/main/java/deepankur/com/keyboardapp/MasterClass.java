@@ -19,6 +19,7 @@ public class MasterClass extends Application {
     protected void attachBaseContext(Context base) {
         super.attachBaseContext(base);
         MultiDex.install(this);
+        mContext = new WeakReference<Context>(this);
     }
 
     public static Context getGlobalContext() {

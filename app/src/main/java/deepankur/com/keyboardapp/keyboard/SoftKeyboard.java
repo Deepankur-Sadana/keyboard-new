@@ -39,6 +39,7 @@ import de.greenrobot.event.EventBus;
 import deepankur.com.keyboardapp.InAppEditingController;
 import deepankur.com.keyboardapp.MessageEvent;
 import deepankur.com.keyboardapp.R;
+import deepankur.com.keyboardapp.databases.DatabaseHelper;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
 import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
 import deepankur.com.keyboardapp.keyboardCustomViews.TabStripView;
@@ -102,6 +103,7 @@ public class SoftKeyboard extends InputMethodService
     public void onCreate() {
         super.onCreate();
         EventBus.getDefault().register(this);
+        DatabaseHelper.getDataBaseHelper(this);
         mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         mWordSeparators = getResources().getString(R.string.word_separators);
         final TextServicesManager tsm = (TextServicesManager) getSystemService(

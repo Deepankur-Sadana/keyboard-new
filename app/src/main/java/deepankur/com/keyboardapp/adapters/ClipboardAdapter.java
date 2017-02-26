@@ -106,7 +106,7 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     if (recyclerViewClickInterface != null)
                         recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, ITEM_HOLDER, v.getTag());
 
-                    EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, ((ClipBoardItemModel) rootView.getTag()).getNote()));
+                    EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, ((ClipBoardItemModel) rootView.getTag()).getDescription()));
                 }
             });
             v.setOnLongClickListener(new View.OnLongClickListener() {
