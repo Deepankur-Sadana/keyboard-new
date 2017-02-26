@@ -652,7 +652,6 @@ public class SoftKeyboard extends InputMethodService
     private boolean mInAppEditing = false;
 
     public void onEvent(MessageEvent messageEvent) {
-        Log.d(TAG, "onEvent: " + messageEvent);
         if (messageEvent.getMessageType() == POPUP_KEYBOARD_FOR_IN_APP_EDITING)
             mInAppEditing = true;
         else if (messageEvent.getMessageType() == ON_IN_APP_EDITING_FINISHED)

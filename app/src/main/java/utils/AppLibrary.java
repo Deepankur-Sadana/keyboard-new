@@ -42,6 +42,8 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import deepankur.com.keyboardapp.MasterClass;
+
 /**
  * Created by admin on 1/12/2015.
  */
@@ -539,5 +541,8 @@ public class AppLibrary {
         );
     }
 
+    public static void showShortToast(String s) {
+        Toast.makeText(MasterClass.getGlobalContext(), s, Toast.LENGTH_SHORT).show();
+    }
 
 }

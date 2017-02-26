@@ -22,7 +22,21 @@
             android:padding="8dp"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
-            android:text="SAVE"
+            android:text=" SAVE "
+            android:textColor="@android:color/white" />
+
+        <TextView
+            android:layout_marginBottom="8dp"
+            android:id="@+id/deleteTV"
+            android:layout_above="@id/saveTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/holo_blue_light"
+            android:padding="8dp"
+            android:paddingEnd="16dp"
+            android:paddingStart="16dp"
+            android:text="Delete"
             android:textColor="@android:color/white" />
 
         <EditText

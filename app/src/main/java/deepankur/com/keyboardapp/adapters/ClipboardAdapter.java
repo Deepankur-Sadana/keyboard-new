@@ -104,16 +104,15 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 public void onClick(View v) {
                     Log.d(TAG, "onClick: new clipboard item adding request");
                     if (recyclerViewClickInterface != null)
-                        recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, ITEM_HOLDER, v.getTag());
+                        recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, ITEM_HOLDER, rootView.getTag());
 
-                    EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, ((ClipBoardItemModel) rootView.getTag()).getDescription()));
                 }
             });
             v.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    Log.d(TAG, "onLongClick: ");
-                    recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, ITEM_HOLDER, v.getTag());
+                    Log.d(TAG, "onLongClick: " + rootView.getTag());
+                    recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_LONG_PRESS, ITEM_HOLDER, rootView.getTag());
                     return true;
                 }
             });

@@ -2,6 +2,7 @@ package deepankur.com.keyboardapp.keyboardCustomViews;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -20,6 +21,7 @@ import deepankur.com.keyboardapp.cache.ClipBoardCache;
 import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
 import deepankur.com.keyboardapp.interfaces.Reachable;
 import deepankur.com.keyboardapp.models.ClipBoardItemModel;
+import utils.AppLibrary;
 
 /**
  * Created by deepankursadana on 21/02/17.
@@ -30,16 +32,17 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
     private Context context;
     private static final String TAG = AddEditClipboardItemView.class.getSimpleName();
 
-    //    private int ACTION_TYPE;
     public enum ActionType {
         ADD, EDIT
     }
 
-    public static ActionType actionType;
+    private ActionType actionType;
     private ClipBoardItemModel clipBoardItemModel;
 
-    public AddEditClipboardItemView(Context context) {
+    public AddEditClipboardItemView(Context context, ActionType actionType, @Nullable ClipBoardItemModel clipBoardItemModel) {
         super(context);
+        this.actionType = actionType;
+        this.clipBoardItemModel = clipBoardItemModel;
         init(context);
     }
 
@@ -73,6 +76,8 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(titleEt.getText().toString()) && !TextUtils.isEmpty(descriptionEt.getText().toString())) {
                     if (actionType == ActionType.EDIT) {
+                        clipBoardItemModel.setTitle(titleEt.getText().toString());
+                        clipBoardItemModel.setDescription(descriptionEt.getText().toString());
                         ClipBoardCache.getInstance().update(clipBoardItemModel);
                     } else if (actionType == ActionType.ADD) {
                         ClipBoardItemModel clipBoardItemModel = new ClipBoardItemModel();
@@ -82,13 +87,27 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
                     }
                     ((FrameLayout) AddEditClipboardItemView.this.getParent()).removeView(AddEditClipboardItemView.this);
                     EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
+                } else {
+                    AppLibrary.showShortToast("PLease fill the details");
                 }
             }
         });
+
+
         if (actionType == ActionType.EDIT) {
             titleEt.setText(clipBoardItemModel.getTitle());
             descriptionEt.setText(clipBoardItemModel.getDescription());
-        }
+
+            rootView.findViewById(R.id.deleteTV).setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+        } else rootView.findViewById(R.id.deleteTV).setVisibility(GONE);
+
+
         titleEt.requestFocus();
         titleEt.setOnEditorActionListener(editorActionListener);
         descriptionEt.setOnEditorActionListener(editorActionListener);
@@ -126,23 +145,12 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
     @SuppressLint("SetTextI18n")
     @Override
     public boolean onEvent(MessageEvent messageEvent) {
-        Log.d(TAG, "onEvent: ");
-//        Object message = messageEvent.getMessage();
-//        String s = (String) message;
-//        if (titleEt.hasFocus()) {
-//            titleEt.setText(titleEt.getText() + s);
-//        } else if (descriptionEt.hasFocus()) {
-//            descriptionEt.setText(titleEt.getText() + s);
-//        }
         return false;
     }
 
-    public void setACTION_TYPE(ActionType ACTION_TYPE) {
-        Log.d(TAG, "setACTION_TYPE: ");
-        this.actionType = ACTION_TYPE;
+    public void setACTION_TYPE(ActionType action_type) {
+        Log.d(TAG, "setACTION_TYPE: " + action_type);
+        this.actionType = action_type;
     }
 
-    public void setClipBoardItemModel(ClipBoardItemModel clipBoardItemModel) {
-        this.clipBoardItemModel = clipBoardItemModel;
-    }
 }

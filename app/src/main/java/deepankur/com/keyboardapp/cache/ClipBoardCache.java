@@ -36,7 +36,7 @@ public class ClipBoardCache {
         clipBoardItemModels.add(clipBoardItemModel);
 //        clipBoardItemModel.setId(System.currentTimeMillis());
         long clipboardItem = getDatabaseHelper().createClipboardItem(clipBoardItemModel, new long[0]);
-        Log.d(TAG, "addItem: " + clipboardItem);
+        Log.d(TAG, "addItem: "+clipboardItem);
 
         for (ClipBoardDataListener l : clipBoardDataListeners) {
             l.onItemAdded(clipBoardItemModel);
@@ -44,6 +44,7 @@ public class ClipBoardCache {
     }
 
     public void update(ClipBoardItemModel c) {
+        getDatabaseHelper().updateToDo(c);
         for (ClipBoardDataListener l : clipBoardDataListeners) {
             l.onItemEdited(c);
         }

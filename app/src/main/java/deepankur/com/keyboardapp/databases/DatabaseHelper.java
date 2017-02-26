@@ -214,7 +214,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
 
         ContentValues values = new ContentValues();
         values.put(KEY_DESCRIPTION, todo.getDescription());
-        values.put(KEY_TAG_ID, todo.getTitle());
+        values.put(KEY_TITLE, todo.getTitle());
         values.put(KEY_STATUS, todo.getStatus());
 
         // updating row

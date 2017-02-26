@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_root_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,25 +8,24 @@
 
     <FrameLayout
         android:id="@+id/main_ui_content"
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
-        android:clipToPadding="false">
-    </FrameLayout>
+        android:layout_height="match_parent"
+        android:clipToPadding="false"></FrameLayout>
 
     <EditText
-        android:inputType="text"
-        android:imeActionLabel="Next"
-        android:imeOptions="actionNext"
-        android:text="asdfghjkl ghcmhgcmhgcv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_gravity="top"
         android:hint="enter"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:imeActionLabel="Next"
+        android:imeOptions="actionNext"
+        android:inputType="text"
+        android:text="hi hello" />
     <!--<FrameLayout-->
-        <!--android:orientation="vertical"-->
-        <!--android:layout_width="@dimen/drawer_width"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="left">-->
-        <!--<include layout="@layout/side_menu_layout"/>-->
+    <!--android:orientation="vertical"-->
+    <!--android:layout_width="@dimen/drawer_width"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:layout_gravity="left">-->
+    <!--<include layout="@layout/side_menu_layout"/>-->
     <!--</FrameLayout>-->
 </FrameLayout>

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -67,11 +68,14 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
     private RecyclerViewClickInterface clickInterface = new RecyclerViewClickInterface() {
         @Override
         public void onItemClick(int clickType, int holderType, Object data) {
+            Log.d(TAG, "onItemClick: clickType " + clickType + " holderType " + holderType + " data " + data);
             if (holderType == BaseRecylerAdapter.HEADER_HOLDER) {
                 loadClipboardItemEditorView(AddEditClipboardItemView.ActionType.ADD, null);
 
             } else if (holderType == BaseRecylerAdapter.ITEM_HOLDER) {
                 if (clickType == CLICK_TYPE_NORMAL) {
+                    EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, ((ClipBoardItemModel) data).getDescription()));
+                    EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
 
                 } else if (clickType == CLICK_TYPE_LONG_PRESS) {
                     loadClipboardItemEditorView(AddEditClipboardItemView.ActionType.EDIT, (ClipBoardItemModel) data);
@@ -84,10 +88,7 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
 
     private void loadClipboardItemEditorView(AddEditClipboardItemView.ActionType actionType, @Nullable ClipBoardItemModel clipBoardItemModel) {
         addItemFrame.removeAllViews();
-        AddEditClipboardItemView addClipboardItemView = new AddEditClipboardItemView(context);
-        addClipboardItemView.setACTION_TYPE(actionType);
-        if (clipBoardItemModel != null)
-            addClipboardItemView.setClipBoardItemModel(clipBoardItemModel);
+        AddEditClipboardItemView addClipboardItemView = new AddEditClipboardItemView(context, actionType, clipBoardItemModel);
         addItemFrame.addView(addClipboardItemView);
         EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
     }
