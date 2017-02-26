@@ -68,13 +68,13 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
         @Override
         public void onItemClick(int clickType, int holderType, Object data) {
             if (holderType == BaseRecylerAdapter.HEADER_HOLDER) {
-                loadClipboardItemEditorView(AddEditClipboardItemView.ADD, null);
+                loadClipboardItemEditorView(AddEditClipboardItemView.ActionType.ADD, null);
 
             } else if (holderType == BaseRecylerAdapter.ITEM_HOLDER) {
                 if (clickType == CLICK_TYPE_NORMAL) {
 
                 } else if (clickType == CLICK_TYPE_LONG_PRESS) {
-                    loadClipboardItemEditorView(AddEditClipboardItemView.EDIT, (ClipBoardItemModel) data);
+                    loadClipboardItemEditorView(AddEditClipboardItemView.ActionType.EDIT, (ClipBoardItemModel) data);
 
                 }
             }
@@ -82,7 +82,7 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
     };
 
 
-    private void loadClipboardItemEditorView(int actionType, @Nullable ClipBoardItemModel clipBoardItemModel) {
+    private void loadClipboardItemEditorView(AddEditClipboardItemView.ActionType actionType, @Nullable ClipBoardItemModel clipBoardItemModel) {
         addItemFrame.removeAllViews();
         AddEditClipboardItemView addClipboardItemView = new AddEditClipboardItemView(context);
         addClipboardItemView.setACTION_TYPE(actionType);

@@ -29,8 +29,13 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
 
     private Context context;
     private static final String TAG = AddEditClipboardItemView.class.getSimpleName();
-    private int ACTION_TYPE;
-    public static final int ADD = 0, EDIT = 1;
+
+    //    private int ACTION_TYPE;
+    public enum ActionType {
+        ADD, EDIT
+    }
+
+    public static ActionType actionType;
     private ClipBoardItemModel clipBoardItemModel;
 
     public AddEditClipboardItemView(Context context) {
@@ -67,9 +72,9 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
             @Override
             public void onClick(View v) {
                 if (!TextUtils.isEmpty(titleEt.getText().toString()) && !TextUtils.isEmpty(descriptionEt.getText().toString())) {
-                    if (ACTION_TYPE == EDIT) {
+                    if (actionType == ActionType.EDIT) {
                         ClipBoardCache.getInstance().update(clipBoardItemModel);
-                    } else if (ACTION_TYPE == ADD) {
+                    } else if (actionType == ActionType.ADD) {
                         ClipBoardItemModel clipBoardItemModel = new ClipBoardItemModel();
                         clipBoardItemModel.setDescription(descriptionEt.getText().toString());
                         clipBoardItemModel.setTitle(titleEt.getText().toString());
@@ -80,7 +85,7 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
                 }
             }
         });
-        if (ACTION_TYPE == EDIT) {
+        if (actionType == ActionType.EDIT) {
             titleEt.setText(clipBoardItemModel.getTitle());
             descriptionEt.setText(clipBoardItemModel.getDescription());
         }
@@ -132,9 +137,9 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
         return false;
     }
 
-    public void setACTION_TYPE(int ACTION_TYPE) {
+    public void setACTION_TYPE(ActionType ACTION_TYPE) {
         Log.d(TAG, "setACTION_TYPE: ");
-        this.ACTION_TYPE = ACTION_TYPE;
+        this.actionType = ACTION_TYPE;
     }
 
     public void setClipBoardItemModel(ClipBoardItemModel clipBoardItemModel) {
