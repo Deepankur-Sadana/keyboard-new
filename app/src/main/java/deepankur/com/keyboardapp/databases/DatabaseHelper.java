@@ -45,12 +45,12 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
     }
 
     private static DatabaseHelper sDatabaseHelper;
-
-    public static DatabaseHelper getDataBaseInstance(Context context) {
-        if (sDatabaseHelper == null)
+    public synchronized static DatabaseHelper getDataBaseHelper(Context context){
+        if (sDatabaseHelper==null)
             sDatabaseHelper = new DatabaseHelper(context);
         return sDatabaseHelper;
     }
+
 
     @Override
     public void onCreate(SQLiteDatabase db) {

@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -18,7 +17,6 @@ import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.adapters.BaseRecylerAdapter;
 import deepankur.com.keyboardapp.adapters.ClipboardAdapter;
 import deepankur.com.keyboardapp.cache.ClipBoardCache;
-import deepankur.com.keyboardapp.databases.DatabaseHelper;
 import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
 import deepankur.com.keyboardapp.interfaces.Recyclable;
 import deepankur.com.keyboardapp.interfaces.RecyclerViewClickInterface;
@@ -100,35 +98,16 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
     private ArrayList<ClipBoardItemModel> getAllClipboardItems(Context context) {
         if (clipboardItemsList != null)
             return clipboardItemsList;
-        List<ClipBoardItemModel> allToDos = DatabaseHelper.getDataBaseInstance(context).getAllToDos();
+        List<ClipBoardItemModel> allToDos = ClipBoardCache.getInstance().getAllClipboardModels();
+
         clipboardItemsList = new ArrayList<>(allToDos);
         return clipboardItemsList;
     }
 
-    private DatabaseHelper databaseHelper;
-
-    private DatabaseHelper getDatabaseHelper() {
-        if (databaseHelper == null)
-            databaseHelper = DatabaseHelper.getDataBaseInstance(context);
-        return databaseHelper;
-    }
 
     private Context context;
     private final String TAG = getClass().getSimpleName();
 
-
-    private void requestAddItem(ClipBoardItemModel keyValueShortcutModel) {
-        long toDo = getDatabaseHelper().createToDo(keyValueShortcutModel, new long[0]);
-        Log.d(TAG, "requestAddItem: " + toDo);
-        clipboardItemsList.add(keyValueShortcutModel);
-        clipboardAdapter.notifyItemInserted(clipboardItemsList.size() - 1);
-    }
-
-    private void updateItem(int index, ClipBoardItemModel keyValueShortcutModel) {
-        int i = getDatabaseHelper().updateToDo(keyValueShortcutModel);
-        Log.d(TAG, "updateItem: " + i);
-        clipboardAdapter.notifyItemChanged(index);
-    }
 
     @Override
     public boolean doRefresh() {
