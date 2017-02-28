@@ -70,6 +70,8 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
 
         titleEt.setOnFocusChangeListener(focusChangeListener);
         descriptionEt.setOnFocusChangeListener(focusChangeListener);
+//        titleEt.setOnKeyListener(onKeyListener);
+//        descriptionEt.setOnKeyListener(onKeyListener);
 
         rootView.findViewById(R.id.saveTV).setOnClickListener(new OnClickListener() {
             @Override
@@ -130,7 +132,7 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             InAppEditingController.getInstance().setEditText((EditText) v);
-            EventBus.getDefault().post(new MessageEvent(EDIT_TEXT_FOCUS_CHANGED, null));
+            EventBus.getDefault().post(new MessageEvent(EDIT_TEXT_FOCUS_CHANGED, v));
             switch (v.getId()) {
                 case R.id.titleTV:
                     Log.d(TAG, "onFocusChange: title " + hasFocus);
@@ -139,6 +141,14 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
                     Log.d(TAG, "onFocusChange: description " + hasFocus);
                     break;
             }
+        }
+    };
+
+    private View.OnKeyListener onKeyListener = new OnKeyListener() {
+        @Override
+        public boolean onKey(View v, int keyCode, KeyEvent event) {
+            Log.d(TAG, "onKey: keyCode " + keyCode + " event " + event + " view " + v);
+            return false;
         }
     };
 

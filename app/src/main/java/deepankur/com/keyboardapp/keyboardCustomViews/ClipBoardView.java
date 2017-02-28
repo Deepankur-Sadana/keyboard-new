@@ -87,10 +87,10 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
 
 
     private void loadClipboardItemEditorView(AddEditClipboardItemView.ActionType actionType, @Nullable ClipBoardItemModel clipBoardItemModel) {
+        EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
         addItemFrame.removeAllViews();
         AddEditClipboardItemView addClipboardItemView = new AddEditClipboardItemView(context, actionType, clipBoardItemModel);
         addItemFrame.addView(addClipboardItemView);
-        EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
     }
 
 

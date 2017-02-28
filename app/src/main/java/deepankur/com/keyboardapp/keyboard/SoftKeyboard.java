@@ -7,6 +7,7 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.media.AudioManager;
+import android.os.Handler;
 import android.os.IBinder;
 import android.text.InputType;
 import android.text.TextUtils;
@@ -27,6 +28,7 @@ import android.view.textservice.SpellCheckerSession;
 import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
+import android.widget.EditText;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -135,6 +137,8 @@ public class SoftKeyboard extends InputMethodService
         mSymbolsShiftedKeyboard = new LatinKeyboard(this, R.xml.symbols_shift);
     }
 
+    private ViewController viewController;
+
     /**
      * Called by the framework when your view for creating input needs to
      * be generated.  This will be called the first time your input method
@@ -149,7 +153,7 @@ public class SoftKeyboard extends InputMethodService
         mInputView.setTag(KeyBoardOptions.QWERTY);
         mInputView.setOnKeyboardActionListener(this);
         mInputView.setPreviewEnabled(true);
-        new ViewController(this, v);
+        viewController = new ViewController(this, v);
         setLatinKeyboard(mQwertyKeyboard);
         return v;
     }
@@ -419,6 +423,15 @@ public class SoftKeyboard extends InputMethodService
                         return true;
                     }
                 }
+                if (viewController.getTabStripView().getmCurrentKeyboardOption() != KeyBoardOptions.QWERTY) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            viewController.getTabStripView().switchToQwertyMode();
+                        }
+                    }, 200);
+                    break;
+                }
                 break;
 
             case KeyEvent.KEYCODE_DEL:
@@ -661,6 +674,7 @@ public class SoftKeyboard extends InputMethodService
             Log.d(TAG, "onEvent: " + s);
             getCurrentInputConnection().commitText(s, 1);
         } else if (messageEvent.getMessageType() == EDIT_TEXT_FOCUS_CHANGED) {
+            Log.d(TAG, "onEvent:  edittext focus changes");
             for (Map.Entry<EditorInfo, Boolean> entry : storedOriginalEditorInfo.entrySet()) {
                 onStartInput(entry.getKey(), entry.getValue());
             }

@@ -25,6 +25,10 @@ public class ViewController implements GreenBotMessageKeyIds {
     private View rootView;
     private String TAG = getClass().getSimpleName();
 
+    public TabStripView getTabStripView() {
+        return tabStripView;
+    }
+
     public ViewController(final Context context, final View rootView) {
         this.rootView = rootView;
         this.tabStripView = (TabStripView) rootView.findViewById(R.id.tabsStrip);
