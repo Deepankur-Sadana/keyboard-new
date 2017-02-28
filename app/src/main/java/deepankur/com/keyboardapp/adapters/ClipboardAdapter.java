@@ -45,7 +45,7 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return new VHItem(View.inflate(parent.getContext(), R.layout.card_clipboard, null));
         else if (viewType == HEADER_HOLDER) {
             ImageView imageView = new ImageView(parent.getContext());
-            imageView.setImageResource(android.R.drawable.ic_input_add);
+            imageView.setImageResource(android.R.drawable.ic_menu_add);
             return new VHHeader(imageView);
         }
         throw new IllegalArgumentException("view type " + viewType + " not supported in: " + TAG);
