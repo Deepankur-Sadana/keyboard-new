@@ -78,7 +78,7 @@ public class LatinKeyboardView extends KeyboardView {
         List<Key> keys = getKeyboard().getKeys();
         for (Key key : keys) {
             if (key.label != null) {
-                if (key.label.equals("q")) {
+                         if (key.label.equals("q")) {
                     canvas.drawText("1", key.x + (key.width - 25), key.y + 40, paint);
                 } else if (key.label.equals("w")) {
                     canvas.drawText("2", key.x + (key.width - 25), key.y + 40, paint);
@@ -88,6 +88,16 @@ public class LatinKeyboardView extends KeyboardView {
                     canvas.drawText("4", key.x + (key.width - 25), key.y + 40, paint);
                 } else if (key.label.equals("t")) {
                     canvas.drawText("5", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("y")) {
+                    canvas.drawText("6", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("u")) {
+                    canvas.drawText("7", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("i")) {
+                    canvas.drawText("8", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("o")) {
+                    canvas.drawText("9", key.x + (key.width - 25), key.y + 40, paint);
+                } else if (key.label.equals("p")) {
+                    canvas.drawText("0", key.x + (key.width - 25), key.y + 40, paint);
                 }
             }
 
