@@ -28,7 +28,6 @@ import android.view.textservice.SpellCheckerSession;
 import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
-import android.widget.EditText;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -602,6 +601,10 @@ public class SoftKeyboard extends InputMethodService
                 ArrayList<String> list = new ArrayList<String>();
                 //list.add(mComposing.toString());
                 Log.d("SoftKeyboard", "REQUESTING: " + mComposing.toString());
+                if (mScs == null) {//todo happening in samsung devices
+                    Log.d(TAG, "updateCandidates: spell checker session is null returning");
+                    return;
+                }
                 mScs.getSentenceSuggestions(new TextInfo[]{new TextInfo(mComposing.toString())}, 5);
                 setSuggestions(list, true, true);
             } else {
