@@ -87,8 +87,18 @@ public class ViewController implements GreenBotMessageKeyIds {
 //                keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
             frameToShow = R.id.fragmentContainerFrame;
         }
-
+        pauseAllViewsOtherThanQwerty();
         ((RelativeLayout) rootView).bringChildToFront(rootView.findViewById(frameToShow));
+    }
+
+
+    private void pauseAllViewsOtherThanQwerty(){
+        FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.fragmentContainerFrame);
+        for (int i = 0; i < frameLayout.getChildCount(); i++) {
+            // pause everything else
+                if (frameLayout.getChildAt(i) instanceof Recyclable)
+                    ((Recyclable) frameLayout.getChildAt(i)).onRestInBackground();
+            }
     }
 
     public void onEvent(MessageEvent messageEvent) {
