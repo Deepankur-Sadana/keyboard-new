@@ -7,7 +7,7 @@ package deepankur.com.keyboardapp.models;
 
 public class ClipBoardItemModel {
 
-    int id;
+    long id;
     String title;
     String description;
     int status;
@@ -33,7 +33,7 @@ public class ClipBoardItemModel {
     }
 
     // setters
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

@@ -43,6 +43,15 @@ public class ClipBoardCache {
         }
     }
 
+    public void deleteItem(ClipBoardItemModel model){
+        clipBoardItemModels.remove(model);
+        getDatabaseHelper().deleteToDo(model.getId());
+
+        for (ClipBoardDataListener l : clipBoardDataListeners) {
+            l.onListChanged();
+        }
+    }
+
     public void update(ClipBoardItemModel c) {
         getDatabaseHelper().updateToDo(c);
         for (ClipBoardDataListener l : clipBoardDataListeners) {

@@ -102,6 +102,7 @@ public class DatabaseHelper extends SQLiteOpenHelper implements DataBaseKeyIds {
             createClipboardTag(todo_id, tag_id);
         }
 
+        todo.setId(todo_id);
         return todo_id;
     }
 

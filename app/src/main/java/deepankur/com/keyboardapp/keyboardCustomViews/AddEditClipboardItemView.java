@@ -110,12 +110,15 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
             rootView.findViewById(R.id.deleteTV).setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    ((FrameLayout) AddEditClipboardItemView.this.getParent()).removeView(AddEditClipboardItemView.this);
+                    EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
+                    ClipBoardCache.getInstance().deleteItem(clipBoardItemModel);
                 }
             });
 
-        } else rootView.findViewById(R.id.deleteTV).setVisibility(GONE);
-
+        } else {
+            rootView.findViewById(R.id.deleteTV).setVisibility(GONE);
+        }
 
         titleEt.requestFocus();
         titleEt.setOnEditorActionListener(editorActionListener);
