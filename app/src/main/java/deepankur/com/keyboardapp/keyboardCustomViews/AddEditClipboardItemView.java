@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -62,6 +63,12 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
         EventBus.getDefault().register(this);
 
         View rootView = inflate(context, R.layout.clipboard_add_item, null);
+        rootView.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {//intercepting touch on the background of the title and description views
+                return true;
+            }
+        });
         this.removeAllViews();
         this.addView(rootView);
 
