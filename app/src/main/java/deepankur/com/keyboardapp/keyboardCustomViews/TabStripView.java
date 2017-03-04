@@ -8,7 +8,6 @@ import android.widget.LinearLayout;
 
 import de.greenrobot.event.EventBus;
 import deepankur.com.keyboardapp.MessageEvent;
-import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.KeyBoardOptions;
 import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
 import utils.AppLibrary;
@@ -51,12 +50,14 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         }
     }
 
-    private int getResourceIdForTabStrip(KeyBoardOptions option){
-        switch (option){
+    private int getResourceIdForTabStrip(KeyBoardOptions option) {
+        switch (option) {
             case CONTACTS:
                 return android.R.drawable.ic_menu_add;
+            default:
+                return android.R.drawable.ic_menu_add;
+
         }
-        return 0;
     }
 
     public void onEvent(MessageEvent event) {
