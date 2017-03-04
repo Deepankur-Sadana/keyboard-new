@@ -162,6 +162,11 @@ public class ViewController implements GreenBotMessageKeyIds {
             clipBoardView.setTag(keyBoardOptions);
             frameLayout.addView(clipBoardView);
             clipBoardView.getLayoutParams().height = getKeyboardHeight();
+        } else if (keyBoardOptions == KeyBoardOptions.CONTACTS) {
+            final SearchContactsView contactsView = new SearchContactsView(context);
+            contactsView.setTag(keyBoardOptions);
+            frameLayout.addView(contactsView);
+            contactsView.getLayoutParams().height = getKeyboardHeight();
         }
     }
 

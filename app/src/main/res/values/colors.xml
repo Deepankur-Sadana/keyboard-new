@@ -16,4 +16,5 @@
 
     <color name="card_light_gray_background">#2000</color>
     <color name="blue_button">#3b5998</color>
+    <color name="card_divider_color">#e0e0e0</color>
 </resources>
