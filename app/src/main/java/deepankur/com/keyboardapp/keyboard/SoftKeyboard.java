@@ -28,6 +28,7 @@ import android.view.textservice.SpellCheckerSession;
 import android.view.textservice.SuggestionsInfo;
 import android.view.textservice.TextInfo;
 import android.view.textservice.TextServicesManager;
+import android.widget.EditText;
 
 import com.crashlytics.android.Crashlytics;
 
@@ -430,6 +431,12 @@ public class SoftKeyboard extends InputMethodService
                         }
                     }, 200);
                     break;
+                    /**
+                     * 03-04 19:36:14.423 24209-24209/deepankur.com.keyboardapp E/AndroidRuntime: FATAL EXCEPTION: main
+                     Process: deepankur.com.keyboardapp, PID: 24209
+                     java.lang.NullPointerException: Attempt to invoke virtual method 'deepankur.com.keyboardapp.keyboardCustomViews.TabStripView deepankur.com.keyboardapp.keyboardCustomViews.ViewController.getTabStripView()' on a null object reference
+                     at deepankur.com.keyboardapp.keyboard.SoftKeyboard.onKeyDown(SoftKeyboard.java:426)
+                     */
                 }
                 break;
 
@@ -670,16 +677,30 @@ public class SoftKeyboard extends InputMethodService
     public void onEvent(MessageEvent messageEvent) {
         if (messageEvent.getMessageType() == POPUP_KEYBOARD_FOR_IN_APP_EDITING)
             mInAppEditing = true;
-        else if (messageEvent.getMessageType() == ON_IN_APP_EDITING_FINISHED)
+        else if (messageEvent.getMessageType() == ON_IN_APP_EDITING_FINISHED){
             mInAppEditing = false;
+        mComposing.setLength(0);}
         else if (messageEvent.getMessageType() == ON_CLIPBOARD_ITEM_SELECTED) {
             String s = (String) messageEvent.getMessage();
             Log.d(TAG, "onEvent: " + s);
             getCurrentInputConnection().commitText(s, 1);
         } else if (messageEvent.getMessageType() == EDIT_TEXT_FOCUS_CHANGED) {
-            Log.d(TAG, "onEvent:  edittext focus changes");
-            for (Map.Entry<EditorInfo, Boolean> entry : storedOriginalEditorInfo.entrySet()) {
-                onStartInput(entry.getKey(), entry.getValue());
+            EditText editText = (EditText) messageEvent.getMessage();
+            Log.d(TAG, "onEvent:  edittext focus changes " + editText.hasFocus());
+            Log.d(TAG, "onEvent: mcomposing " + mComposing);
+            if (editText.hasFocus()) {
+                for (Map.Entry<EditorInfo, Boolean> entry : storedOriginalEditorInfo.entrySet()) {
+                    //                onStartInput(entry.getKey(), entry.getValue());
+                    if (editText.hasFocus()) {
+                        String s = (editText).getText().toString();
+                        (editText).getText().clear();
+                        getCurrentInputConnection().setComposingText(s, 1);
+                        //                    mComposing.setLength();
+                        mComposing.setLength(0);
+                        mComposing.append(s);
+                    }
+                    break;
+                }
             }
         }
     }
@@ -791,6 +812,7 @@ public class SoftKeyboard extends InputMethodService
     public void onKey(int primaryCode, int[] keyCodes) {
         Log.d(TAG, "onKey KEYCODE: " + primaryCode);
         playClick(primaryCode);
+        Log.d(TAG, "onkeycompo: " + mComposing );
 
 //        if (mInAppEditing){
 //            InAppEditingController.getInstance().onKey(primaryCode, keyCodes);

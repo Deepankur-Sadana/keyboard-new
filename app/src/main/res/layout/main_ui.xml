@@ -10,7 +10,7 @@
         android:id="@+id/main_ui_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"></FrameLayout>
+        android:clipToPadding="false" />
 
     <EditText
         android:layout_width="match_parent"
