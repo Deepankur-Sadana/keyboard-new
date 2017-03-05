@@ -90,6 +90,21 @@ public class WizardPermissionsFragment extends WizardPageBaseFragment implements
         }
     }
 
+    @Override
+    void previousStepNotComplete() {
+
+    }
+
+    @Override
+    void thisStepCompleted() {
+
+    }
+
+    @Override
+    void nextStepNeedsSetup() {
+
+    }
+
     @SuppressLint("LongLogTag")
     @Override
     public void onClick(View v) {

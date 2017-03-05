@@ -89,4 +89,9 @@ public abstract class WizardPageBaseFragment extends Fragment {
             thisStepNeedsSetup.setVisibility(View.VISIBLE);
         }
     }
+
+    abstract void previousStepNotComplete();
+    abstract void thisStepCompleted();
+    abstract void nextStepNeedsSetup();
+
 }

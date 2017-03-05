@@ -128,6 +128,8 @@ public class WizardPageEnableKeyboardFragment extends WizardPageBaseFragment {
         }
     }
 
+
+
     @Override
     protected boolean isStepCompleted(@NonNull Context context) {
         return SetupSupport.isThisKeyboardEnabled(context);
@@ -150,5 +152,20 @@ public class WizardPageEnableKeyboardFragment extends WizardPageBaseFragment {
             mAppContext.getContentResolver().unregisterContentObserver(mSecureSettingsChanged);
             mAppContext = null;
         }
+    }
+
+    @Override
+    void previousStepNotComplete() {
+
+    }
+
+    @Override
+    void thisStepCompleted() {
+
+    }
+
+    @Override
+    void nextStepNeedsSetup() {
+
     }
 }

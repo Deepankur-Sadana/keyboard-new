@@ -45,6 +45,21 @@ public class WizardPageSwitchToKeyboardFragment extends WizardPageBaseFragment {
     }
 
     @Override
+    void previousStepNotComplete() {
+
+    }
+
+    @Override
+    void thisStepCompleted() {
+
+    }
+
+    @Override
+    void nextStepNeedsSetup() {
+
+    }
+
+    @Override
     protected boolean isStepCompleted(@NonNull Context context) {
         return SetupSupport.isThisKeyboardSetAsDefaultIME(context);
     }

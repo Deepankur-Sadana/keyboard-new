@@ -24,12 +24,9 @@ public class WizardPageDoneAndMoreSettingsFragment extends WizardPageBaseFragmen
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-//        view.findViewById(R.id.go_to_languages_action).setOnClickListener(this);
-//        view.findViewById(R.id.go_to_theme_action).setOnClickListener(this);
-//        view.findViewById(R.id.go_to_all_settings_action).setOnClickListener(this);
-//
-//        mDemoAnyKeyboardView = (DemoAnyKeyboardView) view.findViewById(R.id.demo_keyboard_view);
     }
+
+
 
     @Override
     protected boolean isStepCompleted(@NonNull Context context) {
@@ -44,31 +41,32 @@ public class WizardPageDoneAndMoreSettingsFragment extends WizardPageBaseFragmen
     @Override
     public void onClick(View v) {
         MainSettingsActivity activity = (MainSettingsActivity) getActivity();
-        switch (v.getId()) {
-//            case R.id.go_to_languages_action:
-//                activity.addFragmentToUi(new KeyboardAddOnBrowserFragment(), TransitionExperiences.DEEPER_EXPERIENCE_TRANSITION);
-//                break;
-//            case R.id.go_to_theme_action:
-//                activity.addFragmentToUi(new KeyboardThemeSelectorFragment(), TransitionExperiences.DEEPER_EXPERIENCE_TRANSITION);
-//                break;
-//            case R.id.go_to_all_settings_action:
-//                activity.onNavigateToRootClicked(v);
-//                activity.openDrawer();
-//                break;
-        }
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
-//        AnyKeyboard defaultKeyboard = KeyboardFactory.getEnabledKeyboards(getContext()).get(0).createKeyboard(getContext(), Keyboard.KEYBOARD_ROW_MODE_NORMAL);
-//        defaultKeyboard.loadKeyboard(mDemoAnyKeyboardView.getThemedKeyboardDimens());
-//        mDemoAnyKeyboardView.setKeyboard(defaultKeyboard, null, null);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
 //        mDemoAnyKeyboardView.onViewNotRequired();
+    }
+
+    @Override
+    void previousStepNotComplete() {
+
+    }
+
+    @Override
+    void thisStepCompleted() {
+
+    }
+
+    @Override
+    void nextStepNeedsSetup() {
+
     }
 }
