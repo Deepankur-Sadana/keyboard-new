@@ -51,34 +51,7 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         setContentView(R.layout.main_ui);
-
         mTitle = mDrawerTitle = getTitle();
-
-//        mDrawerRootLayout = (DrawerLayout) findViewById(R.id.main_root_layout);
-//        mDrawerRootLayout.setDrawerShadow(R.drawable.drawer_shadow, Gravity.LEFT);
-//        mDrawerToggle = new ActionBarDrawerToggle(
-//                this,                  /* host Activity */
-//                mDrawerRootLayout,         /* DrawerLayout object */
-//                R.string.drawer_open,  /* "open drawer" description */
-//                R.string.drawer_close  /* "close drawer" description */
-//        )
-//        {
-//
-//            /** Called when a drawer has settled in a completely closed state. */
-//            public void onDrawerClosed(View view) {
-//                getSupportActionBar().setTitle(mTitle);
-//                ActivityCompat.invalidateOptionsMenu(MainSettingsActivity.this);// creates call to onPrepareOptionsMenu()
-//            }
-//
-//            /** Called when a drawer has settled in a completely open state. */
-//            public void onDrawerOpened(View drawerView) {
-//                getSupportActionBar().setTitle(mDrawerTitle);
-//                ActivityCompat.invalidateOptionsMenu(MainSettingsActivity.this);// creates call to onPrepareOptionsMenu()
-//            }
-//        };
-
-        // Set the drawer toggle as the DrawerListener
-//        mDrawerRootLayout.setDrawerListener(mDrawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
@@ -139,16 +112,38 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
         return R.id.main_ui_content;
     }
 
+    final String TAG = getClass().getSimpleName();
+
     @Override
     protected void onStart() {
         super.onStart();
+        Log.d(TAG, "onStart: ");
         //updating menu's data
         updateMenuExtraData();
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.d(TAG, "onRestart: ");
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+        Log.d(TAG, "onStop: ");
         if (mAlertDialog != null && mAlertDialog.isShowing()) {
             mAlertDialog.dismiss();
             mAlertDialog = null;
@@ -158,6 +153,7 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
 //        AnyApplication.getConfig().removeChangedListener(menuExtraUpdaterOnConfigChange);
     }
 
@@ -197,72 +193,7 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
         getSupportActionBar().setTitle(mTitle);
     }
 
-    //side menu navigation methods
 
-//    public void onNavigateToRootClicked(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(createRootFragmentInstance(), TransitionExperiences.ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//    }
-
-//    public void onNavigateToKeyboardAddonSettings(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(new KeyboardAddOnBrowserFragment(), TransitionExperiences.SUB_ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//    }
-
-//    public void onNavigateToDictionarySettings(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(new DictionariesFragment(), TransitionExperiences.SUB_ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//    }
-
-//    public void onNavigateToLanguageSettings(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(new AdditionalLanguageSettingsFragment(), TransitionExperiences.SUB_ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//
-//    }
-
-//    public void onNavigateToKeyboardThemeSettings(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(new KeyboardThemeSelectorFragment(), TransitionExperiences.SUB_ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//    }
-
-//    public void onNavigateToEffectsSettings(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(new EffectsSettingsFragment(), TransitionExperiences.SUB_ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//    }
-
-//    public void onNavigateToGestureSettings(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(new GesturesSettingsFragment(), TransitionExperiences.SUB_ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//    }
-
-//    public void onNavigateToQuickTextSettings(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(new QuickTextSettingsFragment(), TransitionExperiences.SUB_ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//    }
-
-//    public void onNavigateToUserInterfaceSettings(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(new AdditionalUiSettingsFragment(), TransitionExperiences.SUB_ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//    }
-
-//    public void onNavigateToAboutClicked(View v) {
-//        mDrawerRootLayout.closeDrawers();
-//        addFragmentToUi(new AboutAnySoftKeyboardFragment(), TransitionExperiences.SUB_ROOT_FRAGMENT_EXPERIENCE_TRANSITION);
-//    }
-
-    public void setFullScreen(boolean fullScreen) {
-        if (fullScreen) {
-//            getSupportActionBar().hide();
-//            mDrawerRootLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        } else {
-//            getSupportActionBar().show();
-//            mDrawerRootLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        }
-    }
-
-    public void openDrawer() {
-//        mDrawerRootLayout.openDrawer(Gravity.LEFT);
-    }
 
     /**
      * Will set the title in the hosting Activity's title.

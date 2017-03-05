@@ -3,18 +3,19 @@ package deepankur.com.keyboardapp.setup;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 
 import deepankur.com.keyboardapp.R;
 
 
 public class WizardPageSwitchToKeyboardFragment extends WizardPageBaseFragment {
+    TextView actionTv;
+
     @Override
     protected int getPageLayoutId() {
-        return R.layout.keyboard_setup_wizard_page_switch_to_layout;
+        return R.layout.fresh_onboarding_screens;
     }
 
     @Override
@@ -27,8 +28,9 @@ public class WizardPageSwitchToKeyboardFragment extends WizardPageBaseFragment {
                 mgr.showInputMethodPicker();
             }
         };
-        view.findViewById(R.id.go_to_switch_keyboard_action).setOnClickListener(showSwitchImeDialog);
-        mStateIcon.setOnClickListener(showSwitchImeDialog);
+        actionTv = (TextView) view.findViewById(R.id.actionTV);
+//        view.findViewById(R.id.go_to_switch_keyboard_action).setOnClickListener(showSwitchImeDialog);
+        actionTv.setOnClickListener(showSwitchImeDialog);
     }
 
     @Override
@@ -37,12 +39,21 @@ public class WizardPageSwitchToKeyboardFragment extends WizardPageBaseFragment {
         if (getActivity() != null) {
             final boolean isActive = isStepCompleted(getActivity());
             final boolean isEnabled = isStepPreConditionDone(getActivity());
-            mStateIcon.setImageResource(isActive ?
-                    R.drawable.ic_wizard_switch_on
-                    : R.drawable.ic_wizard_switch_off);
-            mStateIcon.setClickable(isEnabled && !isActive);
+//            mStateIcon.setImageResource(isActive ?
+//                    R.drawable.ic_wizard_switch_on
+//                    : R.drawable.ic_wizard_switch_off);
+//            actionTv.setText(isActive ?
+//                    DONE :
+//                    DO_IT_NOW
+//            );
+//
+            actionTv.setClickable(isEnabled && !isActive);
+
         }
     }
+
+//    private final String DO_IT_NOW = "SELECT INPUT METHOD", DONE = DO_IT_NOW;
+
 
     @Override
     void previousStepNotComplete() {
@@ -56,7 +67,7 @@ public class WizardPageSwitchToKeyboardFragment extends WizardPageBaseFragment {
 
     @Override
     void nextStepNeedsSetup() {
-
+//        actionTv.setText(DONE);
     }
 
     @Override

@@ -13,6 +13,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import deepankur.com.keyboardapp.R;
@@ -22,7 +23,7 @@ public class WizardPageEnableKeyboardFragment extends WizardPageBaseFragment {
 
     private static final int KEY_MESSAGE_UNREGISTER_LISTENER = 447;
     private static final int KEY_MESSAGE_RETURN_TO_APP = 446;
-
+    private TextView mStateTv;
 
     @SuppressWarnings("HandlerLeak"/*I want this fragment to stay in memory as long as possible*/)
     private Handler mGetBackHereHandler = new Handler() {
@@ -68,7 +69,7 @@ public class WizardPageEnableKeyboardFragment extends WizardPageBaseFragment {
 
     @Override
     protected int getPageLayoutId() {
-        return R.layout.keyboard_setup_wizard_page_enable_layout;
+        return R.layout.fresh_onboarding_screens;
     }
 
     @Override
@@ -97,8 +98,9 @@ public class WizardPageEnableKeyboardFragment extends WizardPageBaseFragment {
                 }
             }
         };
-        view.findViewById(R.id.go_to_language_settings_action).setOnClickListener(goToDeviceLanguageSettings);
-        mStateIcon.setOnClickListener(goToDeviceLanguageSettings);
+        mStateTv = (TextView) view.findViewById(R.id.actionTV);
+//        view.findViewById(R.id.go_to_language_settings_action).setOnClickListener(goToDeviceLanguageSettings);
+        mStateTv.setOnClickListener(goToDeviceLanguageSettings);
     }
 
     @Override
@@ -121,10 +123,10 @@ public class WizardPageEnableKeyboardFragment extends WizardPageBaseFragment {
         super.refreshFragmentUi();
         if (getActivity() != null) {
             final boolean isEnabled = isStepCompleted(getActivity());
-            mStateIcon.setImageResource(isEnabled ?
-                    R.drawable.ic_wizard_enabled_on
-                    : R.drawable.ic_wizard_enabled_off);
-            mStateIcon.setClickable(!isEnabled);
+//            mStateIcon.setImageResource(isEnabled ?
+//                    R.drawable.ic_wizard_enabled_on
+//                    : R.drawable.ic_wizard_enabled_off);
+//            mStateIcon.setClickable(!isEnabled);
         }
     }
 
