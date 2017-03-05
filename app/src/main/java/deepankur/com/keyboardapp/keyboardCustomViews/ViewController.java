@@ -78,13 +78,8 @@ public class ViewController implements GreenBotMessageKeyIds {
         int frameToShow;
         keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
         if (keyBoardOptions == KeyBoardOptions.QWERTY) {
-//            keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
             frameToShow = R.id.keyboardContainer;
         } else {//non qwerty
-//            if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD)
-//                keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.fragmentContainerFrame);
-//            else
-//                keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
             frameToShow = R.id.fragmentContainerFrame;
         }
         pauseAllViewsOtherThanQwerty();

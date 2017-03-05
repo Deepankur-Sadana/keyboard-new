@@ -142,7 +142,6 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
             InAppEditingController.getInstance().setEditText((EditText) v);
-            EventBus.getDefault().post(new MessageEvent(EDIT_TEXT_FOCUS_CHANGED, v));
             switch (v.getId()) {
                 case R.id.titleTV:
                     Log.d(TAG, "onFocusChange: title " + hasFocus);

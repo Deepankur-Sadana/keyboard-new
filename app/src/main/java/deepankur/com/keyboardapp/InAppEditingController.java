@@ -4,10 +4,13 @@ import android.util.Log;
 import android.view.inputmethod.InputConnection;
 import android.widget.EditText;
 
+import de.greenrobot.event.EventBus;
+import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
+
 /**
  * Created by deepankursadana on 25/02/17.
  */
-public class InAppEditingController {
+public class InAppEditingController implements GreenBotMessageKeyIds {
     private static InAppEditingController ourInstance;
     private final static String TAG = InAppEditingController.class.getSimpleName();
     private InputConnection editTextInputConnection;
@@ -26,6 +29,8 @@ public class InAppEditingController {
     public void setEditText(EditText editText) {
         this.editText = editText;
         editTextInputConnection = new CustomInputConnection(editText);
+        EventBus.getDefault().post(new MessageEvent(EDIT_TEXT_FOCUS_CHANGED, editText));
+
     }
 
     public void onKey(int primaryCode, int[] keyCodes) {
