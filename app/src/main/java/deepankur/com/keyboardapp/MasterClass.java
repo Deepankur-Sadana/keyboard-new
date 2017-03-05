@@ -30,7 +30,10 @@ public class MasterClass extends Application {
     public void onCreate() {
         super.onCreate();
         Log.d(TAG, "onCreate: ");
+        msConfig = new AskPrefsImpl();
+
     }
+
 
     @Override
     public void onLowMemory() {
@@ -46,5 +49,12 @@ public class MasterClass extends Application {
     public void onTerminate() {
         super.onTerminate();
         Log.d(TAG, "onTerminate: ");
+    }
+
+
+    private static AskPrefs msConfig;
+
+    public static AskPrefs getConfig() {
+        return msConfig;
     }
 }

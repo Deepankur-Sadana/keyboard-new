@@ -12,10 +12,10 @@ class WizardPagesAdapter extends FragmentPagerAdapter {
     WizardPagesAdapter(FragmentManager fm) {
         super(fm);
         mFragments = new Fragment[MARSHMALLOW ? 4 :3];
-        mFragments[0] = new WizardPageEnableKeyboardFragment();
-        mFragments[1] = new WizardPageSwitchToKeyboardFragment();
+        mFragments[0] = new WizardPageEnableKeyboardFragment();//done
+        mFragments[1] = new WizardPageSwitchToKeyboardFragment();//done
         if (MARSHMALLOW) {
-            mFragments[2] = new WizardPermissionsFragment();
+            mFragments[2] = new WizardPermissionsFragment();//partially done, skipper ask prefs
             mFragments[3] = new WizardPageDoneAndMoreSettingsFragment();
         } else {
             mFragments[2] = new WizardPageDoneAndMoreSettingsFragment();

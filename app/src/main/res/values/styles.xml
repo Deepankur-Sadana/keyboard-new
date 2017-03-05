@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="Ask"/>
+    <style name="Ask" />
 
     <style name="Ask.Card">
         <item name="android:layout_marginTop">4dp</item>
@@ -20,4 +20,37 @@
         <item name="android:layout_height">wrap_content</item>
     </style>
 
+    <style name="Ask.Text">
+        <item name="android:textColor">?android:textColorPrimary</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="Ask.Text.Title" parent="Ask.Text">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+
+    <style name="Ask.Text.Normal" parent="Ask.Text">
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="Ask.Text.Link" parent="Ask.Text.Normal">
+        <item name="android:textColor">?android:textColorLink</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="Ask.Text.Large" parent="Ask.Text">
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="Ask.Text.Large.Bold" parent="Ask.Text.Large">
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="Ask.Text.SubTitle" parent="Ask.Text">
+        <item name="android:textColor">?android:textColorSecondary</item>
+        <item name="android:textSize">18sp</item>
+    </style>
 </resources>

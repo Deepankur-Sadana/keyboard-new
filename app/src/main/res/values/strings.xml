@@ -47,7 +47,7 @@
     <string name="setup_wizard_step_two_details">Your system can use <i>Keyboard_App</i> now, but it is not set as the active keyboard.\nBy switching, <i>Keyboard_App</i> will be your new on-screen keyboard, along with all its features!</string>
     <string name="setup_wizard_step_two_action">Switch active keyboards</string>
     <string name="setup_wizard_step_three_title">What\'s next</string>
-    <string name="setup_wizard_step_three_details">Thank you for choosing <i>AnySoftKeyboard</i>.</string>
+    <string name="setup_wizard_step_three_details">Thank you for choosing <i>Smart Keyboard</i>.</string>
     <string name="setup_wizard_step_three_details_done"><b>You are done 🎉\nGo to you favorite app to try it out.</b></string>
     <string name="setup_wizard_step_three_details_actions">Or, you can customize and personalize the keyboard to your likings:</string>
     <string name="setup_wizard_step_three_action_languages">Setup languages…</string>
@@ -56,4 +56,15 @@
     <string name="ime_crashed_title">AnySoftKeyboard Crashed!</string>
     <string name="not_configured_with_click_here">Keyboard_APP is not fully set-up for use. Click here to set up.</string>
     <string name="not_configured_with_just_click_here">Click here</string>
+    <string name="notification_read_contacts_title">Can I read your contacts?</string>
+    <string name="contacts_permissions_dialog_message">Smart Keyboard is using your contacts\' names to provide you with a personalized word suggestion.</string>
+    <string name="allow_permission">Allow</string>
+    <string name="navigate_to_app_permissions">Go to App permissions</string>
+    <string name="turn_off_contacts_dictionary">Turn off Contacts Dictionary</string>
+    <string name="wizard_allow_contacts_permission">Allow contacts-based typing suggestions</string>
+    <string name="read_more_about_permissions">Read more about permissions…</string>
+    <string name="settings_key_use_contacts_dictionary">settings_key_use_contacts_dictionary</string>
+    <string name="permissions_wiki_site_url">https://github.com/AnySoftKeyboard/AnySoftKeyboard/wiki/Why-Does-AnySoftKeyboard-Requires-Extra-Permissions</string>
+
+
 </resources>

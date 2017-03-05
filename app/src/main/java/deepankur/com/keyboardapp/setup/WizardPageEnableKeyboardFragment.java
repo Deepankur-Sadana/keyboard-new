@@ -67,8 +67,8 @@ public class WizardPageEnableKeyboardFragment extends WizardPageBaseFragment {
     private Context mAppContext;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.keyboard_setup_wizard_page_enable_layout, container, false);
+    protected int getPageLayoutId() {
+        return R.layout.keyboard_setup_wizard_page_enable_layout;
     }
 
     @Override

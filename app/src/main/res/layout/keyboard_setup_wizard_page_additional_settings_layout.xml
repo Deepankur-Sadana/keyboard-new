@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="8dp"
-        android:text="@string/setup_wizard_step_three_title" />
 
     <LinearLayout
         android:id="@+id/previous_step_not_complete"
@@ -19,6 +14,7 @@
         android:visibility="visible">
 
         <TextView
+            style="@style/Ask.Text.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -43,25 +39,12 @@
         android:visibility="gone">
 
         <TextView
+            style="@style/Ask.Text.Normal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:gravity="center"
             android:text="@string/setup_wizard_step_three_details" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="@string/setup_wizard_step_three_details_done" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:text="@string/setup_wizard_step_three_details_actions" />
 
     </LinearLayout>
 </LinearLayout>

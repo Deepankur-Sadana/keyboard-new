@@ -8,22 +8,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 
+import net.evendanan.chauffeur.lib.experiences.TransitionExperiences;
+
 import deepankur.com.keyboardapp.R;
 
 
 public class WizardPageDoneAndMoreSettingsFragment extends WizardPageBaseFragment implements View.OnClickListener {
-
 //    private DemoAnyKeyboardView mDemoAnyKeyboardView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return new FrameLayout(getActivity());
-//        return inflater.inflate(R.layout.keyboard_setup_wizard_page_additional_settings_layout, container, false);
+    protected int getPageLayoutId() {
+        return R.layout.keyboard_setup_wizard_page_additional_settings_layout;
     }
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+//        view.findViewById(R.id.go_to_languages_action).setOnClickListener(this);
+//        view.findViewById(R.id.go_to_theme_action).setOnClickListener(this);
+//        view.findViewById(R.id.go_to_all_settings_action).setOnClickListener(this);
+//
+//        mDemoAnyKeyboardView = (DemoAnyKeyboardView) view.findViewById(R.id.demo_keyboard_view);
     }
 
     @Override
@@ -38,8 +43,8 @@ public class WizardPageDoneAndMoreSettingsFragment extends WizardPageBaseFragmen
 
     @Override
     public void onClick(View v) {
-//        MainSettingsActivity activity = (MainSettingsActivity) getActivity();
-//        switch (v.getId()) {
+        MainSettingsActivity activity = (MainSettingsActivity) getActivity();
+        switch (v.getId()) {
 //            case R.id.go_to_languages_action:
 //                activity.addFragmentToUi(new KeyboardAddOnBrowserFragment(), TransitionExperiences.DEEPER_EXPERIENCE_TRANSITION);
 //                break;
@@ -50,7 +55,7 @@ public class WizardPageDoneAndMoreSettingsFragment extends WizardPageBaseFragmen
 //                activity.onNavigateToRootClicked(v);
 //                activity.openDrawer();
 //                break;
-//        }
+        }
     }
 
     @Override

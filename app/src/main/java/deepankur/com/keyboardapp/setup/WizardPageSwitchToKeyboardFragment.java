@@ -12,10 +12,9 @@ import deepankur.com.keyboardapp.R;
 
 
 public class WizardPageSwitchToKeyboardFragment extends WizardPageBaseFragment {
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.keyboard_setup_wizard_page_switch_to_layout, container, false);
+    protected int getPageLayoutId() {
+        return R.layout.keyboard_setup_wizard_page_switch_to_layout;
     }
 
     @Override
