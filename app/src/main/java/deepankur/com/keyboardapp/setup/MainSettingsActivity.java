@@ -1,6 +1,7 @@
 package deepankur.com.keyboardapp.setup;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,19 +12,15 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.SharedPreferencesCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.TextView;
 
-import net.evendanan.chauffeur.lib.experiences.TransitionExperiences;
-import net.evendanan.chauffeur.lib.permissions.PermissionsFragmentChauffeurActivity;
 import net.evendanan.chauffeur.lib.permissions.PermissionsRequest;
 
 import java.lang.ref.WeakReference;
@@ -31,11 +28,11 @@ import java.lang.ref.WeakReference;
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.PermissionsRequestCodes;
 
-public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
+public class MainSettingsActivity extends FragmentActivity {
 
 
     public static final String EXTRA_KEY_APP_SHORTCUT_ID = "shortcut_id";
-//    private DrawerLayout mDrawerRootLayout;
+    //    private DrawerLayout mDrawerRootLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
     private CharSequence mTitle;
@@ -50,11 +47,14 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        Log.d(TAG, "onCreate: ");
         setContentView(R.layout.main_ui);
         mTitle = mDrawerTitle = getTitle();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeButtonEnabled(true);
-
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setHomeButtonEnabled(true);
+        if (shouldLaunchSetupFragments(this)) {
+            if (!loaded) launchSetUpFragment();
+        }
 //        AnyApplication.getConfig().addChangedListener(menuExtraUpdaterOnConfigChange);
     }
 
@@ -90,7 +90,7 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
 //                    onNavigateToUserInterfaceSettings(null);
                     break;
                 default:
-                    throw new IllegalArgumentException("Unknown app-shortcut "+shortcutId);
+                    throw new IllegalArgumentException("Unknown app-shortcut " + shortcutId);
             }
         }
     }
@@ -101,16 +101,6 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
         handleAppShortcuts(intent);
     }
 
-    @NonNull
-    @Override
-    protected Fragment createRootFragmentInstance() {
-        return new MainFragment();
-    }
-
-    @Override
-    protected int getFragmentRootUiElementId() {
-        return R.id.main_ui_content;
-    }
 
     final String TAG = getClass().getSimpleName();
 
@@ -190,9 +180,8 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
     @Override
     public void setTitle(CharSequence title) {
         mTitle = title;
-        getSupportActionBar().setTitle(mTitle);
+//        getSupportActionBar().setTitle(mTitle);
     }
-
 
 
     /**
@@ -214,7 +203,7 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
                     if (ActivityCompat.shouldShowRequestPermissionRationale(MainSettingsActivity.this, Manifest.permission.READ_CONTACTS)) {
                         startContactsPermissionRequest();
                     } else {
-                        startAppPermissionsActivity();
+//                        startAppPermissionsActivity();
                     }
                     break;
                 case DialogInterface.BUTTON_NEGATIVE:
@@ -230,17 +219,17 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
     private AlertDialog mAlertDialog;
 
     public void startContactsPermissionRequest() {
-        startPermissionsRequest(new ContactPermissionRequest(this));
+//        startPermissionsRequest(new ContactPermissionRequest(this));
     }
 
-    @NonNull
-    protected PermissionsRequest createPermissionRequestFromIntentRequest(int requestId, @NonNull String[] permissions, @NonNull Intent intent) {
-        if (requestId == PermissionsRequestCodes.CONTACTS.getRequestCode()) {
-            return new ContactPermissionRequest(this);
-        } else {
-            return super.createPermissionRequestFromIntentRequest(requestId, permissions, intent);
-        }
-    }
+//    @NonNull
+//    protected PermissionsRequest createPermissionRequestFromIntentRequest(int requestId, @NonNull String[] permissions, @NonNull Intent intent) {
+//        if (requestId == PermissionsRequestCodes.CONTACTS.getRequestCode()) {
+//            return new ContactPermissionRequest(this);
+//        } else {
+//            return super.createPermissionRequestFromIntentRequest(requestId, permissions, intent);
+//        }
+//    }
 
 
     private static class ContactPermissionRequest extends PermissionsRequest.PermissionsRequestBase {
@@ -251,6 +240,7 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
             super(PermissionsRequestCodes.CONTACTS.getRequestCode(), Manifest.permission.READ_CONTACTS);
             mMainSettingsActivityWeakReference = new WeakReference<>(activity);
         }
+
         @Override
         public void onPermissionsGranted() {
             /*
@@ -275,9 +265,29 @@ public class MainSettingsActivity extends PermissionsFragmentChauffeurActivity {
             builder.setPositiveButton(activity.getString(userSaysDontAskAgain ? R.string.navigate_to_app_permissions : R.string.allow_permission), activity.mContactsDictionaryDialogListener);
             builder.setNegativeButton(activity.getString(R.string.turn_off_contacts_dictionary), activity.mContactsDictionaryDialogListener);
 
-            if (activity.mAlertDialog != null && activity.mAlertDialog.isShowing()) activity.mAlertDialog.dismiss();
+            if (activity.mAlertDialog != null && activity.mAlertDialog.isShowing())
+                activity.mAlertDialog.dismiss();
             activity.mAlertDialog = builder.create();
             activity.mAlertDialog.show();
         }
+    }
+
+    private boolean shouldLaunchSetupFragments(Context context) {
+        return !SetupSupport.isThisKeyboardSetAsDefaultIME(context);
+    }
+
+    static boolean loaded;
+
+    public void launchSetUpFragment() {//pos not required; data has complete info
+//        loaded = true;
+        SetUpKeyboardWizardFragment fragment = new SetUpKeyboardWizardFragment();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//        fragmentTransaction.setCustomAnimations(R.anim.enter_res_id_exit, R.anim.exit_res_id_exit,
+//                R.anim.exit_res_id_start, R.anim.enter_res_id_start);
+        fragmentTransaction.add(R.id.main_ui_content, fragment, SetUpKeyboardWizardFragment.class.getSimpleName());
+        fragmentTransaction.addToBackStack(SetUpKeyboardWizardFragment.class.getSimpleName());
+        fragmentTransaction.commitAllowingStateLoss();
     }
 }
