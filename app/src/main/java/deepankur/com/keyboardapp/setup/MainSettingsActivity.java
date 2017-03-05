@@ -24,11 +24,13 @@ import android.view.MenuItem;
 import net.evendanan.chauffeur.lib.permissions.PermissionsRequest;
 
 import java.lang.ref.WeakReference;
+import java.util.Map;
 
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.PermissionsRequestCodes;
+import deepankur.com.keyboardapp.preferences.PrefsKeyIds;
 
-public class MainSettingsActivity extends FragmentActivity {
+public class MainSettingsActivity extends FragmentActivity implements PrefsKeyIds {
 
 
     public static final String EXTRA_KEY_APP_SHORTCUT_ID = "shortcut_id";
@@ -52,9 +54,11 @@ public class MainSettingsActivity extends FragmentActivity {
         mTitle = mDrawerTitle = getTitle();
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(true);
-        if (shouldLaunchSetupFragments(this)) {
-            if (!loaded) launchSetUpFragment();
+//        boolean firstIntroFragment = checkAndLaunchFirstIntroFragment();
+        if (!false) {
+            boolean launchSetUpFragment = checkAndLaunchSetUpFragment(this);
         }
+
 //        AnyApplication.getConfig().addChangedListener(menuExtraUpdaterOnConfigChange);
     }
 
@@ -272,22 +276,63 @@ public class MainSettingsActivity extends FragmentActivity {
         }
     }
 
-    private boolean shouldLaunchSetupFragments(Context context) {
-        return !SetupSupport.isThisKeyboardSetAsDefaultIME(context);
-    }
 
     static boolean loaded;
 
-    public void launchSetUpFragment() {//pos not required; data has complete info
-//        loaded = true;
-        SetUpKeyboardWizardFragment fragment = new SetUpKeyboardWizardFragment();
+    /**
+     * @param context
+     * @return true if this fragment was launched,false otherwisw
+     */
+    public boolean checkAndLaunchSetUpFragment(Context context) {
 
+        boolean b = SetupSupport.isThisKeyboardSetAsDefaultIME(context);
+        if (b)
+            return false;
+        SetUpKeyboardWizardFragment fragment = new SetUpKeyboardWizardFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        fragmentTransaction.setCustomAnimations(R.anim.enter_res_id_exit, R.anim.exit_res_id_exit,
-//                R.anim.exit_res_id_start, R.anim.enter_res_id_start);
         fragmentTransaction.add(R.id.main_ui_content, fragment, SetUpKeyboardWizardFragment.class.getSimpleName());
         fragmentTransaction.addToBackStack(SetUpKeyboardWizardFragment.class.getSimpleName());
         fragmentTransaction.commitAllowingStateLoss();
+        return true;
     }
+
+    public void onFirstIntroDone() {
+
+    }
+
+    /**
+     * @return true if the fragment was launched,false otherwise
+     */
+    boolean checkAndLaunchFirstIntroFragment() {
+        // parse Preference file
+        SharedPreferences preferences = this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+
+        // get values from Map
+        boolean introDone = preferences.getBoolean(APP_INTRO_DONE, false);
+        if (introDone) return false;
+
+        // you can get all Map but be careful you must not modify the collection returned by this
+        // method, or alter any of its contents.
+        Map<String, ?> all = preferences.getAll();
+
+        // get Editor object
+        SharedPreferences.Editor editor = preferences.edit();
+
+        //add on Change Listener
+        preferences.registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
+
+        //remove on Change Listener
+        preferences.unregisterOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
+
+        return true;
+    }
+
+
+    SharedPreferences.OnSharedPreferenceChangeListener mOnSharedPreferenceChangeListener
+            = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        }
+    };
 }

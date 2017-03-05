@@ -33,7 +33,8 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     }
 
     private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
-            , KeyBoardOptions.CONTACTS};
+//            , KeyBoardOptions.CONTACTS
+    };
 
     private void init(Context context) {
         EventBus.getDefault().register(this);
