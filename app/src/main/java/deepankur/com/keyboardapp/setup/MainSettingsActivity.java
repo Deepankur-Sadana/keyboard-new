@@ -54,8 +54,8 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
         mTitle = mDrawerTitle = getTitle();
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        getSupportActionBar().setHomeButtonEnabled(true);
-//        boolean firstIntroFragment = checkAndLaunchFirstIntroFragment();
-        if (!false) {
+        boolean firstIntroFragment = checkAndLaunchFirstIntroFragment();
+        if (!firstIntroFragment) {
             boolean launchSetUpFragment = checkAndLaunchSetUpFragment(this);
         }
 
@@ -298,7 +298,10 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
     }
 
     public void onFirstIntroDone() {
-
+        SharedPreferences preferences = this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(APP_INTRO_DONE, true);
+        checkAndLaunchSetUpFragment(this);
     }
 
     /**

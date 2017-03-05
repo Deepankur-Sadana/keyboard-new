@@ -146,7 +146,7 @@
             android:codes="-5"
             android:isRepeatable="true"
             android:keyEdgeFlags="right"
-            android:keyIcon="@drawable/sym_keyboard_delete"
+            android:keyIcon="@drawable/backspace_svg"
             android:keyWidth="15%p" />
     </Row>
 
