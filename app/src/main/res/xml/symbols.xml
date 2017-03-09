@@ -146,7 +146,8 @@
         -->
         <Key
             android:codes="-101"
-            android:keyWidth="0%p" />
+            android:keyIcon="@drawable/ic_change_language_icon"
+            android:keyWidth="10%p" />
         <Key
             android:codes="32"
             android:isRepeatable="true"
