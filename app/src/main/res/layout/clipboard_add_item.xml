@@ -9,8 +9,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:padding="8dp">
+        android:background="@android:color/white">
 
         <deepankur.com.keyboardapp.customTextViews.MontserratRegularTextView
             android:id="@+id/saveTV"
@@ -18,56 +17,62 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/blue_rounded_corners"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/cerulean"
             android:padding="8dp"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
             android:text="  Save  "
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
 
         <deepankur.com.keyboardapp.customTextViews.MontserratRegularTextView
-            android:layout_marginBottom="8dp"
             android:id="@+id/deleteTV"
-            android:layout_above="@id/saveTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_above="@id/saveTV"
             android:layout_alignParentEnd="true"
-            android:background="@drawable/blue_rounded_corners"
+            android:layout_marginBottom="10dp"
+            android:layout_marginEnd="20dp"
+            android:background="@color/brick"
             android:padding="8dp"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
             android:text="Delete"
-            android:textColor="@android:color/white" />
+            android:textColor="@android:color/white"
+            android:textSize="16sp" />
 
         <EditText
-            android:imeOptions="actionDone"
             android:id="@+id/titleTV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             android:layout_toStartOf="@+id/saveTV"
-            android:background="@color/card_light_gray_background"
+            android:background="@color/edit_text_background"
             android:hint="Title"
-            android:padding="8dp"
-            android:paddingEnd="16dp"
-            android:paddingStart="16dp"
-            android:textColor="@android:color/black" />
+            android:imeOptions="actionDone"
+            android:padding="10dp"
+            android:textColor="@color/edit_text_text_color" />
 
         <EditText
             android:id="@+id/descriptionTV"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@id/titleTV"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_below="@+id/titleTV"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
             android:layout_toStartOf="@+id/saveTV"
-            android:background="@color/card_light_gray_background"
-            android:hint="Description"
+            android:background="@color/edit_text_background"
             android:gravity="top"
+            android:hint="Description"
             android:padding="8dp"
             android:paddingEnd="16dp"
             android:paddingStart="16dp"
-            android:textColor="@android:color/black" />
+            android:textColor="@color/edit_text_text_color" />
     </RelativeLayout>
-
 </FrameLayout>

@@ -23,6 +23,7 @@ import deepankur.com.keyboardapp.interfaces.GreenBotMessageKeyIds;
 import deepankur.com.keyboardapp.interfaces.Reachable;
 import deepankur.com.keyboardapp.models.ClipBoardItemModel;
 import utils.AppLibrary;
+import utils.FontPicker;
 
 /**
  * Created by deepankursadana on 21/02/17.
@@ -79,6 +80,11 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
         descriptionEt.setOnFocusChangeListener(focusChangeListener);
 //        titleEt.setOnKeyListener(onKeyListener);
 //        descriptionEt.setOnKeyListener(onKeyListener);
+        titleEt.setTypeface(FontPicker.getInstance(getContext()).getRobotoRegular());
+        descriptionEt.setTypeface(FontPicker.getInstance(getContext()).getRobotoRegular());
+
+        ((TextView) rootView.findViewById(R.id.saveTV)).setTypeface(FontPicker.getInstance(getContext()).getRobotoRegular());
+        ((TextView) rootView.findViewById(R.id.deleteTV)).setTypeface(FontPicker.getInstance(getContext()).getRobotoRegular());
 
         rootView.findViewById(R.id.saveTV).setOnClickListener(new OnClickListener() {
             @Override

@@ -24,7 +24,8 @@ public class FontPicker {
             MontserratSemiBold,
             Museo300Regular,
             Museo500Regular,
-            Museo700Regular;
+            Museo700Regular,
+            RobotoRegular;
 
     private FontPicker(Context context) {
         museo700 = Typeface.createFromAsset(context.getAssets(), "fonts/Museo700-Regular.otf");
@@ -36,6 +37,7 @@ public class FontPicker {
         Museo300Regular = Typeface.createFromAsset(context.getAssets(), "fonts/Museo300-Regular.otf");
         Museo500Regular = Typeface.createFromAsset(context.getAssets(), "fonts/Museo500-Regular.otf");
         Museo700Regular = Typeface.createFromAsset(context.getAssets(), "fonts/Museo700-Regular.otf");
+        RobotoRegular = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
     }
 
     public Typeface getMuseo700() {
@@ -72,5 +74,9 @@ public class FontPicker {
 
     public Typeface getMuseo700Regular() {
         return Museo700Regular;
+    }
+
+    public Typeface getRobotoRegular() {
+        return RobotoRegular;
     }
 }
