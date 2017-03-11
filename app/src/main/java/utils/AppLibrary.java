@@ -222,9 +222,6 @@ public class AppLibrary {
 
     /* fonts */
     private static final Hashtable<String, Typeface> typefaces = new Hashtable<String, Typeface>();
-    public static final String Regular = "fonts/Roboto-Light.ttf";
-    public static final String Bold = "fonts/Roboto-Regular.ttf";
-    public static final String Icon = "fonts/icons.ttf";
 
     public static Typeface getTypeface(Context c, String name) {
         synchronized (typefaces) {
