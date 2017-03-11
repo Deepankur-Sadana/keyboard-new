@@ -28,6 +28,7 @@ import java.util.Map;
 
 import deepankur.com.keyboardapp.R;
 import deepankur.com.keyboardapp.enums.PermissionsRequestCodes;
+import deepankur.com.keyboardapp.ftue.ParentFirstRunIntroFragment;
 import deepankur.com.keyboardapp.preferences.PrefsKeyIds;
 
 public class MainSettingsActivity extends FragmentActivity implements PrefsKeyIds {
@@ -61,6 +62,13 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
         }
 
     }
+
+    SharedPreferences.OnSharedPreferenceChangeListener mOnSharedPreferenceChangeListener
+            = new SharedPreferences.OnSharedPreferenceChangeListener() {
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        }
+    };
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -242,10 +250,27 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
     static boolean loaded;
 
     /**
+     * @return true if the fragment was launched,false otherwise
+     */
+    private boolean checkAndLaunchFirstIntroFragment() {
+        // parse Preference file
+        SharedPreferences preferences = this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        boolean introDone = preferences.getBoolean(APP_INTRO_DONE, false);
+        if (introDone) return false;
+        ParentFirstRunIntroFragment fragment = new ParentFirstRunIntroFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.main_ui_content, fragment, ParentFirstRunIntroFragment.class.getSimpleName());
+        fragmentTransaction.commitAllowingStateLoss();
+
+        return true;
+    }
+
+    /**
      * @param context
      * @return true if this fragment was launched,false otherwisw
      */
-    public boolean checkAndLaunchSetUpFragment(Context context) {
+    private boolean checkAndLaunchSetUpFragment(Context context) {
 
         boolean b = SetupSupport.isThisKeyboardSetAsDefaultIME(context);
         if (b)
@@ -264,32 +289,41 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
         SharedPreferences preferences = this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean(APP_INTRO_DONE, true);
+        editor.commit();
+        removeFirstIntroFragment();
         checkAndLaunchSetUpFragment(this);
     }
 
-    /**
-     * @return true if the fragment was launched,false otherwise
-     */
-    boolean checkAndLaunchFirstIntroFragment() {
-        // parse Preference file
-        SharedPreferences preferences = this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-        boolean introDone = preferences.getBoolean(APP_INTRO_DONE, false);
-        if (introDone) return false;
-        SetUpKeyboardWizardFragment fragment = new SetUpKeyboardWizardFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.add(R.id.main_ui_content, fragment, SetUpKeyboardWizardFragment.class.getSimpleName());
-        fragmentTransaction.addToBackStack(SetUpKeyboardWizardFragment.class.getSimpleName());
-        fragmentTransaction.commitAllowingStateLoss();
+    public void removeFirstIntroFragment() {
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag(ParentFirstRunIntroFragment.class.getSimpleName());
+        try {
+            if (fragment != null)
+                getSupportFragmentManager().beginTransaction().remove(fragment).commitAllowingStateLoss();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-        return true;
+
+        if (getFragmentInBackStack(ParentFirstRunIntroFragment.class.getSimpleName()) != null) {
+            boolean popped = false;
+            try {
+                popped = getSupportFragmentManager().popBackStackImmediate();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            Log.d(TAG, "removeFirstIntroFragment: popped " + popped);
+        } else
+            Log.d(TAG, "removeFirstIntroFragment: fragment is null");
     }
 
+    /**
+     * @param fragmentTag the String supplied while fragment transaction
+     * @return
+     */
+    private Fragment getFragmentInBackStack(String fragmentTag) {
+        return getSupportFragmentManager().findFragmentByTag(fragmentTag);
 
-    SharedPreferences.OnSharedPreferenceChangeListener mOnSharedPreferenceChangeListener
-            = new SharedPreferences.OnSharedPreferenceChangeListener() {
-        @Override
-        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        }
-    };
+    }
+
 }
