@@ -4,4 +4,5 @@
     android:id="@+id/wizard_pages_pager"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="@dimen/global_content_padding_side"/>
+    android:background="@drawable/background"
+    android:padding="@dimen/global_content_padding_side" />
