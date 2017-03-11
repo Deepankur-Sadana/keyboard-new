@@ -34,7 +34,6 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
 
 
     public static final String EXTRA_KEY_APP_SHORTCUT_ID = "shortcut_id";
-    //    private DrawerLayout mDrawerRootLayout;
     private ActionBarDrawerToggle mDrawerToggle;
 
     private CharSequence mTitle;
@@ -42,7 +41,6 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
     private SharedPreferences.OnSharedPreferenceChangeListener menuExtraUpdaterOnConfigChange = new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-            updateMenuExtraData();
         }
     };
 
@@ -52,22 +50,21 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
         Log.d(TAG, "onCreate: ");
         setContentView(R.layout.main_ui);
         mTitle = mDrawerTitle = getTitle();
-//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-//        getSupportActionBar().setHomeButtonEnabled(true);
+        SharedPreferences preferences = this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        Map<String, ?> all = preferences.getAll();
+        preferences.registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
+        preferences.unregisterOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
+
         boolean firstIntroFragment = checkAndLaunchFirstIntroFragment();
         if (!firstIntroFragment) {
             boolean launchSetUpFragment = checkAndLaunchSetUpFragment(this);
         }
 
-//        AnyApplication.getConfig().addChangedListener(menuExtraUpdaterOnConfigChange);
     }
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-//        mDrawerToggle.syncState();
-        //applying my very own Edge-Effect color
         EdgeEffectHacker.brandGlowEffect(this, ContextCompat.getColor(this, android.R.color.holo_red_dark));
         handleAppShortcuts(getIntent());
     }
@@ -76,26 +73,6 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
         if (intent != null && Intent.ACTION_VIEW.equals(intent.getAction()) && intent.hasExtra(EXTRA_KEY_APP_SHORTCUT_ID)) {
             final String shortcutId = intent.getStringExtra(EXTRA_KEY_APP_SHORTCUT_ID);
             intent.removeExtra(EXTRA_KEY_APP_SHORTCUT_ID);
-
-            switch (shortcutId) {
-                case "keyboards":
-//                    onNavigateToKeyboardAddonSettings(null);
-                    break;
-                case "themes":
-//                    onNavigateToKeyboardThemeSettings(null);
-                    break;
-                case "gestures":
-//                    onNavigateToGestureSettings(null);
-                    break;
-                case "quick_keys":
-//                    onNavigateToQuickTextSettings(null);
-                    break;
-                case "ui_tweaks":
-//                    onNavigateToUserInterfaceSettings(null);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Unknown app-shortcut " + shortcutId);
-            }
         }
     }
 
@@ -112,8 +89,6 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
     protected void onStart() {
         super.onStart();
         Log.d(TAG, "onStart: ");
-        //updating menu's data
-        updateMenuExtraData();
     }
 
     @Override
@@ -148,21 +123,8 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "onDestroy: ");
-//        AnyApplication.getConfig().removeChangedListener(menuExtraUpdaterOnConfigChange);
     }
 
-    private void updateMenuExtraData() {
-//        TextView keyboardsData = (TextView) findViewById(R.id.keyboards_group_extra_data);
-//        final int all = KeyboardFactory.getAllAvailableKeyboards(getApplicationContext()).size();
-//        final int enabled = KeyboardFactory.getEnabledKeyboards(getApplicationContext()).size();
-//        keyboardsData.setText(getString(R.string.keyboards_group_extra_template, enabled, all));
-//
-//        TextView themeData = (TextView) findViewById(R.id.theme_extra_data);
-//        KeyboardTheme theme = KeyboardThemeFactory.getCurrentKeyboardTheme(getApplicationContext());
-//        if (theme == null)
-//            theme = KeyboardThemeFactory.getFallbackTheme(getApplicationContext());
-//        themeData.setText(getString(R.string.selected_add_on_summary, theme.getName()));
-    }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -297,6 +259,7 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
         return true;
     }
 
+
     public void onFirstIntroDone() {
         SharedPreferences preferences = this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -310,23 +273,14 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
     boolean checkAndLaunchFirstIntroFragment() {
         // parse Preference file
         SharedPreferences preferences = this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
-
-        // get values from Map
         boolean introDone = preferences.getBoolean(APP_INTRO_DONE, false);
         if (introDone) return false;
-
-        // you can get all Map but be careful you must not modify the collection returned by this
-        // method, or alter any of its contents.
-        Map<String, ?> all = preferences.getAll();
-
-        // get Editor object
-        SharedPreferences.Editor editor = preferences.edit();
-
-        //add on Change Listener
-        preferences.registerOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
-
-        //remove on Change Listener
-        preferences.unregisterOnSharedPreferenceChangeListener(mOnSharedPreferenceChangeListener);
+        SetUpKeyboardWizardFragment fragment = new SetUpKeyboardWizardFragment();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.add(R.id.main_ui_content, fragment, SetUpKeyboardWizardFragment.class.getSimpleName());
+        fragmentTransaction.addToBackStack(SetUpKeyboardWizardFragment.class.getSimpleName());
+        fragmentTransaction.commitAllowingStateLoss();
 
         return true;
     }
