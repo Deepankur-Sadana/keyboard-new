@@ -83,8 +83,6 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
         titleEt.setTypeface(FontPicker.getInstance(getContext()).getRobotoRegular());
         descriptionEt.setTypeface(FontPicker.getInstance(getContext()).getRobotoRegular());
 
-        ((TextView) rootView.findViewById(R.id.saveTV)).setTypeface(FontPicker.getInstance(getContext()).getRobotoRegular());
-        ((TextView) rootView.findViewById(R.id.deleteTV)).setTypeface(FontPicker.getInstance(getContext()).getRobotoRegular());
 
         rootView.findViewById(R.id.saveTV).setOnClickListener(new OnClickListener() {
             @Override

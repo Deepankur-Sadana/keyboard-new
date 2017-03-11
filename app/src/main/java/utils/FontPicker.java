@@ -3,6 +3,8 @@ package utils;
 import android.content.Context;
 import android.graphics.Typeface;
 
+import deepankur.com.keyboardapp.customTextViews.OpenSansRegular;
+
 /**
  * Created by deepankur on 6/24/16.
  */
@@ -25,7 +27,9 @@ public class FontPicker {
             Museo300Regular,
             Museo500Regular,
             Museo700Regular,
-            RobotoRegular;
+            RobotoRegular,
+            OpenSansRegular;
+
 
     private FontPicker(Context context) {
         museo700 = Typeface.createFromAsset(context.getAssets(), "fonts/Museo700-Regular.otf");
@@ -38,6 +42,9 @@ public class FontPicker {
         Museo500Regular = Typeface.createFromAsset(context.getAssets(), "fonts/Museo500-Regular.otf");
         Museo700Regular = Typeface.createFromAsset(context.getAssets(), "fonts/Museo700-Regular.otf");
         RobotoRegular = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
+        OpenSansRegular =Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Regular.ttf");
+
+
     }
 
     public Typeface getMuseo700() {
@@ -56,9 +63,7 @@ public class FontPicker {
         return MontserratLight;
     }
 
-    public Typeface getMontserratRegular() {
-        return MontserratRegular;
-    }
+    public Typeface getMontserratRegular() {return MontserratRegular;}
 
     public Typeface getMontserratSemiBold() {
         return MontserratSemiBold;
@@ -76,7 +81,10 @@ public class FontPicker {
         return Museo700Regular;
     }
 
-    public Typeface getRobotoRegular() {
-        return RobotoRegular;
-    }
+    public Typeface getRobotoRegular() {return RobotoRegular; }
+
+    public Typeface getOpenSansRegular() {return OpenSansRegular; }
 }
+
+
+
