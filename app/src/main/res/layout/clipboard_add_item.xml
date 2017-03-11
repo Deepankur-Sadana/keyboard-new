@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:background="@android:color/white">
 
-        <deepankur.com.keyboardapp.customTextViews.RobotoRegular
+        <com.vingeapp.android.customTextViews.RobotoRegular
             android:id="@+id/saveTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:textColor="@android:color/white"
             android:textSize="16sp" />
 
-        <deepankur.com.keyboardapp.customTextViews.RobotoRegular
+        <com.vingeapp.android.customTextViews.RobotoRegular
             android:id="@+id/deleteTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

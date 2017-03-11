@@ -22,7 +22,7 @@ android {
     compileSdkVersion 24
     buildToolsVersion "25.0.2"
     defaultConfig {
-        applicationId "deepankur.com.keyboardapp"
+        applicationId "com.vingeapp.android"
         minSdkVersion 19
         targetSdkVersion 24
         versionCode 1

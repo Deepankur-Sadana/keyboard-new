@@ -20,7 +20,7 @@
             <include layout="@layout/smart_keyboard_logo" />
         </LinearLayout>
 
-        <deepankur.com.keyboardapp.customTextViews.MontserratRegularTextView
+        <com.vingeapp.android.customTextViews.MontserratRegularTextView
             android:id="@+id/zero_screenTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
         android:id="@+id/subsequent_screen_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <deepankur.com.keyboardapp.customTextViews.MontserratRegularTextView
+        <com.vingeapp.android.customTextViews.MontserratRegularTextView
             android:id="@+id/subsequent_screenTV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

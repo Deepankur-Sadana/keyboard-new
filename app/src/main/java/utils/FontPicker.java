@@ -3,8 +3,6 @@ package utils;
 import android.content.Context;
 import android.graphics.Typeface;
 
-import deepankur.com.keyboardapp.customTextViews.OpenSansRegular;
-
 /**
  * Created by deepankur on 6/24/16.
  */

@@ -42,7 +42,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import deepankur.com.keyboardapp.MasterClass;
+import com.vingeapp.android.MasterClass;
 
 /**
  * Created by admin on 1/12/2015.

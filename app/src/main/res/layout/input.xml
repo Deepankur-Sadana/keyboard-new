@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:layout_alignParentBottom="true">
 
-    <deepankur.com.keyboardapp.keyboardCustomViews.TabStripView
+    <com.vingeapp.android.keyboardCustomViews.TabStripView
         android:id="@+id/tabsStrip"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tabsStrip">
 
-        <deepankur.com.keyboardapp.keyboard.LatinKeyboardView
+        <com.vingeapp.android.keyboard.LatinKeyboardView
             android:id="@+id/keyboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -13,7 +13,7 @@
         <include layout="@layout/smart_keyboard_logo" />
     </LinearLayout>
 
-    <deepankur.com.keyboardapp.customTextViews.MontserratRegularTextView
+    <com.vingeapp.android.customTextViews.MontserratRegularTextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -22,7 +22,7 @@
         android:textColor="@color/deep_aqua"
         android:textSize="24sp" />
 
-    <deepankur.com.keyboardapp.customTextViews.OpenSansRegular
+    <com.vingeapp.android.customTextViews.OpenSansRegular
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
@@ -44,7 +44,7 @@
         android:paddingStart="16dp"
         android:paddingTop="10dp">
 
-        <deepankur.com.keyboardapp.customTextViews.RobotoRegular
+        <com.vingeapp.android.customTextViews.RobotoRegular
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
