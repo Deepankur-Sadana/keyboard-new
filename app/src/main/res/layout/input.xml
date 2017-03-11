@@ -7,7 +7,7 @@
     <com.vingeapp.android.keyboardCustomViews.TabStripView
         android:id="@+id/tabsStrip"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="36.7dp"
         android:background="@color/keyboard_light"
         android:orientation="horizontal"
         android:padding="8dp" />

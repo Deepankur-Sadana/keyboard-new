@@ -2,12 +2,14 @@ package com.vingeapp.android.keyboardCustomViews;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import de.greenrobot.event.EventBus;
 import com.vingeapp.android.MessageEvent;
+import com.vingeapp.android.R;
 import com.vingeapp.android.enums.KeyBoardOptions;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import utils.AppLibrary;
@@ -33,13 +35,14 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     }
 
     private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
-//            , KeyBoardOptions.CONTACTS
+            , KeyBoardOptions.CONTACTS
     };
 
     private void init(Context context) {
         EventBus.getDefault().register(this);
         int pixel = (int) AppLibrary.convertDpToPixel(8, context);
         this.setPadding(pixel, pixel, pixel, pixel);
+        this.setGravity(Gravity.CENTER_VERTICAL);
         for (int i = 0; i < keyBoardOptions.length; i++) {
             ImageView imageView = new ImageView(context);
             imageView.setPadding(pixel, pixel, pixel, pixel);
@@ -55,6 +58,8 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         switch (option) {
             case CONTACTS:
                 return android.R.drawable.ic_menu_add;
+            case CLIP_BOARD:
+                return R.drawable.ic_clipboard;
             default:
                 return android.R.drawable.ic_menu_add;
 
@@ -113,7 +118,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         this.onOptionClickedListener = onOptionClickedListener;
     }
 
-    public interface OnOptionClickedListener {
+    interface OnOptionClickedListener {
         void onOptionClicked(KeyBoardOptions keyBoardOptions);
     }
 }
