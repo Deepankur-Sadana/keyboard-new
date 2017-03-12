@@ -134,7 +134,7 @@ public class LatinKeyboard extends Keyboard {
                 mEnterKey.label = res.getText(R.string.label_send_key);
                 break;
             default:
-                mEnterKey.icon = res.getDrawable(R.drawable.sym_keyboard_return);
+                mEnterKey.icon = res.getDrawable(R.drawable.return_button);
                 mEnterKey.label = null;
                 break;
         }

@@ -183,7 +183,7 @@
         <Key
             android:codes="10"
             android:keyEdgeFlags="right"
-            android:keyIcon="@drawable/sym_keyboard_return"
+            android:keyIcon="@drawable/return_button"
             android:keyWidth="20%p" />
     </Row>
 </Keyboard>
