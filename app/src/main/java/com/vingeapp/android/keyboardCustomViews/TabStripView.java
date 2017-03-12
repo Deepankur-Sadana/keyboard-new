@@ -40,7 +40,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
 
     private void init(Context context) {
         EventBus.getDefault().register(this);
-        int pixel = (int) AppLibrary.convertDpToPixel(8, context);
+        int pixel = (int) AppLibrary.convertDpToPixel(0, context);
         this.setPadding(pixel, pixel, pixel, pixel);
         this.setGravity(Gravity.CENTER_VERTICAL);
         for (int i = 0; i < keyBoardOptions.length; i++) {
@@ -51,9 +51,13 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
             imageView.setOnClickListener(onClickListener);
             imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? 1f : 0.3f);
             this.addView(imageView);
+            ((LayoutParams) imageView.getLayoutParams()).leftMargin = getLeftMargin(i);
         }
     }
 
+    int getLeftMargin(int index){
+        return (int) AppLibrary.convertDpToPixel(index == 0 ? 66 : 44, getContext());
+    }
     private int getResourceIdForTabStrip(KeyBoardOptions option) {
         switch (option) {
             case CONTACTS:
