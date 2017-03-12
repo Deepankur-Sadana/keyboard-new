@@ -7,11 +7,12 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import de.greenrobot.event.EventBus;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.enums.KeyBoardOptions;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+
+import de.greenrobot.event.EventBus;
 import utils.AppLibrary;
 
 /**
@@ -40,8 +41,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
 
     private void init(Context context) {
         EventBus.getDefault().register(this);
-        int pixel = (int) AppLibrary.convertDpToPixel(0, context);
-        this.setPadding(pixel, pixel, pixel, pixel);
+        int pixel = (int) AppLibrary.convertDpToPixel(8, context);
         this.setGravity(Gravity.CENTER_VERTICAL);
         for (int i = 0; i < keyBoardOptions.length; i++) {
             ImageView imageView = new ImageView(context);
@@ -49,15 +49,16 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
             imageView.setImageResource(getResourceIdForTabStrip(keyBoardOptions[i]));
             imageView.setTag(keyBoardOptions[i]);
             imageView.setOnClickListener(onClickListener);
-            imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? 1f : 0.3f);
+            imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? 0.9f : 0.2f);
             this.addView(imageView);
             ((LayoutParams) imageView.getLayoutParams()).leftMargin = getLeftMargin(i);
         }
     }
 
-    int getLeftMargin(int index){
+    int getLeftMargin(int index) {
         return (int) AppLibrary.convertDpToPixel(index == 0 ? 66 : 44, getContext());
     }
+
     private int getResourceIdForTabStrip(KeyBoardOptions option) {
         switch (option) {
             case CONTACTS:
@@ -101,14 +102,11 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         for (int i = 0; i < TabStripView.this.getChildCount(); i++) {
             ImageView imageView = (ImageView) TabStripView.this.getChildAt(i);
             KeyBoardOptions tag1 = (KeyBoardOptions) imageView.getTag();
-            imageView.setAlpha(tag == tag1 ? 1f : 0.3f);
+            imageView.setAlpha(tag == tag1 ? 0.9f : 0.2f);
         }
         switch (tag) {
-            case FAVORITE_APPS:
-                break;
             case CONTACTS:
-            case CAMERA:
-            case LOCATION:
+                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
             default:
                 break;
         }

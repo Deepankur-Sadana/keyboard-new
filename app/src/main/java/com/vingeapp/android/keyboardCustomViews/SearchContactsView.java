@@ -16,7 +16,7 @@ import android.widget.Toast;
 import com.permissioneverywhere.PermissionEverywhere;
 import com.permissioneverywhere.PermissionResponse;
 import com.permissioneverywhere.PermissionResultCallback;
-
+import com.vingeapp.android.InAppEditingController;
 import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.SearchContactsAdapter;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
@@ -60,7 +60,14 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
         SearchContactsAdapter searchContactsAdapter = new SearchContactsAdapter(null, context);
         mRecycler.setAdapter(searchContactsAdapter);
         this.addView(rootView);
-//        mEditText.requestFocus();//todo
+        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus)
+                    InAppEditingController.getInstance().setEditText((EditText) v);
+            }
+        });
+        mEditText.requestFocus();
 
     }
 
@@ -90,8 +97,10 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
 
     @Override
     public boolean doRefresh() {
-        if (mEditText != null && !mEditText.hasFocus()) {
-            mEditText.requestFocus();
+        if (mEditText != null) {
+            mEditText.setText("");
+            if (!mEditText.hasFocus())
+                mEditText.requestFocus();
             return true;
         }
         return false;
