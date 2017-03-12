@@ -49,6 +49,13 @@ import com.vingeapp.android.MasterClass;
  */
 public class AppLibrary {
 
+    public static final String FACEBOOK_ACCESS_TOKEN = "facebook_access_token";
+
+    public static final String FACEBOOK_ID = "facebook_id";
+    public static final String FACEBOOK_BIO_INFO = "facebook_bio_info";
+    public static final String BIRTHDAY_PERMISSION = "birthday_permission";
+    public static final String FACEBOOK_LOGIN_STATE = "facebook_login_state";
+
 
     static final SimpleDateFormat outFormatD = new SimpleDateFormat("MMM d, yyyy", Locale.US);
     static final SimpleDateFormat outFormatT = new SimpleDateFormat("h:mma", Locale.US);

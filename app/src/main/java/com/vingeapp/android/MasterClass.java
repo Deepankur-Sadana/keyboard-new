@@ -5,6 +5,10 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.util.Log;
 
+import com.facebook.CallbackManager;
+import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
+
 import java.lang.ref.WeakReference;
 
 /**
@@ -14,6 +18,8 @@ import java.lang.ref.WeakReference;
 public class MasterClass extends Application {
     private final static String TAG = MasterClass.class.getSimpleName();
     private static WeakReference<Context> mContext;
+    public static CallbackManager callbackManager;
+
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -31,6 +37,10 @@ public class MasterClass extends Application {
         super.onCreate();
         Log.d(TAG, "onCreate: ");
         msConfig = new AskPrefsImpl();
+
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        callbackManager = CallbackManager.Factory.create();
+        AppEventsLogger.activateApp(this);
 
     }
 

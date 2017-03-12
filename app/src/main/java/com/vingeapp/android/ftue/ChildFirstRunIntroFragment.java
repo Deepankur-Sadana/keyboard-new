@@ -22,7 +22,7 @@ import com.vingeapp.android.setup.MainSettingsActivity;
 public class ChildFirstRunIntroFragment extends BaseFragment {
     int PAGE_NUMBER;
     final String TAG = getClass().getSimpleName();
-
+    View rootView;
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +39,7 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(PAGE_NUMBER != 3 ? R.layout.fragment_first_time_user_experiece : R.layout.fragment_facebook_login, container, false);
+        rootView = inflater.inflate(PAGE_NUMBER != 3 ? R.layout.fragment_first_time_user_experiece : R.layout.fragment_facebook_login, container, false);
         if (PAGE_NUMBER == 0) {
             rootView.findViewById(R.id.zero_screen_layout).setVisibility(View.VISIBLE);
             rootView.findViewById(R.id.subsequent_screen_layout).setVisibility(View.GONE);
@@ -48,7 +48,9 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
             rootView.findViewById(R.id.facebook_login_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ((MainSettingsActivity) getActivity()).onFirstIntroDone();
+                    ((MainSettingsActivity) getActivity()).setChildIntroFragment(ChildFirstRunIntroFragment.this);
+                    rootView.findViewById(R.id.facebook_login_button).setEnabled(false);
+                    ((MainSettingsActivity) getActivity()).onLoginButtonClicked();
                 }
             });
         } else {
@@ -64,5 +66,10 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
                 new int[]{Color.GREEN, Color.BLUE},
                 new float[]{0, 1}, Shader.TileMode.CLAMP);
         textView.getPaint().setShader(textShader);
+    }
+
+    public void enableFacebookButton(){
+        rootView.findViewById(R.id.facebook_login_button).setEnabled(true);
+
     }
 }

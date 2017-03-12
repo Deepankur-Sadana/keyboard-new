@@ -1,10 +1,14 @@
 package com.vingeapp.android.setup;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -18,20 +22,35 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.SharedPreferencesCompat;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
+
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
+import com.vingeapp.android.R;
+import com.vingeapp.android.enums.PermissionsRequestCodes;
+import com.vingeapp.android.ftue.ChildFirstRunIntroFragment;
+import com.vingeapp.android.ftue.ParentFirstRunIntroFragment;
+import com.vingeapp.android.preferences.PrefsKeyIds;
 
 import net.evendanan.chauffeur.lib.permissions.PermissionsRequest;
 
 import java.lang.ref.WeakReference;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 import java.util.Map;
 
-import com.vingeapp.android.R;
-import com.vingeapp.android.enums.PermissionsRequestCodes;
-import com.vingeapp.android.ftue.ParentFirstRunIntroFragment;
-import com.vingeapp.android.preferences.PrefsKeyIds;
+import utils.AppLibrary;
 
 public class MainSettingsActivity extends FragmentActivity implements PrefsKeyIds {
 
@@ -51,6 +70,25 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         Log.d(TAG, "onCreate: ");
+
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo(
+                    "com.vingeapp.android",
+                    PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.d("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException | NoSuchAlgorithmException e) {
+
+        }
+
+        callbackManager = CallbackManager.Factory.create();
+
+        callFacebookLogout(this);
+        addCallBack();
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -290,6 +328,9 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
     }
 
 
+    /**
+     * We declare our first intro to be done only when the user has done facebook login
+     */
     public void onFirstIntroDone() {
         SharedPreferences preferences = this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = preferences.edit();
@@ -331,4 +372,104 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
 
     }
 
+    private CallbackManager callbackManager;
+
+    void addCallBack() {
+        LoginManager.getInstance().registerCallback(callbackManager,
+                new FacebookCallback<LoginResult>() {
+                    @SuppressLint("CommitPrefEdits")
+                    @Override
+                    public void onSuccess(LoginResult loginResult) {
+                        if (loginResult != null) {
+                            String accessToken = loginResult.getAccessToken().getToken();
+                            Log.d(TAG, "Permissions granted -" + AccessToken.getCurrentAccessToken().getPermissions());
+                            Log.d(TAG, "OnSuccess, Facebook Access Token - " + accessToken);
+                            Log.d("OnSuccess, FACEBOOK_ID", loginResult.getAccessToken().getUserId());
+                            SharedPreferences prefs = MainSettingsActivity.this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+
+                            prefs.edit().putString(AppLibrary.FACEBOOK_ACCESS_TOKEN, accessToken).commit();
+                            prefs.edit().putBoolean(AppLibrary.FACEBOOK_LOGIN_STATE, true).commit();
+                            prefs.edit().putString(AppLibrary.FACEBOOK_ID, loginResult.getAccessToken().getUserId()).commit();
+                            prefs.edit().putBoolean(AppLibrary.BIRTHDAY_PERMISSION, true).commit();
+
+
+                            postFacebookLoginRequest();
+                        } else {
+                            Log.d(TAG, "On Success, Login result not found");
+                            Toast.makeText(MainSettingsActivity.this, "Sorry! Something went wrong", Toast.LENGTH_SHORT).show();
+                            enableLoginButton();
+                        }
+                    }
+
+                    @Override
+                    public void onCancel() {
+                        Log.d(TAG, "On Cancel");
+                        Toast.makeText(MainSettingsActivity.this, "Sorry! Something went wrong", Toast.LENGTH_SHORT).show();
+//                        findViewById(R.id.facebookLayout).setClickable(true);
+                        enableLoginButton();
+
+                    }
+
+                    @Override
+                    public void onError(FacebookException exception) {
+                        Log.d(TAG, "On Error");
+//                        findViewById(R.id.facebookLayout).setClickable(true);
+                        enableLoginButton();
+                        Toast.makeText(MainSettingsActivity.this, "Sorry! Something went wrong", Toast.LENGTH_SHORT).show();
+                        exception.printStackTrace();
+                    }
+                });
+    }
+
+    private ChildFirstRunIntroFragment childIntroFragment;
+
+    public void setChildIntroFragment(ChildFirstRunIntroFragment childIntroFragment) {
+        this.childIntroFragment = childIntroFragment;
+    }
+
+    public void onLoginButtonClicked() {
+        doFacebookLogin();
+    }
+
+    @SuppressWarnings("deprecation")
+    private void postFacebookLoginRequest() {
+        this.onFirstIntroDone();
+
+//        List<NameValuePair> pairs = new ArrayList<>();
+//        String deviceId = AppLibrary.getDeviceId(this);
+//        if (deviceId != null && !deviceId.equals(""))
+//            pairs.add(new BasicNameValuePair("deviceId", deviceId));
+////        String registrationToken = FirebaseInstanceId.getInstance().getToken();
+////        AppLibrary.log_d(TAG, "Got registration token as -" + registrationToken);
+////        if (registrationToken != null)
+////            pairs.add(new BasicNameValuePair("notificationId", registrationToken));
+//        pairs.add(new BasicNameValuePair("deviceName", AppLibrary.getDeviceName()));
+//        pairs.add(new BasicNameValuePair("token", prefs.getString(AppLibrary.FACEBOOK_ACCESS_TOKEN, "")));
+//        pairs.add(new BasicNameValuePair("facebookId", prefs.getString(AppLibrary.FACEBOOK_ID, "")));
+//        RequestManager.makePostRequest(this, RequestManager.FACEBOOK_LOGIN_REQUEST, RequestManager.FACEBOOK_LOGIN_RESPONSE,
+//                null, pairs, postLoginCallback);
+//        findViewById(R.id.progressView).setVisibility(View.VISIBLE);
+    }
+
+    private void enableLoginButton() {
+        if (childIntroFragment != null) childIntroFragment.enableFacebookButton();
+    }
+
+    private void doFacebookLogin() {
+        LoginManager.getInstance().logInWithReadPermissions(this,
+                Arrays.asList("public_profile", "email", "user_friends", "user_birthday"));
+    }
+    /**
+     * Logout From Facebook
+     */
+    public static void callFacebookLogout(Context context) {
+        LoginManager.getInstance().logOut();
+
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+    }
 }

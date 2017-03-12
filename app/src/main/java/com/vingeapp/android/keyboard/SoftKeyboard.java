@@ -31,13 +31,6 @@ import android.view.textservice.TextServicesManager;
 import android.widget.EditText;
 
 import com.crashlytics.android.Crashlytics;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import de.greenrobot.event.EventBus;
 import com.vingeapp.android.InAppEditingController;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
@@ -46,6 +39,13 @@ import com.vingeapp.android.enums.KeyBoardOptions;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.keyboardCustomViews.TabStripView;
 import com.vingeapp.android.keyboardCustomViews.ViewController;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import de.greenrobot.event.EventBus;
 import io.fabric.sdk.android.Fabric;
 import utils.AppLibrary;
 
@@ -423,21 +423,23 @@ public class SoftKeyboard extends InputMethodService
                         return true;
                     }
                 }
-                if (viewController.getTabStripView().getmCurrentKeyboardOption() != KeyBoardOptions.QWERTY) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            viewController.getTabStripView().switchToQwertyMode();
-                        }
-                    }, 200);
-                    break;
-                    /**
-                     * 03-04 19:36:14.423 24209-24209/deepankur.com.keyboardapp E/AndroidRuntime: FATAL EXCEPTION: main
-                     Process: deepankur.com.keyboardapp, PID: 24209
-                     java.lang.NullPointerException: Attempt to invoke virtual method 'deepankur.com.keyboardapp.keyboardCustomViews.TabStripView deepankur.com.keyboardapp.keyboardCustomViews.ViewController.getTabStripView()' on a null object reference
-                     at deepankur.com.keyboardapp.keyboard.SoftKeyboard.onKeyDown(SoftKeyboard.java:426)
-                     */
-                }
+                if (viewController != null)
+                    if (viewController.getTabStripView().getmCurrentKeyboardOption() != KeyBoardOptions.QWERTY) {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewController.getTabStripView().switchToQwertyMode();
+                            }
+                        }, 200);
+                        break;
+                        /**
+                         * 03-04 19:36:14.423 24209-24209/deepankur.com.keyboardapp E/AndroidRuntime: FATAL EXCEPTION: main
+                         Process: deepankur.com.keyboardapp, PID: 24209
+                         java.lang.NullPointerException: Attempt to invoke virtual method 'deepankur.com.keyboardapp.keyboardCustomViews.TabStripView deepankur.com.keyboardapp.keyboardCustomViews.ViewController.getTabStripView()' on a null object reference
+                         at deepankur.com.keyboardapp.keyboard.SoftKeyboard.onKeyDown(SoftKeyboard.java:426)
+                         */
+                    } else
+                        Log.e(TAG, "onKeyDown: View controller is null unable to switch to qwerty");
                 break;
 
             case KeyEvent.KEYCODE_DEL:
@@ -677,10 +679,10 @@ public class SoftKeyboard extends InputMethodService
     public void onEvent(MessageEvent messageEvent) {
         if (messageEvent.getMessageType() == POPUP_KEYBOARD_FOR_IN_APP_EDITING)
             mInAppEditing = true;
-        else if (messageEvent.getMessageType() == ON_IN_APP_EDITING_FINISHED){
+        else if (messageEvent.getMessageType() == ON_IN_APP_EDITING_FINISHED) {
             mInAppEditing = false;
-        mComposing.setLength(0);}
-        else if (messageEvent.getMessageType() == ON_CLIPBOARD_ITEM_SELECTED) {
+            mComposing.setLength(0);
+        } else if (messageEvent.getMessageType() == ON_CLIPBOARD_ITEM_SELECTED) {
             String s = (String) messageEvent.getMessage();
             Log.d(TAG, "onEvent: " + s);
             getCurrentInputConnection().commitText(s, 1);
@@ -812,7 +814,7 @@ public class SoftKeyboard extends InputMethodService
     public void onKey(int primaryCode, int[] keyCodes) {
         Log.d(TAG, "onKey KEYCODE: " + primaryCode);
         playClick(primaryCode);
-        Log.d(TAG, "onkeycompo: " + mComposing );
+        Log.d(TAG, "onkeycompo: " + mComposing);
 
 //        if (mInAppEditing){
 //            InAppEditingController.getInstance().onKey(primaryCode, keyCodes);

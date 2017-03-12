@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">KeyboardApp</string>
+    <string name="app_name">VingeApp</string>
 
-    <string name="simple_ime">Keyboard_App</string>
+    <string name="simple_ime">VingeApp</string>
     <string name="subtype_en_US">English (US)</string>
 
 
@@ -65,6 +65,7 @@
     <string name="read_more_about_permissions">Read more about permissions…</string>
     <string name="settings_key_use_contacts_dictionary">settings_key_use_contacts_dictionary</string>
     <string name="permissions_wiki_site_url">https://github.com/AnySoftKeyboard/AnySoftKeyboard/wiki/Why-Does-AnySoftKeyboard-Requires-Extra-Permissions</string>
+    <string name="facebook_app_id">1464531870255176</string>
 
 
 </resources>
