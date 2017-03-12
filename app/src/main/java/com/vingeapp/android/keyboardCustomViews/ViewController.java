@@ -1,6 +1,7 @@
 package com.vingeapp.android.keyboardCustomViews;
 
 import android.content.Context;
+import android.support.v7.widget.ActionBarOverlayLayout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -104,13 +105,21 @@ public class ViewController implements GreenBotMessageKeyIds {
     }
 
     private void bringKeyboardToFrameContainerBottom() {
-        RelativeLayout.LayoutParams keyBoardFrameParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.keyboardContainer).getLayoutParams();
-        keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.fragmentContainerFrame);
+        RelativeLayout.LayoutParams frameHolderParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.fragmentContainerFrame).getLayoutParams();
+        frameHolderParams.removeRule(RelativeLayout.BELOW);
+
+        RelativeLayout.LayoutParams stripParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.tabsStrip).getLayoutParams();
+        stripParams.addRule(RelativeLayout.BELOW, R.id.fragmentContainerFrame);
+
+
     }
 
     private void enterNormalKeyboardMode() {
-        RelativeLayout.LayoutParams keyBoardFrameParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.keyboardContainer).getLayoutParams();
-        keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
+        RelativeLayout.LayoutParams fragmentFrameParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.fragmentContainerFrame).getLayoutParams();
+        fragmentFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
+
+        RelativeLayout.LayoutParams stripParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.tabsStrip).getLayoutParams();
+        stripParams.removeRule(RelativeLayout.BELOW);
     }
 
 
