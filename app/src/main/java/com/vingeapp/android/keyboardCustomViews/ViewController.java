@@ -76,7 +76,7 @@ public class ViewController implements GreenBotMessageKeyIds {
     private void adjustViews(KeyBoardOptions keyBoardOptions) {
         RelativeLayout.LayoutParams keyBoardFrameParams = (RelativeLayout.LayoutParams) rootView.findViewById(R.id.keyboardContainer).getLayoutParams();
         int frameToShow;
-        keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
+//        keyBoardFrameParams.addRule(RelativeLayout.BELOW, R.id.tabsStrip);
         if (keyBoardOptions == KeyBoardOptions.QWERTY) {
             frameToShow = R.id.keyboardContainer;
         } else {//non qwerty

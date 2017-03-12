@@ -61,9 +61,11 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     private int getResourceIdForTabStrip(KeyBoardOptions option) {
         switch (option) {
             case CONTACTS:
-                return android.R.drawable.ic_menu_add;
+                return R.drawable.ic_wizard_contacts_on;
             case CLIP_BOARD:
                 return R.drawable.ic_clipboard;
+            case QWERTY:
+                return R.drawable.ic_aa;
             default:
                 return android.R.drawable.ic_menu_add;
 
