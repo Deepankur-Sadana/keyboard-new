@@ -47,7 +47,7 @@ public class SearchContactsAdapter extends RecyclerView.Adapter<SearchContactsAd
         return contactList == null ? 0 : contactList.size();
     }
 
-    protected class VHItem extends RecyclerView.ViewHolder {
+    class VHItem extends RecyclerView.ViewHolder {
 
         TextView itemName;
 

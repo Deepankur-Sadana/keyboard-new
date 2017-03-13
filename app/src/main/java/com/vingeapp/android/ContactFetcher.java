@@ -19,7 +19,7 @@ public class ContactFetcher {
     private static final String TAG = ContactFetcher.class.getSimpleName();
 
 
-    public static ArrayList<ContactsModel> getContacts(Context context) {
+    public ArrayList<ContactsModel> getContacts(Context context) {
         ArrayList<ContactsModel> contactsModels = new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
@@ -40,19 +40,48 @@ public class ContactFetcher {
                             ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
                             new String[]{id}, null);
                     while (pCur.moveToNext()) {
-                        String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String phoneNo = replaceAllWhiteCharacters(pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER)));
                         String disname = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                         ContactsModel model = new ContactsModel(disname, phoneNo);
                         contactsModels.add(model);
                         Log.d(TAG, "aVoid: " + disname + " \t " + phoneNo);
-//                        Toast.makeText(NativeContentProvider.this, "Name: " + name
-//                                + ", Phone No: " + phoneNo, Toast.LENGTH_SHORT).show();
                     }
                     pCur.close();
                 }
             }
         }
-        return contactsModels;
+        ArrayList<ContactsModel> filteredList = filterOutDuplicateEntries(contactsModels);
+        return filteredList;
+    }
+
+    private String replaceAllWhiteCharacters(String originalNumber) {
+        if (originalNumber == null) return "";
+        return originalNumber.replaceAll("\\s", "");
+    }
+
+    /**
+     * This method will filter out all the duplicate  ebtries ie. All the
+     * entries having same name and number
+     *
+     * @param initialList the complete list obtained from the O.S.
+     * @return the filtered list
+     */
+    private ArrayList<ContactsModel> filterOutDuplicateEntries(ArrayList<ContactsModel> initialList) {
+
+        ArrayList<ContactsModel> duplicateEntries = new ArrayList<>();
+        for (int i = 0; i < initialList.size(); i++) {
+            ContactsModel originalContact = initialList.get(i);
+            for (int j = i + 1; j < initialList.size(); j++) {
+                ContactsModel loopingContact = initialList.get(j);
+                if (originalContact.name != null && originalContact.number != null && loopingContact.name != null && loopingContact.number != null &&
+                        originalContact.name.equals(loopingContact.name) && originalContact.number.equals(loopingContact.number)) {
+                    duplicateEntries.add(loopingContact);
+                }
+            }
+
+        }
+        initialList.removeAll(duplicateEntries);
+        return initialList;
     }
 }
 

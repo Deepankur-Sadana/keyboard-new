@@ -65,7 +65,10 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
         mEditText.setOnFocusChangeListener(focusChangeListener);
 
         long t1 = System.currentTimeMillis();
-        allContacts = ContactFetcher.getContacts(context);
+        if (allContacts == null || allContacts.size() == 0) {
+            ContactFetcher fetcher = new ContactFetcher();
+            allContacts = fetcher.getContacts(context);
+        }
         Log.d(TAG, "init: fetching contacts took " + (System.currentTimeMillis() - t1));
         searchContactsAdapter = new SearchContactsAdapter(allContacts, context);
         mRecycler.setAdapter(searchContactsAdapter);
