@@ -13,7 +13,7 @@ import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
  * Created by deepankur on 2/6/17.
  */
 
-public class ShortcutApplicationsActivity extends BaseActivity {
+public abstract class ShortcutApplicationsActivity extends BaseActivity {
     @Override
     public void onCreate(Bundle savedInstanceState, PersistableBundle persistentState) {
         super.onCreate(savedInstanceState, persistentState);

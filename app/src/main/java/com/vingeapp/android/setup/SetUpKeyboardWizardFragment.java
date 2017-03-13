@@ -20,6 +20,7 @@ import android.view.ViewGroup;
 import java.lang.ref.WeakReference;
 
 import com.vingeapp.android.R;
+import com.vingeapp.android.utils.PagerDots;
 
 /**
  * This fragment will guide the user through the process of enabling, switch to and configuring AnySoftKeyboard.
@@ -102,6 +103,12 @@ public class SetUpKeyboardWizardFragment extends Fragment {
         WizardPagesAdapter wizardPagesAdapter = new WizardPagesAdapter(getChildFragmentManager());
         mWizardPager = (ViewPager) view.findViewById(R.id.wizard_pages_pager);
         mWizardPager.setAdapter(wizardPagesAdapter);
+
+        PagerDots pagerDots = (PagerDots) view.findViewById(R.id.pagerDots);
+        pagerDots.setViewPager(mWizardPager);
+        pagerDots.onItemSelected(0);//initially highliting the zeroes th dot
+
+
     }
 
     @Override

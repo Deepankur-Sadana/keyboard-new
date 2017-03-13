@@ -1,11 +1,17 @@
 package com.vingeapp.android.keyboardCustomViews;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.Settings;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
@@ -20,6 +26,8 @@ import utils.AppLibrary;
  */
 
 public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds {
+    Context context;
+
     public TabStripView(Context context) {
         super(context);
         init(context);
@@ -40,6 +48,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     };
 
     private void init(Context context) {
+        this.context = context;
         EventBus.getDefault().register(this);
         int pixel = (int) AppLibrary.convertDpToPixel(8, context);
         this.setGravity(Gravity.CENTER);
@@ -63,7 +72,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     private int getResourceIdForTabStrip(KeyBoardOptions option) {
         switch (option) {
             case CONTACTS:
-                return R.drawable.ic_wizard_contacts_on;
+                return R.drawable.contacts;
             case CLIP_BOARD:
                 return R.drawable.ic_clipboard;
             case QWERTY:
@@ -93,10 +102,17 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         }
     };
 
+    final String TAG = getClass().getSimpleName();
+
     private void notifyItemClicked(View v, KeyBoardOptions keyBoardOptions) {
         KeyBoardOptions tag = (KeyBoardOptions) v.getTag();
         if (tag == mCurrentKeyboardOption)
             return;
+
+        if (isViewLocked(tag)) {
+            Log.d(TAG, "notifyItemClicked: view is locked somehow, ignoring the click");
+            return;
+        }
         mCurrentKeyboardOption = tag;
         if (onOptionClickedListener != null)
             onOptionClickedListener.onOptionClicked(tag);
@@ -125,5 +141,30 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
 
     interface OnOptionClickedListener {
         void onOptionClicked(KeyBoardOptions keyBoardOptions);
+    }
+
+    /**
+     * @param keyBoardOptions the option on which the user has clicked
+     * @return true if we can't open the option due to some permissions and all,
+     * false if everything is OK
+     */
+    private boolean isViewLocked(KeyBoardOptions keyBoardOptions) {
+        if (keyBoardOptions == KeyBoardOptions.CONTACTS) {
+            if (!AppLibrary.isPerMissionGranted(context, Manifest.permission.READ_CONTACTS)) {//checking if the contacts permission is granted or not
+                Toast.makeText(context, "Please provide Contacts permissions in the settings ", Toast.LENGTH_SHORT).show();
+                takeMeToSettings("contacts");
+                return true;
+            }
+
+        }
+        return false;
+    }
+
+    private void takeMeToSettings(String permissionName) {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+        intent.setData(uri);
+        context.startActivity(intent);
     }
 }

@@ -1,5 +1,6 @@
 package utils;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -10,6 +11,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -29,6 +31,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.facebook.login.LoginManager;
+import com.vingeapp.android.BuildConfig;
+import com.vingeapp.android.MasterClass;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -41,9 +45,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.vingeapp.android.BuildConfig;
-import com.vingeapp.android.MasterClass;
 
 /**
  * Created by admin on 1/12/2015.
@@ -548,6 +549,49 @@ public class AppLibrary {
 
     public static void showShortToast(String s) {
         Toast.makeText(MasterClass.getGlobalContext(), s, Toast.LENGTH_SHORT).show();
+    }
+
+    public static boolean verifyPermissions(int[] grantResults) {
+        // At least one result must be checked.
+        if (grantResults.length < 1) {
+            return false;
+        }
+
+        // Verify that each required permission has been granted, otherwise return false.
+        for (int result : grantResults) {
+            if (result != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean isPerMissionGranted(Context context, String permission) {
+        PackageManager pm = context.getPackageManager();
+        int hasPerm = pm.checkPermission(
+                Manifest.permission.READ_CONTACTS,
+                context.getPackageName());
+        return hasPerm == PackageManager.PERMISSION_GRANTED;
+    }
+
+    public static final String[] allPermissionsRequired = new String[]{Manifest.permission.READ_CONTACTS};
+
+    /**
+     * @param context
+     * @return true if all the permissions required by the application are granted,
+     * false otherwise
+     *
+     */
+    public static boolean allPermissionsGranted(Context context) {
+//        PackageManager pm = context.getPackageManager();
+        for (int i = 0; i < allPermissionsRequired.length; i++) {
+            if (!isPerMissionGranted(context, allPermissionsRequired[i])) {
+                Log.d(TAG, "allPermissionsGranted: not having " + allPermissionsRequired[i]);
+                return false;
+            }
+        }
+
+        return true;
     }
 
 }

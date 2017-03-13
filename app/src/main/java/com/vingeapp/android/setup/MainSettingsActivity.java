@@ -33,12 +33,12 @@ import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
-import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.vingeapp.android.R;
+import com.vingeapp.android.activities.BaseActivity;
 import com.vingeapp.android.enums.PermissionsRequestCodes;
 import com.vingeapp.android.ftue.ChildFirstRunIntroFragment;
 import com.vingeapp.android.ftue.ParentFirstRunIntroFragment;
@@ -57,7 +57,7 @@ import java.util.Map;
 
 import utils.AppLibrary;
 
-public class MainSettingsActivity extends FragmentActivity implements PrefsKeyIds {
+public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
 
 
     public static final String EXTRA_KEY_APP_SHORTCUT_ID = "shortcut_id";
@@ -244,6 +244,11 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
 //        startPermissionsRequest(new ContactPermissionRequest(this));
     }
 
+    @Override
+    protected void onPermissionsGranted(String[] permissions) {
+        finish();
+    }
+
 //    @NonNull
 //    protected PermissionsRequest createPermissionRequestFromIntentRequest(int requestId, @NonNull String[] permissions, @NonNull Intent intent) {
 //        if (requestId == PermissionsRequestCodes.CONTACTS.getRequestCode()) {
@@ -320,7 +325,7 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
      */
     private boolean checkAndLaunchSetUpFragment(Context context) {
 
-        boolean b = SetupSupport.isThisKeyboardSetAsDefaultIME(context);
+        boolean b = SetupSupport.isThisKeyboardSetAsDefaultIME(context) && AppLibrary.allPermissionsGranted(this);
         if (b)
             return false;
         SetUpKeyboardWizardFragment fragment = new SetUpKeyboardWizardFragment();
@@ -487,6 +492,7 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
         LoginManager.getInstance().logInWithReadPermissions(this,
                 Arrays.asList("public_profile", "email", "user_friends", "user_birthday"));
     }
+
     /**
      * Logout From Facebook
      */
@@ -500,4 +506,6 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
+
+
 }

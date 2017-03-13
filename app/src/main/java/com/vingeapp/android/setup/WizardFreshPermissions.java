@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.View;
 
 import com.vingeapp.android.R;
+import com.vingeapp.android.activities.BaseActivity;
 
 /**
  * Created by deepankursadana on 05/03/17.
@@ -23,7 +24,7 @@ public class WizardFreshPermissions extends WizardPageBaseFragment {
         view.findViewById(R.id.actionTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().finish();
+                ((BaseActivity) getActivity()).requestCameraPermissionsAndProceed();
             }
         });
     }

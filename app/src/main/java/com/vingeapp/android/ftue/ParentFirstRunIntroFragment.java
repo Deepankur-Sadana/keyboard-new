@@ -9,11 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
-
 import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.GenericViewPagerAdapter;
 import com.vingeapp.android.fragments.BaseFragment;
+import com.vingeapp.android.utils.PagerDots;
+
+import java.util.ArrayList;
 
 /**
  * Created by deepankursadana on 05/03/17.
@@ -37,6 +38,9 @@ public class ParentFirstRunIntroFragment extends BaseFragment {
 
         viewPager = (ViewPager) rootView.findViewById(R.id.viewPager);
         initViewPager();
+        PagerDots pagerDots = (PagerDots) rootView.findViewById(R.id.pagerDots);
+        pagerDots.setViewPager(viewPager);
+        pagerDots.onItemSelected(0);//initially highliting the zeroes th dot
         return rootView;
     }
 

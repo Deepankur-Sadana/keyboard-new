@@ -2,6 +2,9 @@ package com.vingeapp.android.keyboardCustomViews;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -25,6 +28,8 @@ import com.vingeapp.android.interfaces.Refreshable;
 import com.vingeapp.android.models.ContactsModel;
 
 import java.util.ArrayList;
+
+import utils.AppLibrary;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -84,6 +89,14 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
 
     }
 
+    private void takeMeToSettings(String permissionName) {
+        Intent intent = new Intent();
+        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+        intent.setData(uri);
+        context.startActivity(intent);
+    }
+
     private final String TAG = getClass().getSimpleName();
     private View.OnFocusChangeListener focusChangeListener = new OnFocusChangeListener() {
         @Override
@@ -107,11 +120,12 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
             if (filteredList == null) filteredList = new ArrayList<>();
             else filteredList.clear();
 
-            for (ContactsModel model : allContacts) {
+            if (allContacts != null)
+                for (ContactsModel model : allContacts) {
 
-                if (model.name != null && model.name.toLowerCase().contains(s.toString().trim().toLowerCase()))
-                    filteredList.add(model);
-            }
+                    if (model.name != null && model.name.toLowerCase().contains(s.toString().trim().toLowerCase()))
+                        filteredList.add(model);
+                }
             searchContactsAdapter.setContactList(filteredList);
 
         }

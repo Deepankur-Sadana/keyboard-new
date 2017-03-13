@@ -16,6 +16,8 @@ import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.models.ClipBoardItemModel;
 
+import utils.AppLibrary;
+
 import static com.vingeapp.android.adapters.BaseRecylerAdapter.HEADER_HOLDER;
 import static com.vingeapp.android.adapters.BaseRecylerAdapter.ITEM_HOLDER;
 
@@ -43,7 +45,9 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return new VHItem(View.inflate(parent.getContext(), R.layout.card_clipboard, null));
         else if (viewType == HEADER_HOLDER) {
             ImageView imageView = new ImageView(parent.getContext());
-            imageView.setImageResource(android.R.drawable.ic_menu_add);
+            imageView.setImageResource(R.drawable.add_new);
+            int pixel = (int) AppLibrary.convertDpToPixel(8, context);
+            imageView.setPadding(pixel,pixel,pixel,pixel);
             return new VHHeader(imageView);
         }
         throw new IllegalArgumentException("view type " + viewType + " not supported in: " + TAG);

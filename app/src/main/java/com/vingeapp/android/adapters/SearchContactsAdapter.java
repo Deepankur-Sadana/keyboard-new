@@ -11,6 +11,8 @@ import com.vingeapp.android.models.ContactsModel;
 
 import java.util.ArrayList;
 
+import utils.AppLibrary;
+
 /**
  * Created by deepankursadana on 05/03/17.
  */
@@ -53,7 +55,7 @@ public class SearchContactsAdapter extends RecyclerView.Adapter<SearchContactsAd
 
         VHItem(View itemView) {
             super(itemView);
-            itemView.setMinimumHeight(100);
+            itemView.setMinimumHeight(AppLibrary.convertDpToPixels(itemView.getContext(), 50));
             itemName = (TextView) itemView.findViewById(R.id.itemNameTV);
         }
     }
