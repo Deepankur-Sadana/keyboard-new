@@ -34,6 +34,8 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.vingeapp.android.R;
@@ -43,6 +45,9 @@ import com.vingeapp.android.ftue.ParentFirstRunIntroFragment;
 import com.vingeapp.android.preferences.PrefsKeyIds;
 
 import net.evendanan.chauffeur.lib.permissions.PermissionsRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
@@ -392,6 +397,29 @@ public class MainSettingsActivity extends FragmentActivity implements PrefsKeyId
                             prefs.edit().putString(AppLibrary.FACEBOOK_ID, loginResult.getAccessToken().getUserId()).commit();
                             prefs.edit().putBoolean(AppLibrary.BIRTHDAY_PERMISSION, true).commit();
 
+                            GraphRequest request = GraphRequest.newMeRequest(
+                                    loginResult.getAccessToken(),
+                                    new GraphRequest.GraphJSONObjectCallback() {
+                                        @Override
+                                        public void onCompleted(JSONObject object, GraphResponse response) {
+                                            Log.v("LoginActivity", response.toString());
+
+                                            // Application code
+                                            try {
+                                                String email = object.getString("email");
+                                                String birthday = object.getString("birthday"); // 01/31/1980 format
+
+                                                Log.d(TAG, "onCompleted: email " + email + " birthday " + birthday);
+                                            } catch (JSONException e) {
+                                                Log.d(TAG, "onCompleted: " + e);
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
+                            Bundle parameters = new Bundle();
+                            parameters.putString("fields", "id,name,email,gender,birthday");
+                            request.setParameters(parameters);
+                            request.executeAsync();
 
                             postFacebookLoginRequest();
                         } else {
