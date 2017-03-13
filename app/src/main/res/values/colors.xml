@@ -29,5 +29,8 @@
     <color name="key_color">#232f34</color>
     <color name="facebook_login_button">#475993</color>
     <color name="edit_text_hint_color">#e0e0e0</color>
+    <!--<color name="keyboard_color">#262c30</color>-->
+    <color name="keyboard_color">#ff0000</color>
+    <color name="spacebar_color">#353B3F</color>
 
 </resources>
