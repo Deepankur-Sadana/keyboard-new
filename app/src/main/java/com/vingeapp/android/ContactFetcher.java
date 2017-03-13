@@ -6,22 +6,21 @@ import android.database.Cursor;
 import android.provider.ContactsContract;
 import android.util.Log;
 
+import com.vingeapp.android.models.ContactsModel;
+
+import java.util.ArrayList;
+
 /**
  * Created by deepankursadana on 05/03/17.
  */
 
-public class Contact {
-    
-    private final String TAG = getClass().getSimpleName();
+public class ContactFetcher {
+
+    private static final String TAG = ContactFetcher.class.getSimpleName();
 
 
-    public void init(Context context) {
-        aVoid(context);
-    }
-
-
-
-    private void aVoid(Context context) {
+    public static ArrayList<ContactsModel> getContacts(Context context) {
+        ArrayList<ContactsModel> contactsModels = new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                 null, null, null, null);
@@ -43,6 +42,8 @@ public class Contact {
                     while (pCur.moveToNext()) {
                         String phoneNo = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         String disname = pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        ContactsModel model = new ContactsModel(disname, phoneNo);
+                        contactsModels.add(model);
                         Log.d(TAG, "aVoid: " + disname + " \t " + phoneNo);
 //                        Toast.makeText(NativeContentProvider.this, "Name: " + name
 //                                + ", Phone No: " + phoneNo, Toast.LENGTH_SHORT).show();
@@ -51,6 +52,7 @@ public class Contact {
                 }
             }
         }
+        return contactsModels;
     }
 }
 

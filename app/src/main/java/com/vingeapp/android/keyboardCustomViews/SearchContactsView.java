@@ -16,11 +16,15 @@ import android.widget.Toast;
 import com.permissioneverywhere.PermissionEverywhere;
 import com.permissioneverywhere.PermissionResponse;
 import com.permissioneverywhere.PermissionResultCallback;
+import com.vingeapp.android.ContactFetcher;
 import com.vingeapp.android.InAppEditingController;
 import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.SearchContactsAdapter;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.Refreshable;
+import com.vingeapp.android.models.ContactsModel;
+
+import java.util.ArrayList;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -33,6 +37,8 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
     private Context context;
     private RecyclerView mRecycler;
     private EditText mEditText;
+    private SearchContactsAdapter searchContactsAdapter;
+    ArrayList<ContactsModel> allContacts;
 
     public SearchContactsView(Context context) {
         super(context);
@@ -57,7 +63,11 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
         this.mEditText = (EditText) rootView.findViewById(R.id.searchET);
         this.mEditText.addTextChangedListener(textWatcher);
         mEditText.setOnFocusChangeListener(focusChangeListener);
-        SearchContactsAdapter searchContactsAdapter = new SearchContactsAdapter(null, context);
+
+        long t1 = System.currentTimeMillis();
+        allContacts = ContactFetcher.getContacts(context);
+        Log.d(TAG, "init: fetching contacts took " + (System.currentTimeMillis() - t1));
+        searchContactsAdapter = new SearchContactsAdapter(allContacts, context);
         mRecycler.setAdapter(searchContactsAdapter);
         this.addView(rootView);
         mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -91,9 +101,20 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
 
         @Override
         public void afterTextChanged(Editable s) {
+            if (filteredList == null) filteredList = new ArrayList<>();
+            else filteredList.clear();
+
+            for (ContactsModel model : allContacts) {
+
+                if (model.name != null && model.name.toLowerCase().contains(s.toString().trim().toLowerCase()))
+                    filteredList.add(model);
+            }
+            searchContactsAdapter.setContactList(filteredList);
 
         }
     };
+
+    ArrayList<ContactsModel> filteredList;
 
     @Override
     public boolean doRefresh() {
