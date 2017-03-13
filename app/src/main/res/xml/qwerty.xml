@@ -151,14 +151,15 @@
     </Row>
 
     <Row android:rowEdgeFlags="bottom">
-        <Key
-            android:codes="-3"
-            android:keyEdgeFlags="left"
-            android:keyIcon="@drawable/sym_keyboard_done"
-            android:keyWidth="15%p" />
+        <!--<Key-->
+            <!--android:codes="-3"-->
+            <!--android:keyEdgeFlags="left"-->
+            <!--android:keyIcon="@drawable/sym_keyboard_done"-->
+            <!--android:keyWidth="15%p" />-->
         <Key
             android:codes="-2"
             android:keyLabel="123"
+            android:keyEdgeFlags="left"
             android:keyWidth="10%p" />
         <!--
             android:codes: -101 is not a framework-defined key code but a key code that is
@@ -173,7 +174,7 @@
             android:codes="32"
             android:isRepeatable="true"
             android:keyIcon="@drawable/sym_keyboard_space"
-            android:keyWidth="40%p" />
+            android:keyWidth="45%p" />
         <Key
             android:codes="46,44"
             android:keyLabel=". ,"

@@ -126,18 +126,19 @@
             android:codes="-5"
             android:isRepeatable="true"
             android:keyEdgeFlags="right"
-            android:keyIcon="@drawable/sym_keyboard_delete"
+            android:keyIcon="@drawable/backspace_svg"
             android:keyWidth="15%p" />
     </Row>
 
     <Row android:rowEdgeFlags="bottom">
-        <Key
-            android:codes="-3"
-            android:keyEdgeFlags="left"
-            android:keyIcon="@drawable/sym_keyboard_done"
-            android:keyWidth="15%p" />
+        <!--<Key-->
+            <!--android:codes="-3"-->
+            <!--android:keyEdgeFlags="left"-->
+            <!--android:keyIcon="@drawable/sym_keyboard_done"-->
+            <!--android:keyWidth="15%p" />-->
         <Key
             android:codes="-2"
+            android:keyEdgeFlags="left"
             android:keyLabel="ABC"
             android:keyWidth="10%p" />
         <!--
@@ -156,7 +157,7 @@
             android:codes="32"
             android:isRepeatable="true"
             android:keyIcon="@drawable/sym_keyboard_space"
-            android:keyWidth="30%p" />
+            android:keyWidth="45%p" />
         <Key
             android:codes="8230"
             android:keyLabel="…"
