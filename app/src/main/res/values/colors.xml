@@ -28,5 +28,6 @@
     <color name="edit_text_text_color">#232f35</color>
     <color name="key_color">#232f34</color>
     <color name="facebook_login_button">#475993</color>
+    <color name="edit_text_hint_color">#e0e0e0</color>
 
 </resources>

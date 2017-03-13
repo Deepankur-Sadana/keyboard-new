@@ -53,6 +53,7 @@ public class SearchContactsAdapter extends RecyclerView.Adapter<SearchContactsAd
 
         VHItem(View itemView) {
             super(itemView);
+            itemView.setMinimumHeight(100);
             itemName = (TextView) itemView.findViewById(R.id.itemNameTV);
         }
     }
