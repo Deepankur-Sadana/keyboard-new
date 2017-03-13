@@ -42,6 +42,7 @@ import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.vingeapp.android.BuildConfig;
 import com.vingeapp.android.MasterClass;
 
 /**
@@ -55,7 +56,7 @@ public class AppLibrary {
     public static final String FACEBOOK_BIO_INFO = "facebook_bio_info";
     public static final String BIRTHDAY_PERMISSION = "birthday_permission";
     public static final String FACEBOOK_LOGIN_STATE = "facebook_login_state";
-
+    public static final boolean PRODUCTION_MODE = !BuildConfig.DEBUG;
 
     static final SimpleDateFormat outFormatD = new SimpleDateFormat("MMM d, yyyy", Locale.US);
     static final SimpleDateFormat outFormatT = new SimpleDateFormat("h:mma", Locale.US);
