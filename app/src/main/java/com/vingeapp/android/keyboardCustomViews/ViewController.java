@@ -160,17 +160,17 @@ public class ViewController implements GreenBotMessageKeyIds {
             favouriteApplicationView.setTag(keyBoardOptions);
             frameLayout.addView(favouriteApplicationView);
             Log.d(TAG, "addView: " + rootView.getHeight());
-            favouriteApplicationView.getLayoutParams().height = getKeyboardHeight();
+//            favouriteApplicationView.getLayoutParams().height = getKeyboardHeight();
         } else if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD) {
             final ClipBoardView clipBoardView = new ClipBoardView(context);
             clipBoardView.setTag(keyBoardOptions);
             frameLayout.addView(clipBoardView);
-            clipBoardView.getLayoutParams().height = getKeyboardHeight();
+//            clipBoardView.getLayoutParams().height = getKeyboardHeight();
         } else if (keyBoardOptions == KeyBoardOptions.CONTACTS) {
             final SearchContactsView contactsView = new SearchContactsView(context);
             contactsView.setTag(keyBoardOptions);
             frameLayout.addView(contactsView);
-            contactsView.getLayoutParams().height = getKeyboardHeight();
+//            contactsView.getLayoutParams().height = getKeyboardHeight();
         }
     }
 
