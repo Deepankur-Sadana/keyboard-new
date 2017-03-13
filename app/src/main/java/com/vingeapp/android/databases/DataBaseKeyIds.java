@@ -6,7 +6,7 @@ package com.vingeapp.android.databases;
 
 public interface DataBaseKeyIds {
     // Logcat tag
-    String LOG = DatabaseHelper.class.getName();
+//    String LOG = DatabaseHelper.class.getName();
 
     // Database Version
     int DATABASE_VERSION = 1;

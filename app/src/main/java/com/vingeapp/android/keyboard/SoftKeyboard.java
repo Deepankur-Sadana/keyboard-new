@@ -34,7 +34,6 @@ import com.crashlytics.android.Crashlytics;
 import com.vingeapp.android.InAppEditingController;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
-import com.vingeapp.android.databases.DatabaseHelper;
 import com.vingeapp.android.enums.KeyBoardOptions;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.keyboardCustomViews.TabStripView;
@@ -105,7 +104,6 @@ public class SoftKeyboard extends InputMethodService
     public void onCreate() {
         super.onCreate();
         EventBus.getDefault().register(this);
-        DatabaseHelper.getDataBaseHelper(this);
         mInputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         mWordSeparators = getResources().getString(R.string.word_separators);
         final TextServicesManager tsm = (TextServicesManager) getSystemService(

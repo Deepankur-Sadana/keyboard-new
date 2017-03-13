@@ -9,20 +9,21 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import de.greenrobot.event.EventBus;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.BaseRecylerAdapter;
 import com.vingeapp.android.adapters.ClipboardAdapter;
-import com.vingeapp.android.cache.ClipBoardCache;
+import com.vingeapp.android.firebase.FireBaseHelper;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.Recyclable;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.interfaces.Refreshable;
 import com.vingeapp.android.models.ClipBoardItemModel;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by deepankur on 2/19/17.
@@ -52,7 +53,7 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
 
     private void init(Context context) {
         rootView = inflate(context, R.layout.keyboard_view_clipboard, null);
-        ClipBoardCache.getInstance().addListener(clipBoardDataListener);
+        FireBaseHelper.getInstance(context).addClipBoardDataListener(clipBoardDataListener);
         this.addView(rootView);
         this.context = context;
         this.mRecycler = (RecyclerView) rootView.findViewById(R.id.recyclerView);
@@ -94,15 +95,12 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
     }
 
 
-    private ArrayList<ClipBoardItemModel> clipboardItemsList;
 
     private ArrayList<ClipBoardItemModel> getAllClipboardItems(Context context) {
-        if (clipboardItemsList != null)
-            return clipboardItemsList;
-        List<ClipBoardItemModel> allToDos = ClipBoardCache.getInstance().getAllClipboardModels();
 
-        clipboardItemsList = new ArrayList<>(allToDos);
-        return clipboardItemsList;
+        FireBaseHelper.getInstance(context).loadClipboardItems();
+        return FireBaseHelper.getInstance(context).getAllClipboardModels();
+
     }
 
 
@@ -128,7 +126,8 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
             ((FrameLayout) rootView.findViewById(R.id.add_clipboard_item_dialog)).removeAllViews();
     }
 
-    private ClipBoardCache.ClipBoardDataListener clipBoardDataListener = new ClipBoardCache.ClipBoardDataListener() {
+
+    private FireBaseHelper.ClipBoardDataListener clipBoardDataListener = new FireBaseHelper.ClipBoardDataListener() {
         @Override
         public void onItemAdded(ClipBoardItemModel clipBoardItemModel) {
             if (clipboardAdapter != null)

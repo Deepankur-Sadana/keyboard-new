@@ -11,7 +11,8 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 import com.vingeapp.android.R;
-import com.vingeapp.android.cache.ClipBoardCache;
+//import com.vingeapp.android.cache.ClipBoardCache;
+import com.vingeapp.android.firebase.FireBaseHelper;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.models.ClipBoardItemModel;
@@ -34,7 +35,7 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     public ClipboardAdapter(Context context, ArrayList<ClipBoardItemModel> keyValueShortcuts, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
-        this.clipBoardItemsList = ClipBoardCache.getInstance().getAllClipboardModels();
+        this.clipBoardItemsList = FireBaseHelper.getInstance(context).getAllClipboardModels();
         this.recyclerViewClickInterface = recyclerViewClickInterface;
     }
 

@@ -18,7 +18,7 @@ import de.greenrobot.event.EventBus;
 import com.vingeapp.android.InAppEditingController;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
-import com.vingeapp.android.cache.ClipBoardCache;
+import com.vingeapp.android.firebase.FireBaseHelper;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.Reachable;
 import com.vingeapp.android.models.ClipBoardItemModel;
@@ -60,7 +60,7 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
 
     private EditText titleEt, descriptionEt;
 
-    private void init(Context context) {
+    private void init(final Context context) {
         EventBus.getDefault().register(this);
 
         View rootView = inflate(context, R.layout.clipboard_add_item, null);
@@ -91,12 +91,14 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
                     if (actionType == ActionType.EDIT) {
                         clipBoardItemModel.setTitle(titleEt.getText().toString());
                         clipBoardItemModel.setDescription(descriptionEt.getText().toString());
-                        ClipBoardCache.getInstance().update(clipBoardItemModel);
+//                        ClipBoardCache.getInstance().update(clipBoardItemModel);
+                        FireBaseHelper.getInstance(context).updateClipBoardItem(clipBoardItemModel);
                     } else if (actionType == ActionType.ADD) {
                         ClipBoardItemModel clipBoardItemModel = new ClipBoardItemModel();
                         clipBoardItemModel.setDescription(descriptionEt.getText().toString());
                         clipBoardItemModel.setTitle(titleEt.getText().toString());
-                        ClipBoardCache.getInstance().addItem(clipBoardItemModel);
+//                        ClipBoardCache.getInstance().addItem(clipBoardItemModel);
+                        FireBaseHelper.getInstance(context).addNewClipBoardItemToDb(clipBoardItemModel);
                     }
                     ((FrameLayout) AddEditClipboardItemView.this.getParent()).removeView(AddEditClipboardItemView.this);
                     EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
@@ -116,7 +118,9 @@ public class AddEditClipboardItemView extends FrameLayout implements Reachable, 
                 public void onClick(View v) {
                     ((FrameLayout) AddEditClipboardItemView.this.getParent()).removeView(AddEditClipboardItemView.this);
                     EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
-                    ClipBoardCache.getInstance().deleteItem(clipBoardItemModel);
+//                    ClipBoardCache.getInstance().deleteItem(clipBoardItemModel);
+                    FireBaseHelper.getInstance(context).deleteClipboardItem(clipBoardItemModel);
+
                 }
             });
 
