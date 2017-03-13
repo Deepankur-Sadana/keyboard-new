@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "407343179030",
+    "firebase_url": "https://vingeapp.firebaseio.com",
+    "project_id": "vingeapp",
+    "storage_bucket": "vingeapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:407343179030:android:6c788ada746af7a5",
+        "android_client_info": {
+          "package_name": "com.vingeapp.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "407343179030-1reffe8i9nl6nt40fee8glj3nu96b5qe.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBpAi9XfdHIs-bbTaXCqKsZXbr64SBrkhc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
