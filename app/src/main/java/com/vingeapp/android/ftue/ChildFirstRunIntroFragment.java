@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.vingeapp.android.R;
@@ -43,15 +44,16 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
 
 
         int id;
-        if (PAGE_NUMBER == 0)
-            id = R.layout.fragment_intro_logo;
-        else if (PAGE_NUMBER >= 1 && PAGE_NUMBER < 3) {
-            id = R.layout.fragment_keyboard_intro;
-        } else id = R.layout.fragment_facebook_login;//for last item
-        Log.d("***********", "PAGE" + PAGE_NUMBER);
-        rootView = inflater.inflate(id, container, false);
-        if (PAGE_NUMBER == 3) {
 
+        if (PAGE_NUMBER == 0) {//first page
+            id = R.layout.fragment_intro_logo;
+        } else if (PAGE_NUMBER == 4) {//last page
+            id = R.layout.fragment_facebook_login;
+        } else {//all the pages in between
+            id = R.layout.fragment_keyboard_intro;
+        }
+        rootView = inflater.inflate(id, container, false);
+        if (PAGE_NUMBER == 4) {
             rootView.findViewById(R.id.facebook_login_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -61,7 +63,26 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
                 }
             });
         }
+
+        initializeThePages(PAGE_NUMBER);
         return rootView;
+    }
+
+    private void initializeThePages(int pageNumber) {
+        if (pageNumber == 0 || pageNumber == 4) {
+            return;// we don't need to alter the views in first and the last page, so returning
+        }
+
+        ImageView introIv = (ImageView) rootView.findViewById(R.id.introIV);
+        TextView introTv = (TextView) rootView.findViewById(R.id.introTV);
+        if (pageNumber == 1) {
+            introIv.setImageResource(R.drawable.image_f_0_0_1);
+            introTv.setText("Clean Layout");
+        } else if (pageNumber == 2) {
+            introIv.setImageResource(R.drawable.image_f_0_0_2);
+            introTv.setText("Intuitive shortcut bar");
+        }
+
     }
 
     void applyGradient(TextView textView) {

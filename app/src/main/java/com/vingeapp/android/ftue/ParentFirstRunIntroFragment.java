@@ -22,7 +22,7 @@ import java.util.ArrayList;
 
 public class ParentFirstRunIntroFragment extends BaseFragment {
     ViewPager viewPager;
-    final int PAGE_COUNT = 4;
+    final int PAGE_COUNT = 5;
     final String TAG = getClass().getSimpleName();
 
     @Override

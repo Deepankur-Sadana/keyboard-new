@@ -1,16 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/subsequent_screen_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.vingeapp.android.customTextViews.MontserratRegularTextView
 
-        android:id="@+id/subsequent_screenTV"
+    <ImageView
+        android:id="@+id/introIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/introTV"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginStart="120dp"
+        android:src="@drawable/image_f_0_0_1" />
+
+    <com.vingeapp.android.customTextViews.MontserratRegularTextView
+        android:id="@+id/introTV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/descriptionTV"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="400dp"
         android:gravity="center"
         android:text="Clean Layout"
         android:textColor="@color/indigo"
@@ -18,27 +29,16 @@
 
 
     <TextView
+        android:id="@+id/descriptionTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="92dp"
         android:gravity="center"
-        android:paddingStart="50dp"
         android:paddingEnd="50dp"
+        android:paddingStart="50dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
         android:textColor="@color/indigo"
-        android:textSize="16sp"
-        android:layout_alignParentBottom="true" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/image_f_0_0_1"
-        android:layout_marginStart="120dp"
-        android:layout_marginEnd="100dp"
-        android:layout_marginTop="320dp"
-        android:layout_marginBottom="24dp"
-        android:layout_alignParentTop="true" />
-
-
-
+        android:textSize="16sp" />
 
 </RelativeLayout>
