@@ -26,7 +26,9 @@ public class FontPicker {
             Museo500Regular,
             Museo700Regular,
             RobotoRegular,
-            OpenSansRegular;
+            OpenSansRegular,
+            OpenSansBold;
+
 
 
     private FontPicker(Context context) {
@@ -41,6 +43,7 @@ public class FontPicker {
         Museo700Regular = Typeface.createFromAsset(context.getAssets(), "fonts/Museo700-Regular.otf");
         RobotoRegular = Typeface.createFromAsset(context.getAssets(), "fonts/Roboto-Regular.ttf");
         OpenSansRegular =Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Regular.ttf");
+        OpenSansBold =Typeface.createFromAsset(context.getAssets(), "fonts/OpenSans-Bold.ttf");
 
 
     }
@@ -82,6 +85,8 @@ public class FontPicker {
     public Typeface getRobotoRegular() {return RobotoRegular; }
 
     public Typeface getOpenSansRegular() {return OpenSansRegular; }
+
+    public Typeface getOpenSansBold() {return OpenSansBold; }
 }
 
 

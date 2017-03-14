@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/zero_screen_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+        <LinearLayout
+            android:id="@+id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <include layout="@layout/smart_keyboard_logo" />
+
+
+        </LinearLayout>
+
+        <com.vingeapp.android.customTextViews.MontserratRegularTextView
+            android:id="@+id/zero_screenTV"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/logo"
+            android:layout_marginTop="32dp"
+            android:gravity="center"
+            android:text="Smarter conversations"
+            android:textColor="@color/turquoise"
+            android:textSize="24sp" />
+
+
+    </RelativeLayout>
