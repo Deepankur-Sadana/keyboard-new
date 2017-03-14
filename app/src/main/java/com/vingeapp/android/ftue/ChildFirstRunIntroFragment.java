@@ -22,11 +22,11 @@ import com.vingeapp.android.setup.MainSettingsActivity;
 public class ChildFirstRunIntroFragment extends BaseFragment {
     int PAGE_NUMBER;
     final String TAG = getClass().getSimpleName();
-    View rootView;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        PAGE_NUMBER = getArguments().getInt("page_number", 0);
+//        PAGE_NUMBER = getArguments().getInt("page_number", 0);i
         Log.d(TAG, "onCreate: " + PAGE_NUMBER);
 
     }
@@ -35,16 +35,23 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
         this.PAGE_NUMBER = PAGE_NUMBER;
     }
 
+    View rootView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(PAGE_NUMBER != 3 ? R.layout.fragment_first_time_user_experiece : R.layout.fragment_facebook_login, container, false);
-        if (PAGE_NUMBER == 0) {
-            rootView.findViewById(R.id.zero_screen_layout).setVisibility(View.VISIBLE);
-            rootView.findViewById(R.id.subsequent_screen_layout).setVisibility(View.GONE);
-            applyGradient((TextView) rootView.findViewById(R.id.zero_screenTV));
-        } else if (PAGE_NUMBER == 3) {
+
+        int id;
+        if (PAGE_NUMBER == 0)
+            id = R.layout.fragment_intro_logo;
+        else if (PAGE_NUMBER >= 1 && PAGE_NUMBER < 3) {
+            id = R.layout.fragment_keyboard_intro;
+        } else id = R.layout.fragment_facebook_login;//for last item
+        Log.d("***********", "PAGE" + PAGE_NUMBER);
+        rootView = inflater.inflate(id, container, false);
+        if (PAGE_NUMBER == 3) {
+
             rootView.findViewById(R.id.facebook_login_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -53,10 +60,6 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
                     ((MainSettingsActivity) getActivity()).onLoginButtonClicked();
                 }
             });
-        } else {
-            rootView.findViewById(R.id.zero_screen_layout).setVisibility(View.GONE);
-            rootView.findViewById(R.id.subsequent_screen_layout).setVisibility(View.VISIBLE);
-            applyGradient((TextView) rootView.findViewById(R.id.subsequent_screenTV));
         }
         return rootView;
     }
@@ -68,7 +71,7 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
         textView.getPaint().setShader(textShader);
     }
 
-    public void enableFacebookButton(){
+    public void enableFacebookButton() {
         rootView.findViewById(R.id.facebook_login_button).setEnabled(true);
 
     }

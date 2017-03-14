@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/subsequent_screen_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.vingeapp.android.customTextViews.MontserratRegularTextView
+
+        android:id="@+id/subsequent_screenTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="400dp"
+        android:gravity="center"
+        android:text="Clean Layout"
+        android:textColor="@color/indigo"
+        android:textSize="24sp" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor"
+        android:gravity="center"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"
+        android:textColor="@color/indigo"
+        android:textSize="16sp"
+        android:layout_alignParentBottom="true" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/image_f_0_0_1"
+        android:layout_marginStart="120dp"
+        android:layout_marginEnd="100dp"
+        android:layout_marginTop="320dp"
+        android:layout_marginBottom="24dp"
+        android:layout_alignParentTop="true" />
+
+
+
+
+</RelativeLayout>

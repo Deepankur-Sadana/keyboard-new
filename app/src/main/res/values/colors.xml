@@ -29,5 +29,6 @@
     <color name="keyboard_color">#262c30</color>
     <!--<color name="keyboard_color">#ff0000</color>-->
     <color name="spacebar_color">#353B3F</color>
+    <color name="indigo">#887bb9</color>
 
 </resources>

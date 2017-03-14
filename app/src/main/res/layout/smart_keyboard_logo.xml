@@ -5,6 +5,7 @@
     android:background="@drawable/logo_background"
     android:layout_height="wrap_content">
 
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -14,8 +15,9 @@
         android:layout_marginTop="10.7dp"
         android:alpha="0.2"
         android:text="SMART"
-        android:textColor="@color/smart_logo_color"
-        android:textSize="36sp" />
+        android:textColor="@color/turquoise"
+        android:textSize="48sp"
+        android:textStyle="bold"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,6 +26,7 @@
         android:alpha="0.9"
         android:text="KEYBOARD"
         android:layout_gravity="bottom|center_horizontal"
-        android:textColor="@color/smart_logo_color"
-        android:textSize="13sp" />
+        android:textColor="@color/turquoise"
+        android:textSize="18sp" />
+
 </FrameLayout>
