@@ -1,6 +1,6 @@
 package com.vingeapp.android.ftue;
 
-import android.graphics.Color;
+import android.content.Context;
 import android.graphics.LinearGradient;
 import android.graphics.Shader;
 import android.os.Bundle;
@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -32,7 +33,9 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
 
     }
 
-    public void setPAGE_NUMBER(int PAGE_NUMBER) {this.PAGE_NUMBER = PAGE_NUMBER;}
+    public void setPAGE_NUMBER(int PAGE_NUMBER) {
+        this.PAGE_NUMBER = PAGE_NUMBER;
+    }
 
     View rootView;
 
@@ -73,25 +76,35 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
 
         ImageView introIv = (ImageView) rootView.findViewById(R.id.introIV);
         TextView introTv = (TextView) rootView.findViewById(R.id.introTV);
+        applyGradient(introTv);
         if (pageNumber == 1) {
             introIv.setImageResource(R.drawable.image_f_0_0_1);
             introTv.setText("Clean Layout");
         } else if (pageNumber == 2) {
             introIv.setImageResource(R.drawable.image_f_0_0_2);
             introTv.setText("Intuitive shortcut bar");
-        } else
-                {
-                introIv.setImageResource(R.drawable.image_f_0_0_3);
-                introTv.setText("Access to useful apps");
-            }
+        } else if (pageNumber == 3) {
+            introIv.setImageResource(R.drawable.image_f_0_0_3);
+            introTv.setText("Access to useful apps");
         }
+    }
 
 
-    void applyGradient(TextView textView) {
-        Shader textShader = new LinearGradient(0, 0, 0, 20,
-                new int[]{Color.GREEN, Color.BLUE},
-                new float[]{0, 1}, Shader.TileMode.CLAMP);
-        textView.getPaint().setShader(textShader);
+    void applyGradient(final TextView textView) {
+
+        textView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                textView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                Context context = textView.getContext();
+                Shader textShader = new LinearGradient(0, 0, 0, textView.getHeight(),
+                        new int[]{context.getResources().getColor(R.color.turquoise), context.getResources().getColor(R.color.pale_purple)},
+                        new float[]{0, 1}, Shader.TileMode.CLAMP);
+
+                textView.getPaint().setShader(textShader);
+            }
+        });
+
     }
 
     public void enableFacebookButton() {
