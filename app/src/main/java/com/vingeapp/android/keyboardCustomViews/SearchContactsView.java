@@ -21,14 +21,17 @@ import com.permissioneverywhere.PermissionResponse;
 import com.permissioneverywhere.PermissionResultCallback;
 import com.vingeapp.android.ContactFetcher;
 import com.vingeapp.android.InAppEditingController;
+import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.SearchContactsAdapter;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.interfaces.Refreshable;
 import com.vingeapp.android.models.ContactsModel;
 
 import java.util.ArrayList;
 
+import de.greenrobot.event.EventBus;
 import utils.AppLibrary;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -75,7 +78,14 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
             allContacts = fetcher.getContacts(context);
         }
         Log.d(TAG, "init: fetching contacts took " + (System.currentTimeMillis() - t1));
-        searchContactsAdapter = new SearchContactsAdapter(allContacts, context);
+        searchContactsAdapter = new SearchContactsAdapter(allContacts, context, new RecyclerViewClickInterface() {
+            @Override
+            public void onItemClick(int clickType, int extras, Object data) {
+                ContactsModel contactsModel = (ContactsModel) data;
+                EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
+                EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, contactsModel.name + " " + contactsModel.number));
+            }
+        });
         mRecycler.setAdapter(searchContactsAdapter);
         this.addView(rootView);
         mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
@@ -89,13 +99,6 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
 
     }
 
-    private void takeMeToSettings(String permissionName) {
-        Intent intent = new Intent();
-        intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
-        intent.setData(uri);
-        context.startActivity(intent);
-    }
 
     private final String TAG = getClass().getSimpleName();
     private View.OnFocusChangeListener focusChangeListener = new OnFocusChangeListener() {
