@@ -32,9 +32,7 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
 
     }
 
-    public void setPAGE_NUMBER(int PAGE_NUMBER) {
-        this.PAGE_NUMBER = PAGE_NUMBER;
-    }
+    public void setPAGE_NUMBER(int PAGE_NUMBER) {this.PAGE_NUMBER = PAGE_NUMBER;}
 
     View rootView;
 
@@ -81,9 +79,13 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
         } else if (pageNumber == 2) {
             introIv.setImageResource(R.drawable.image_f_0_0_2);
             introTv.setText("Intuitive shortcut bar");
+        } else
+                {
+                introIv.setImageResource(R.drawable.image_f_0_0_3);
+                introTv.setText("Access to useful apps");
+            }
         }
 
-    }
 
     void applyGradient(TextView textView) {
         Shader textShader = new LinearGradient(0, 0, 0, 20,
