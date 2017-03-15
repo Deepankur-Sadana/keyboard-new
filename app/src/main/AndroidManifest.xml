@@ -23,7 +23,8 @@
             android:authorities="com.facebook.app.FacebookContentProvider"
             android:exported="true" />
 
-        <activity android:name="com.vingeapp.android.setup.MainSettingsActivity">
+        <activity android:name="com.vingeapp.android.setup.MainSettingsActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
