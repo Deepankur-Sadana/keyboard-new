@@ -61,6 +61,7 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
                     ((MainSettingsActivity) getActivity()).setChildIntroFragment(ChildFirstRunIntroFragment.this);
                     rootView.findViewById(R.id.facebook_login_button).setEnabled(false);
                     ((MainSettingsActivity) getActivity()).onLoginButtonClicked();
+
                 }
             });
         }
@@ -70,13 +71,19 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
     }
 
     private void initializeThePages(int pageNumber) {
+
         if (pageNumber == 0 || pageNumber == 4) {
+            if (pageNumber ==0) {
+                TextView zero_screenTv = (TextView) rootView.findViewById(R.id.zero_screenTV);
+                applyGradient(zero_screenTv, HORIZONTAL);
+            }
+
             return;// we don't need to alter the views in first and the last page, so returning
         }
 
         ImageView introIv = (ImageView) rootView.findViewById(R.id.introIV);
         TextView introTv = (TextView) rootView.findViewById(R.id.introTV);
-        applyGradient(introTv);
+        applyGradient(introTv, VERTICAL);
         if (pageNumber == 1) {
             introIv.setImageResource(R.drawable.image_f_0_0_1);
             introTv.setText("Clean Layout");
@@ -90,16 +97,25 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
     }
 
 
-    void applyGradient(final TextView textView) {
+    final int HORIZONTAL = 1, VERTICAL = 2;
 
+    void applyGradient(final TextView textView, final int direction) {
+        Log.d(TAG, "applyGradient: textview " + textView);
+        // Log.d(TAG, "applyGradient:on page" + PAGE_NUMBER + "textViewHeight" + textView.getHeight() + "at time:" + System.currentTimeMillis());
         textView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
                 textView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 Context context = textView.getContext();
-                Shader textShader = new LinearGradient(0, 0, 0, textView.getHeight(),
-                        new int[]{context.getResources().getColor(R.color.turquoise), context.getResources().getColor(R.color.pale_purple)},
-                        new float[]{0, 1}, Shader.TileMode.CLAMP);
+                Shader textShader;
+                if (direction == HORIZONTAL)
+                    textShader = new LinearGradient(0, 0, textView.getWidth(), 0,
+                            new int[]{context.getResources().getColor(R.color.turquoise), context.getResources().getColor(R.color.pale_purple)},
+                            new float[]{0, 1}, Shader.TileMode.CLAMP);
+                else
+                    textShader = new LinearGradient(0, 0, 0, textView.getHeight(),
+                            new int[]{context.getResources().getColor(R.color.turquoise), context.getResources().getColor(R.color.pale_purple)},
+                            new float[]{0, 1}, Shader.TileMode.CLAMP);
 
                 textView.getPaint().setShader(textShader);
             }
