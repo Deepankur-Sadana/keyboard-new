@@ -112,7 +112,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
             return;
 
         if (isViewLocked(tag)) {
-            Log.d(TAG, "notifyItemClicked: view is locked somehow, ignoring the click");
+           // Log.d(TAG, "notifyItemClicked: view is locked somehow, ignoring the click");
             return;
         }
         mCurrentKeyboardOption = tag;
@@ -167,6 +167,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", context.getPackageName(), null);
         intent.setData(uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
 }
