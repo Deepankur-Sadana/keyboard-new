@@ -29,6 +29,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+        multiDexEnabled true
+
     }
     buildTypes {
         release {
@@ -74,6 +76,8 @@ dependencies {
     compile 'com.mani:ThinDownloadManager:1.2.7'
     compile 'com.facebook.rebound:rebound:0.3.8'
     compile "com.android.support:palette-v7:24.2.1"
+    compile 'com.google.maps.android:android-maps-utils:0.5+'
+    compile 'com.google.android.gms:play-services-maps:9.8.0'
 
     compile ('com.github.menny.Chauffeur:permissions:118539bb4cde0420928d60766dd0fdac9be9c6ba') {
         exclude group: 'com.android.support'

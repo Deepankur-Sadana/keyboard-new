@@ -37,6 +37,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.vingeapp.android.R;
 import com.vingeapp.android.activities.BaseActivity;
 import com.vingeapp.android.enums.PermissionsRequestCodes;

@@ -12,7 +12,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ImageView
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:id="@+id/contactIV"
+        android:layout_width="wrap_content"
+        android:src="@drawable/contacts"
+        android:paddingBottom="16dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        />
     <EditText
+        android:layout_toEndOf="@+id/contactIV"
         android:layout_alignParentBottom="true"
         android:id="@+id/searchET"
         android:hint="Search"

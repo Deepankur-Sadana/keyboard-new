@@ -66,6 +66,18 @@
     <string name="settings_key_use_contacts_dictionary">settings_key_use_contacts_dictionary</string>
     <string name="permissions_wiki_site_url">https://github.com/AnySoftKeyboard/AnySoftKeyboard/wiki/Why-Does-AnySoftKeyboard-Requires-Extra-Permissions</string>
     <string name="facebook_app_id">1464531870255176</string>
+    <string name="google_api_key_">AIzaSyBj0Z3tm9nXmWzeqnO5TxkbrURkf6PFFvE</string>
+
+    <string name="action_clear">Clear</string>
+    <string name="action_circle">Draw Circle</string>
+    <string name="action_overlay">Draw Overlay</string>
+    <string name="action_polygon">Draw Polygon</string>
+    <string name="action_traffic">Toggle Traffic</string>
+    <string name="action_cycle_map_type">Cycle Map Type</string>
+
+    <string name="dialog_play_services_unavailable">Google Play Services are unavailable.</string>
+    <string name="dialog_download_play_services">Download Play Services</string>
+    <string name="dialog_close_program">Close Program</string>
 
 
 </resources>

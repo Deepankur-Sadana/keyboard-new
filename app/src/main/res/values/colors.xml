@@ -31,4 +31,7 @@
     <color name="spacebar_color">#353B3F</color>
     <color name="indigo">#887bb9</color>
 
+
+    <color name="fill_color">#6600FFFF</color>
+    <color name="stroke_color">#BB00FFFF</color>
 </resources>
