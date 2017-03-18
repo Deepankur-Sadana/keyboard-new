@@ -13,6 +13,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.vingeapp.android.R;
 
 /**
@@ -20,10 +23,9 @@ import com.vingeapp.android.R;
  */
 
 public class KeyboardMapsView extends FrameLayout {
-    View rootView;
-    MapView map;
-    GoogleMap googleMap;
-    final String TAG = getClass().getSimpleName();
+    private View rootView;
+    private MapView map;
+    private final String TAG = getClass().getSimpleName();
 
     public KeyboardMapsView(@NonNull Context context) {
         super(context);
@@ -50,41 +52,19 @@ public class KeyboardMapsView extends FrameLayout {
             @Override
             public void onMapReady(GoogleMap googleMap) {
                 Log.d(TAG, "onMapReady: " + googleMap);
-
-//                LatLng coordinates = new LatLng(match.match.LocationLatitude, match.match.LocationLongitude);
-//                googleMap.addMarker(new MarkerOptions().position(coordinates).title(match.match.LocationAddress));
-//                googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordinates, 15));
                 map.onResume();
-
-
-//                map = googleMap.getMap();
-//                map.getUiSettings().setMyLocationButtonEnabled(false);
-//                map.setMyLocationEnabled(true);
-
-                // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
                 try {
                     MapsInitializer.initialize(context);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
+                final LatLng MELBOURNE = new LatLng(-37.813, 144.962);
+                Marker melbourne = googleMap.addMarker(new MarkerOptions()
+                        .position(MELBOURNE));
             }
         });
 //
-//        // Gets to GoogleMap from the MapView and does initialization stuff
-//        map = mapView.getMap();
-//        map.getUiSettings().setMyLocationButtonEnabled(false);
-//        map.setMyLocationEnabled(true);
-//
-//        // Needs to call MapsInitializer before doing any CameraUpdateFactory calls
-//        try {
-//            MapsInitializer.initialize(this.getActivity());
-//        } catch (GooglePlayServicesNotAvailableException e) {
-//            e.printStackTrace();
-//        }
-//
-//        // Updates the location and zoom of the MapView
-//        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(new LatLng(43.1, -87.9), 10);
-//        map.animateCamera(cameraUpdate);
-
     }
 }
