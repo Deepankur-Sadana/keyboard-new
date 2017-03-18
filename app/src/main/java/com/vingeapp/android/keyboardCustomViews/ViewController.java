@@ -1,20 +1,21 @@
 package com.vingeapp.android.keyboardCustomViews;
 
 import android.content.Context;
-import android.support.v7.widget.ActionBarOverlayLayout;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
-import de.greenrobot.event.EventBus;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.enums.KeyBoardOptions;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.Recyclable;
 import com.vingeapp.android.interfaces.Refreshable;
+import com.vingeapp.android.keyboardCustomViews.maps.KeyboardMapsView;
+
+import de.greenrobot.event.EventBus;
 
 /**
  * Created by deepankur on 2/7/17.
@@ -88,13 +89,13 @@ public class ViewController implements GreenBotMessageKeyIds {
     }
 
 
-    private void pauseAllViewsOtherThanQwerty(){
+    private void pauseAllViewsOtherThanQwerty() {
         FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.fragmentContainerFrame);
         for (int i = 0; i < frameLayout.getChildCount(); i++) {
             // pause everything else
-                if (frameLayout.getChildAt(i) instanceof Recyclable)
-                    ((Recyclable) frameLayout.getChildAt(i)).onRestInBackground();
-            }
+            if (frameLayout.getChildAt(i) instanceof Recyclable)
+                ((Recyclable) frameLayout.getChildAt(i)).onRestInBackground();
+        }
     }
 
     public void onEvent(MessageEvent messageEvent) {
@@ -160,17 +161,18 @@ public class ViewController implements GreenBotMessageKeyIds {
             favouriteApplicationView.setTag(keyBoardOptions);
             frameLayout.addView(favouriteApplicationView);
             Log.d(TAG, "addView: " + rootView.getHeight());
-//            favouriteApplicationView.getLayoutParams().height = getKeyboardHeight();
         } else if (keyBoardOptions == KeyBoardOptions.CLIP_BOARD) {
             final ClipBoardView clipBoardView = new ClipBoardView(context);
             clipBoardView.setTag(keyBoardOptions);
             frameLayout.addView(clipBoardView);
-//            clipBoardView.getLayoutParams().height = getKeyboardHeight();
         } else if (keyBoardOptions == KeyBoardOptions.CONTACTS) {
             final SearchContactsView contactsView = new SearchContactsView(context);
             contactsView.setTag(keyBoardOptions);
             frameLayout.addView(contactsView);
-//            contactsView.getLayoutParams().height = getKeyboardHeight();
+        } else if (keyBoardOptions == KeyBoardOptions.MAPS) {
+            KeyboardMapsView mapsView = new KeyboardMapsView(context);
+            mapsView.setTag(keyBoardOptions);
+            frameLayout.addView(mapsView);
         }
     }
 
