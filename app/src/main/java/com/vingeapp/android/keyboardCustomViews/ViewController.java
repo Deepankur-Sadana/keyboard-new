@@ -170,11 +170,17 @@ public class ViewController implements GreenBotMessageKeyIds {
             contactsView.setTag(keyBoardOptions);
             frameLayout.addView(contactsView);
         } else if (keyBoardOptions == KeyBoardOptions.MAPS) {
-            KeyboardMapsView mapsView = new KeyboardMapsView(context);
+           final KeyboardMapsView mapsView = new KeyboardMapsView(context);
             mapsView.setTag(keyBoardOptions);
             frameLayout.addView(mapsView);
+        } else if (keyBoardOptions == KeyBoardOptions.MY_PROFILE) {
+            final MyProfileView myProfileView = new MyProfileView(context);
+            myProfileView.setTag(keyBoardOptions);
+            frameLayout.addView(myProfileView);
         }
+
     }
+
 
 
     private void setHeightToMatchKeyboard(View v) {

@@ -44,7 +44,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     }
 
     private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
-            , KeyBoardOptions.CONTACTS,KeyBoardOptions.MAPS
+            , KeyBoardOptions.CONTACTS,KeyBoardOptions.MAPS, KeyBoardOptions.MY_PROFILE
     };
 
     private void init(Context context) {
@@ -66,7 +66,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     }
 
     int getMargin(int index) {
-        return (int) AppLibrary.convertDpToPixel(16, getContext());
+        return (int) AppLibrary.convertDpToPixel(1, getContext());
     }
 
     private int getResourceIdForTabStrip(KeyBoardOptions option) {
@@ -79,6 +79,8 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
                 return R.drawable.ic_aa;
             case MAPS:
                 return R.drawable.ic_maps;
+            case MY_PROFILE:
+                return android.R.drawable.ic_menu_add;
             default:
                 return android.R.drawable.ic_menu_add;
 

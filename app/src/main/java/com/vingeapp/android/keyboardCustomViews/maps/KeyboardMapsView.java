@@ -58,13 +58,19 @@ public class KeyboardMapsView extends FrameLayout {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
-                final LatLng MELBOURNE = new LatLng(-37.813, 144.962);
-                Marker melbourne = googleMap.addMarker(new MarkerOptions()
-                        .position(MELBOURNE));
+                mGoogleMap = googleMap;
+                updateMyLocationOnMap();
             }
         });
 //
+    }
+
+    GoogleMap mGoogleMap;
+
+    private void updateMyLocationOnMap(){
+        double myX = 0, myY = 0;
+        LatLng myLocation = new LatLng(myX, myY);
+        mGoogleMap.addMarker(new MarkerOptions().position(myLocation));
+
     }
 }

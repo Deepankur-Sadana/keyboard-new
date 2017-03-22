@@ -78,6 +78,11 @@
     <string name="dialog_play_services_unavailable">Google Play Services are unavailable.</string>
     <string name="dialog_download_play_services">Download Play Services</string>
     <string name="dialog_close_program">Close Program</string>
+    <string name="lbl_you_are_at">YOU ARE AT</string>
+    <string name="btn_get_location">GET MY LOCATION</string>
+    <string name="btn_start_location_updates">START LOCATION UPDATES</string>
+    <string name="btn_stop_location_updates">STOP LOCATION UPDATES</string>
+
 
 
 </resources>

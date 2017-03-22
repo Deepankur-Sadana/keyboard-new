@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
+
+    <ImageView
+        android:id="@+id/infoIV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:layout_marginBottom="24dp"
+        android:src="@android:drawable/btn_star_big_on" />
+
+    <EditText
+        android:id="@+id/nameTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/infoIV"
+        android:background="@color/edit_text_background"
+        android:hint="Name"
+        android:padding="10dp"
+        android:textColor="@color/edit_text_text_color" />
+
+    <EditText
+        android:id="@+id/phonenumberTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/nameTV"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/infoIV"
+        android:background="@color/edit_text_background"
+        android:hint="Phone Number"
+        android:padding="10dp"
+        android:textColor="@color/edit_text_text_color" />
+
+    <EditText
+        android:id="@+id/emailTV"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/phonenumberTV"
+        android:layout_marginEnd="24dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/infoIV"
+        android:background="@color/edit_text_background"
+        android:hint="Email"
+        android:padding="10dp"
+        android:textColor="@color/edit_text_text_color" />
+
+
+</RelativeLayout>

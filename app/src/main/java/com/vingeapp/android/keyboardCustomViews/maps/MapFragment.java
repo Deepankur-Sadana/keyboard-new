@@ -154,6 +154,8 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
         initCamera(mCurrentLocation);
     }
 
+
+
     @Override
     public void onInfoWindowClick(Marker marker) {
         Toast.makeText(getActivity(), "Clicked on marker", Toast.LENGTH_SHORT).show();
@@ -197,6 +199,7 @@ public class MapFragment extends SupportMapFragment implements GoogleApiClient.C
 
         return address;
     }
+
 
     private void drawCircle(LatLng location) {
         CircleOptions options = new CircleOptions();
