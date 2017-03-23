@@ -118,7 +118,7 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
                         new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
                         MY_PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
 
-            } else {//do not ask for permission as user has denied the permissions earlier and clicked on never ask again
+            } else {
 
                 Log.d(TAG, "displayLocation: display location false");
             }
@@ -237,12 +237,12 @@ public class MainActivity extends Activity implements ConnectionCallbacks, OnCon
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (LocationListener) this);
+        LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
     }
 
     protected void stopLocationUpdates() {
         Log.d(TAG, "stopLocationUpdates: ");
-        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, (LocationListener) this);
+        LocationServices.FusedLocationApi.removeLocationUpdates(mGoogleApiClient, this);
     }
 
 

@@ -3,6 +3,7 @@ package com.vingeapp.android;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -19,7 +20,7 @@ public class ContactFetcher {
     private static final String TAG = ContactFetcher.class.getSimpleName();
 
 
-    public ArrayList<ContactsModel> getContacts(Context context) {
+    private ArrayList<ContactsModel> getContacts(Context context) {
         ArrayList<ContactsModel> contactsModels = new ArrayList<>();
         ContentResolver cr = context.getContentResolver();
         Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
@@ -82,6 +83,49 @@ public class ContactFetcher {
         }
         initialList.removeAll(duplicateEntries);
         return initialList;
+    }
+
+
+
+
+    private class ContactFetcherTask extends AsyncTask<Void, Void, Void> {
+        Context context;
+        ContactListener contactListener;
+        ArrayList<ContactsModel> contacts;
+
+        ContactFetcherTask(Context context, ContactListener contactListener) {
+            this.context = context;
+            this.contactListener = contactListener;
+        }
+
+        @Override
+
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            contacts = new ContactFetcher().getContacts(context);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            contactListener.onListLoaded(contacts);
+        }
+
+
+    }
+
+
+    public interface ContactListener {
+        void onListLoaded(ArrayList<ContactsModel> contactsModels);
+    }
+
+    public void loadContactsInBackground(Context context, ContactListener contactListener) {
+        new ContactFetcherTask(context, contactListener).execute();
     }
 }
 

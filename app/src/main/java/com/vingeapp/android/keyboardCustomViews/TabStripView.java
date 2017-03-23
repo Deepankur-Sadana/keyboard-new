@@ -3,10 +3,11 @@ package com.vingeapp.android.keyboardCustomViews;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ import utils.AppLibrary;
 public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds {
     Context context;
 
+
     public TabStripView(Context context) {
         super(context);
         init(context);
@@ -44,7 +46,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     }
 
     private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
-            , KeyBoardOptions.CONTACTS,KeyBoardOptions.MAPS, KeyBoardOptions.MY_PROFILE
+            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.MY_PROFILE
     };
 
     private void init(Context context) {
@@ -114,7 +116,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
             return;
 
         if (isViewLocked(tag)) {
-           // Log.d(TAG, "notifyItemClicked: view is locked somehow, ignoring the click");
+            // Log.d(TAG, "notifyItemClicked: view is locked somehow, ignoring the click");
             return;
         }
         mCurrentKeyboardOption = tag;
@@ -128,6 +130,10 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         switch (tag) {
             case CONTACTS:
                 EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+                break;
+//            case MAPS:
+//                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+//                break;
             default:
                 break;
         }
@@ -160,6 +166,15 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
                 return true;
             }
 
+        } else if (keyBoardOptions == KeyBoardOptions.MAPS) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+
+//                if (!AppLibrary.isPerMissionGranted(context, Manifest.permission.ACCESS_FINE_LOCATION) && !AppLibrary.isPerMissionGranted(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                Toast.makeText(context, "Please provide Your location permissions in the settings ", Toast.LENGTH_SHORT).show();
+                takeMeToSettings("contacts");
+                return true;
+            }
         }
         return false;
     }
@@ -173,3 +188,4 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         context.startActivity(intent);
     }
 }
+

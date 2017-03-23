@@ -1,10 +1,6 @@
 package com.vingeapp.android.keyboardCustomViews;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -14,11 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
-import com.permissioneverywhere.PermissionEverywhere;
-import com.permissioneverywhere.PermissionResponse;
-import com.permissioneverywhere.PermissionResultCallback;
 import com.vingeapp.android.ContactFetcher;
 import com.vingeapp.android.InAppEditingController;
 import com.vingeapp.android.MessageEvent;
@@ -32,9 +24,6 @@ import com.vingeapp.android.models.ContactsModel;
 import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
-import utils.AppLibrary;
-
-import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by deepankursadana on 05/03/17.
@@ -63,7 +52,7 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
         init(context);
     }
 
-    private void init(Context context) {
+    private void init(final Context context) {
         rootView = inflate(context, R.layout.keyboard_view_search_contacts, null);
         this.context = context;
         this.mRecycler = (RecyclerView) rootView.findViewById(R.id.contactsRecycler);
@@ -75,19 +64,24 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
         long t1 = System.currentTimeMillis();
         if (allContacts == null || allContacts.size() == 0) {
             ContactFetcher fetcher = new ContactFetcher();
-            allContacts = fetcher.getContacts(context);
+            fetcher.loadContactsInBackground(context, new ContactFetcher.ContactListener() {
+                @Override
+                public void onListLoaded(ArrayList<ContactsModel> contactsModels) {
+                    allContacts = contactsModels;
+                    searchContactsAdapter = new SearchContactsAdapter(allContacts, context, new RecyclerViewClickInterface() {
+                        @Override
+                        public void onItemClick(int clickType, int extras, Object data) {
+                            ContactsModel contactsModel = (ContactsModel) data;
+                            EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
+                            EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, contactsModel.name + " " + contactsModel.number));
+                        }
+                    });
+                    mRecycler.setAdapter(searchContactsAdapter);
+
+                }
+            });
         }
-        Log.d(TAG, "init: fetching contacts took " + (System.currentTimeMillis() - t1));
-        searchContactsAdapter = new SearchContactsAdapter(allContacts, context, new RecyclerViewClickInterface() {
-            @Override
-            public void onItemClick(int clickType, int extras, Object data) {
-                ContactsModel contactsModel = (ContactsModel) data;
-                EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
-                EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, contactsModel.name + " " + contactsModel.number));
-            }
-        });
-        mRecycler.setAdapter(searchContactsAdapter);
-        this.addView(rootView);
+
         mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -95,6 +89,9 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
                     InAppEditingController.getInstance().setEditText((EditText) v);
             }
         });
+
+        Log.d(TAG, "init: fetching contacts took " + (System.currentTimeMillis() - t1));
+        this.addView(rootView);
         mEditText.requestFocus();
 
     }
@@ -129,7 +126,9 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
                     if (model.name != null && model.name.toLowerCase().contains(s.toString().trim().toLowerCase()))
                         filteredList.add(model);
                 }
-            searchContactsAdapter.setContactList(filteredList);
+
+            if (searchContactsAdapter != null)
+                searchContactsAdapter.setContactList(filteredList);
 
         }
     };
@@ -145,23 +144,5 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
             return true;
         }
         return false;
-    }
-
-
-    final int REQ_CODE = 1;
-
-    private void permissions(final Context context) {
-        PermissionEverywhere.getPermission(getApplicationContext(),
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                REQ_CODE,
-                "Notification title",
-                "This app needs a write permission",
-                R.mipmap.ic_launcher)
-                .enqueue(new PermissionResultCallback() {
-                    @Override
-                    public void onComplete(PermissionResponse permissionResponse) {
-                        Toast.makeText(context, "is Granted " + permissionResponse.isGranted(), Toast.LENGTH_SHORT).show();
-                    }
-                });
     }
 }
