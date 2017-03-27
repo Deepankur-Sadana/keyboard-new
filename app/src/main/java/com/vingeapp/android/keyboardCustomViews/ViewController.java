@@ -1,6 +1,7 @@
 package com.vingeapp.android.keyboardCustomViews;
 
 import android.content.Context;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -177,6 +178,12 @@ public class ViewController implements GreenBotMessageKeyIds {
             final MyProfileView myProfileView = new MyProfileView(context);
             myProfileView.setTag(keyBoardOptions);
             frameLayout.addView(myProfileView);
+        } else if (keyBoardOptions == KeyBoardOptions.SETTINGS) {
+            final SettingsView settingsView = new SettingsView(context);
+            settingsView.setTag(keyBoardOptions);
+            frameLayout.addView(settingsView);
+
+
         }
 
     }

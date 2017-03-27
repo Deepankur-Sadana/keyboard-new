@@ -33,13 +33,13 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
         init(context);
     }
 
-    private FavouriteApplicationsListAdapter favouriteApplicationsListAdapter;
+    private FavoureApplicationsListAdapter favouriteApplicationsListAdapter;
 
     private void init(final Context context) {
         this.setBackgroundColor(Color.WHITE);
         RecyclerView recyclerView = new RecyclerView(context);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
-        favouriteApplicationsListAdapter = new FavouriteApplicationsListAdapter(context, new RecyclerViewClickInterface() {
+        favouriteApplicationsListAdapter = new FavoureApplicationsListAdapter(context, new RecyclerViewClickInterface() {
             @Override
             public void onItemClick(int clickType, int extras, Object data) {
                 String packageName = (String) data;

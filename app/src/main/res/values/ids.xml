@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="get" type="id">1</item>
+    <item name="action_settings" type="id" />
 
 </resources>

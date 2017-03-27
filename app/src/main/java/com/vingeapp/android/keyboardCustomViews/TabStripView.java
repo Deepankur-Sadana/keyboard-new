@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.provider.Settings;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
@@ -46,7 +49,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     }
 
     private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
-            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.MY_PROFILE
+            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.MY_PROFILE, KeyBoardOptions.SETTINGS
     };
 
     private void init(Context context) {
@@ -82,6 +85,8 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
             case MAPS:
                 return R.drawable.ic_maps;
             case MY_PROFILE:
+                return android.R.drawable.ic_menu_add;
+            case SETTINGS:
                 return android.R.drawable.ic_menu_add;
             default:
                 return android.R.drawable.ic_menu_add;
@@ -172,18 +177,47 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
 
 //                if (!AppLibrary.isPerMissionGranted(context, Manifest.permission.ACCESS_FINE_LOCATION) && !AppLibrary.isPerMissionGranted(context, Manifest.permission.ACCESS_COARSE_LOCATION)) {
                 Toast.makeText(context, "Please provide Your location permissions in the settings ", Toast.LENGTH_SHORT).show();
-                takeMeToSettings("contacts");
+                takeMeToSettings("your location");
                 return true;
             }
+        } else if (keyBoardOptions == KeyBoardOptions.SETTINGS) {
+            boolean hasPermission;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                hasPermission = Settings.System.canWrite(context);
+                Log.d(TAG, "Can Write Settings: " + hasPermission);
+                if (hasPermission) {//good to go have the permissions
+                    Log.d(TAG, "Write allowed:" + hasPermission);
+
+                } else {
+                    Log.d(TAG, "Write not allowed:" + hasPermission);
+                    openAndroidWriteSettingsPermissionsMenu();
+                    //must ask for permissions, returning true (implying that view is currently locked)
+                    return true;
+                }
+            } else {//we don't need any permission in lollipop or below devices, hence view won't be ever locked
+                return false;
+            }
         }
+
         return false;
     }
 
+
     private void takeMeToSettings(String permissionName) {
+
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
         Uri uri = Uri.fromParts("package", context.getPackageName(), null);
         intent.setData(uri);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private void openAndroidWriteSettingsPermissionsMenu() {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+        intent.setData(Uri.parse("package:" + context.getPackageName()));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
