@@ -76,7 +76,8 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         Log.d(TAG, "onCreate: ");
-
+        SharedPreferences prefs = MainSettingsActivity.this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        Log.d(TAG, "onCreate: access token " + prefs.getString(AppLibrary.FACEBOOK_ACCESS_TOKEN, null));
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo(
