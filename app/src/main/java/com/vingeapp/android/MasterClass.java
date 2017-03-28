@@ -11,6 +11,9 @@ import com.facebook.appevents.AppEventsLogger;
 
 import java.lang.ref.WeakReference;
 
+import de.greenrobot.event.EventBus;
+import de.greenrobot.event.EventBusBuilder;
+
 /**
  * Created by deepankur on 2/11/17.
  */
@@ -66,5 +69,24 @@ public class MasterClass extends Application {
 
     public static AskPrefs getConfig() {
         return msConfig;
+    }
+    private static EventBus mEventBus;
+
+    public static EventBus getEventBus() {
+        if (mEventBus == null)
+            buildEventBus();
+        return mEventBus;
+    }
+
+    private static void buildEventBus() {
+        EventBusBuilder builder = EventBus.builder();
+        builder.eventInheritance(true);
+        builder.logNoSubscriberMessages(true);
+        builder.logSubscriberExceptions(true);
+        builder.sendNoSubscriberEvent(true);
+        builder.sendSubscriberExceptionEvent(true);
+        builder.throwSubscriberException(true);
+
+        mEventBus = builder.build();
     }
 }
