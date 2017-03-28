@@ -37,9 +37,9 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.vingeapp.android.R;
 import com.vingeapp.android.activities.BaseActivity;
+import com.vingeapp.android.apiHandling.RequestManager;
 import com.vingeapp.android.enums.PermissionsRequestCodes;
 import com.vingeapp.android.ftue.ChildFirstRunIntroFragment;
 import com.vingeapp.android.ftue.ParentFirstRunIntroFragment;
@@ -47,13 +47,17 @@ import com.vingeapp.android.preferences.PrefsKeyIds;
 
 import net.evendanan.chauffeur.lib.permissions.PermissionsRequest;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.lang.ref.WeakReference;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 import utils.AppLibrary;
@@ -466,25 +470,6 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
         doFacebookLogin();
     }
 
-    @SuppressWarnings("deprecation")
-    private void postFacebookLoginRequest() {
-        this.onFirstIntroDone();
-
-//        List<NameValuePair> pairs = new ArrayList<>();
-//        String deviceId = AppLibrary.getDeviceId(this);
-//        if (deviceId != null && !deviceId.equals(""))
-//            pairs.add(new BasicNameValuePair("deviceId", deviceId));
-////        String registrationToken = FirebaseInstanceId.getInstance().getToken();
-////        AppLibrary.log_d(TAG, "Got registration token as -" + registrationToken);
-////        if (registrationToken != null)
-////            pairs.add(new BasicNameValuePair("notificationId", registrationToken));
-//        pairs.add(new BasicNameValuePair("deviceName", AppLibrary.getDeviceName()));
-//        pairs.add(new BasicNameValuePair("token", prefs.getString(AppLibrary.FACEBOOK_ACCESS_TOKEN, "")));
-//        pairs.add(new BasicNameValuePair("facebookId", prefs.getString(AppLibrary.FACEBOOK_ID, "")));
-//        RequestManager.makePostRequest(this, RequestManager.FACEBOOK_LOGIN_REQUEST, RequestManager.FACEBOOK_LOGIN_RESPONSE,
-//                null, pairs, postLoginCallback);
-//        findViewById(R.id.progressView).setVisibility(View.VISIBLE);
-    }
 
     private void enableLoginButton() {
         if (childIntroFragment != null) childIntroFragment.enableFacebookButton();
@@ -509,5 +494,33 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
         callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 
+    @SuppressWarnings("deprecation")
+    private void postFacebookLoginRequest() {
+        SharedPreferences prefs = MainSettingsActivity.this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+
+        List<NameValuePair> pairs = new ArrayList<>();
+//        String deviceId = AppLibrary.getDeviceId(this);
+//        if (deviceId != null && !deviceId.equals(""))
+//            pairs.add(new BasicNameValuePair("deviceId", deviceId));
+        pairs.add(new BasicNameValuePair("deviceName", AppLibrary.getDeviceName()));
+        pairs.add(new BasicNameValuePair("token", prefs.getString(AppLibrary.FACEBOOK_ACCESS_TOKEN, "")));
+        pairs.add(new BasicNameValuePair("facebookId", prefs.getString(AppLibrary.FACEBOOK_ID, "")));
+
+        RequestManager.makePostRequest(this, RequestManager.FACEBOOK_LOGIN_REQUEST, RequestManager.FACEBOOK_LOGIN_RESPONSE,
+                null, pairs, postLoginCallback);
+        this.onFirstIntroDone();
+    }
+
+    private RequestManager.OnRequestFinishCallback postLoginCallback = new RequestManager.OnRequestFinishCallback() {
+        @Override
+        public void onBindParams(boolean success, Object response) {
+            Log.d(TAG, "onBindParams: " + response);
+        }
+
+        @Override
+        public boolean isDestroyed() {
+            return false;
+        }
+    };
 
 }

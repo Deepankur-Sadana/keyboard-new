@@ -107,13 +107,13 @@ public class RequestManager implements ServerKeyIDS{
 //      client.setReadTimeout(30, TimeUnit.SECONDS);
     }
 
-    public static void makeGetRequest(Context context, int url_type, int object_type, List<NameValuePair> pairs, OnRequestFinishCallback mCallback) {
+    public static void makeGetRequest(Context context,ServerRequestType serverRequestType, List<NameValuePair> pairs, OnRequestFinishCallback mCallback) {
         int count = 0;
         do {
             if (Connectivity.isConnected(context)) {
                 if (pairs == null)
                     pairs = new ArrayList<>();
-                new GetRequestTask(url_type, object_type, pairs, mCallback, context).executeOnExecutor(THREAD_POOL_EXECUTOR_API);
+                new GetRequestTask(serverRequestType, pairs, mCallback, context).executeOnExecutor(THREAD_POOL_EXECUTOR_API);
                 return;
             } else {
                 count++;
@@ -121,7 +121,22 @@ public class RequestManager implements ServerKeyIDS{
         } while (count <= 4);
     }
 
-    public static void makePostRequest(Context context, int url_type, int object_type, List<NameValuePair> getParams, List<NameValuePair> pairs, OnRequestFinishCallback mCallback) {
+//    public static void makePostRequest(Context context, int url_type, int object_type, List<NameValuePair> getParams, List<NameValuePair> pairs, OnRequestFinishCallback mCallback) {
+//        int count = 0;
+//        do {
+//            if (Connectivity.isConnected(context)) {
+//                if (getParams == null)
+//                    getParams = new ArrayList<>();
+//                if (pairs == null)
+//                    pairs = new ArrayList<>();
+//                new PostRequestTask(url_type, object_type, getParams, pairs, mCallback).executeOnExecutor(THREAD_POOL_EXECUTOR_API);
+//                return;
+//            } else {
+//                count++;
+//            }
+//        } while (count <= 4);
+//    }
+    public static void makePostRequest(Context context, ServerRequestType serverRequestType, List<NameValuePair> getParams, List<NameValuePair> pairs, OnRequestFinishCallback mCallback) {
         int count = 0;
         do {
             if (Connectivity.isConnected(context)) {
@@ -129,7 +144,7 @@ public class RequestManager implements ServerKeyIDS{
                     getParams = new ArrayList<>();
                 if (pairs == null)
                     pairs = new ArrayList<>();
-                new PostRequestTask(url_type, object_type, getParams, pairs, mCallback).executeOnExecutor(THREAD_POOL_EXECUTOR_API);
+                new PostRequestTask(serverRequestType, getParams, pairs, mCallback).executeOnExecutor(THREAD_POOL_EXECUTOR_API);
                 return;
             } else {
                 count++;
@@ -138,6 +153,9 @@ public class RequestManager implements ServerKeyIDS{
     }
 
 
+    private static Object NewParseResponse(JSONObject object, ServerRequestType serverRequestType) throws JSONException {
+        return object;
+    }
     private static Object NewParseResponse(JSONObject object, int object_type) throws JSONException {
         JSONObject jsonObject = object;
         switch (object_type) {
@@ -174,6 +192,9 @@ public class RequestManager implements ServerKeyIDS{
 
     private static String SERVER_HOST_URL =  "https://www.mypulse.tv/android/" ;
 
+    private static String getUrlFromType(ServerRequestType url_type) {
+        return null;
+    }
     private static String getUrlFromType(int url_type) {
         String url = SERVER_HOST_URL + APP_VERSION_CODE + "/";
         switch (url_type) {
@@ -254,31 +275,36 @@ public class RequestManager implements ServerKeyIDS{
             TimeUnit.SECONDS, sPoolWorkQueueApi, sThreadFactoryApi, new ThreadPoolExecutor.DiscardPolicy());
 
     private static class PostRequestTask extends AsyncTask<Object, Void, Object> {
-        int url_type;
-        int object_type;
+//        int url_type;
+//        int object_type;
         List<NameValuePair> pairs;
         List<NameValuePair> postParams;
         OnRequestFinishCallback mCallback;
+        ServerRequestType serverRequestType;
 
-        public PostRequestTask(int url_type, int object_type, List<NameValuePair> pairs, List<NameValuePair> postParams, OnRequestFinishCallback mCallback) {
-            this.url_type = url_type;
-            this.object_type = object_type;
+//        public PostRequestTask(int url_type, int object_type, List<NameValuePair> pairs, List<NameValuePair> postParams, OnRequestFinishCallback mCallback) {
+//            this.url_type = url_type;
+//            this.object_type = object_type;
+//            this.pairs = pairs;
+//            this.postParams = postParams;
+//            this.mCallback = mCallback;
+//        }
+
+        public PostRequestTask(ServerRequestType serverRequestType, List<NameValuePair> pairs, List<NameValuePair> postParams, OnRequestFinishCallback mCallback) {
+            this.serverRequestType=serverRequestType;
             this.pairs = pairs;
             this.postParams = postParams;
             this.mCallback = mCallback;
         }
 
+
+
         @Override
         protected Object doInBackground(Object... params) {
-            String url_string = getUrlFromType(url_type);
+            String url_string = getUrlFromType(serverRequestType);
 
             if (this.pairs == null) //If a null object is passed, create a new array list
                 this.pairs = new ArrayList<>();
-
-//            pairs.add(new BasicNameValuePair("user", prefs.getString("user_login_id", "")));
-//            pairs.add(new BasicNameValuePair("src", "android"));
-//            pairs.add(new BasicNameValuePair("v", "2"));
-//            pairs.add(new BasicNameValuePair("app_v", APP_VERSION_CODE));
 
             if (!pairs.isEmpty()) {
                 for (NameValuePair pair : pairs) {
@@ -321,7 +347,7 @@ public class RequestManager implements ServerKeyIDS{
 
             try {
                 JSONObject Jobject = new JSONObject(response.body().string());
-                parsedResponse = NewParseResponse(Jobject, object_type);
+                parsedResponse = NewParseResponse(Jobject, serverRequestType);
             } catch (Exception e) {
                 AppLibrary.error_log(TAG, "Parse error", e);
             }
@@ -338,15 +364,16 @@ public class RequestManager implements ServerKeyIDS{
     }
 
     private static class GetRequestTask extends AsyncTask<Object, Void, Object> {
-        int url_type;
-        int object_type;
+//        int url_type;
+//        int object_type;
         List<NameValuePair> pairs;
         OnRequestFinishCallback mCallback;
         Context context;
+        ServerRequestType serverRequestType;
 
-        public GetRequestTask(int url_type, int object_type, List<NameValuePair> pairs, OnRequestFinishCallback mCallback, Context context) {
-            this.url_type = url_type;
-            this.object_type = object_type;
+        public GetRequestTask(ServerRequestType serverRequestType, List<NameValuePair> pairs, OnRequestFinishCallback mCallback, Context context) {
+//            this.url_type = url_type;
+//            this.object_type = object_type;
             this.pairs = pairs;
             this.mCallback = mCallback;
             this.context = context;
@@ -354,7 +381,7 @@ public class RequestManager implements ServerKeyIDS{
 
         @Override
         protected Object doInBackground(Object... params) {
-            String url_string = getUrlFromType(url_type);
+            String url_string = getUrlFromType(serverRequestType);
 
             if (this.pairs == null)  //If a null object is passed, create a new array list
                 this.pairs = new ArrayList<>();
@@ -381,25 +408,25 @@ public class RequestManager implements ServerKeyIDS{
             if (response == null)
                 return null;
 
-            if (url_type == 3046) //For RTMP remove subscriber request, don't enter NewParseResponse function
-                return true;
+//            if (url_type == 3046) //For RTMP remove subscriber request, don't enter NewParseResponse function
+//                return true;
 
-            if (url_type == 3061) {
-                File downloadedFile = new File(this.context.getCacheDir(), "URL");
-
-                try {
-                    BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
-                    sink.writeAll(response.body().source());
-                    sink.close();
-                    return downloadedFile;
-                } catch (Exception e) {
-                    return null;
-                }
-            }
+//            if (url_type == 3061) {
+//                File downloadedFile = new File(this.context.getCacheDir(), "URL");
+//
+//                try {
+//                    BufferedSink sink = Okio.buffer(Okio.sink(downloadedFile));
+//                    sink.writeAll(response.body().source());
+//                    sink.close();
+//                    return downloadedFile;
+//                } catch (Exception e) {
+//                    return null;
+//                }
+//            }
 
             try {
                 JSONObject Jobject = new JSONObject(response.body().string());
-                parsedResponse = NewParseResponse(Jobject, object_type);
+                parsedResponse = NewParseResponse(Jobject, serverRequestType);
             } catch (Exception e) {
                 AppLibrary.error_log(TAG, "Parse error", e);
             }
