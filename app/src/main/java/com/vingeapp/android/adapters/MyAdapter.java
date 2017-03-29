@@ -27,7 +27,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
-        if (holder instanceof AllApplicationsListAdapter.ViewHolder)
+//        if (holder instanceof AllApplicationsListAdapter.ViewHolder)
 
     }
 

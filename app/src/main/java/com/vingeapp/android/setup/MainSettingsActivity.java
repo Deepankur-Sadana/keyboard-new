@@ -40,6 +40,7 @@ import com.facebook.login.LoginResult;
 import com.vingeapp.android.R;
 import com.vingeapp.android.activities.BaseActivity;
 import com.vingeapp.android.apiHandling.RequestManager;
+import com.vingeapp.android.apiHandling.ServerRequestType;
 import com.vingeapp.android.enums.PermissionsRequestCodes;
 import com.vingeapp.android.ftue.ChildFirstRunIntroFragment;
 import com.vingeapp.android.ftue.ParentFirstRunIntroFragment;
@@ -506,9 +507,8 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
         pairs.add(new BasicNameValuePair("token", prefs.getString(AppLibrary.FACEBOOK_ACCESS_TOKEN, "")));
         pairs.add(new BasicNameValuePair("facebookId", prefs.getString(AppLibrary.FACEBOOK_ID, "")));
 
-        RequestManager.makePostRequest(this, RequestManager.FACEBOOK_LOGIN_REQUEST, RequestManager.FACEBOOK_LOGIN_RESPONSE,
-                null, pairs, postLoginCallback);
-        this.onFirstIntroDone();
+        RequestManager.makePostRequest(this, ServerRequestType.CREATE_USER_REQUEST,null, pairs, postLoginCallback);
+//        this.onFirstIntroDone();
     }
 
     private RequestManager.OnRequestFinishCallback postLoginCallback = new RequestManager.OnRequestFinishCallback() {

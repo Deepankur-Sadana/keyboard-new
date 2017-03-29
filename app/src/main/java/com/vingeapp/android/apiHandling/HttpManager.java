@@ -1,6 +1,7 @@
 package com.vingeapp.android.apiHandling;
 
-import com.pulseapp.android.util.AppLibrary;
+
+import android.util.Log;
 
 import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
@@ -32,6 +33,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.List;
+
+import utils.AppLibrary;
 
 /**
  * Created by ratan on 1/13/2015.
@@ -88,15 +91,15 @@ class HttpManager {
 
             long timeBeforeApiCall = System.currentTimeMillis();
             HttpResponse response = HttpManager.execute(httpPost);
-            AppLibrary.log_i(TAG, "request url: " + urlString);
-            AppLibrary.log_i(TAG, "request time: " + (System.currentTimeMillis() - timeBeforeApiCall));
+            Log.d(TAG, "postRequest: " + urlString);
+            Log.d(TAG, "request time: " + (System.currentTimeMillis() - timeBeforeApiCall));
 
             int responseCode = response.getStatusLine().getStatusCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
                 return AppLibrary.getStream(response);
 
             } else {
-                AppLibrary.log_i(TAG, "Response Code: " + responseCode);
+                Log.d(TAG, "Response Code: " + responseCode);
             }
         } catch (IOException e) {
             AppLibrary.error_log(TAG, "fetch failed, url: " + urlString, e);
@@ -114,8 +117,8 @@ class HttpManager {
 
             long timeBeforeApiCall = System.currentTimeMillis();
             HttpResponse response = HttpManager.execute(httpGet);
-            AppLibrary.log_i(TAG, "request url: " + urlString);
-            AppLibrary.log_i(TAG, "request time: " + (System.currentTimeMillis() - timeBeforeApiCall));
+            Log.d(TAG, "request url: " + urlString);
+            Log.d(TAG, "request time: " + (System.currentTimeMillis() - timeBeforeApiCall));
 
             int responseCode = response.getStatusLine().getStatusCode();
             if (responseCode == HttpURLConnection.HTTP_OK) {
@@ -123,7 +126,7 @@ class HttpManager {
                 return in;
 
             } else {
-                AppLibrary.log_i(TAG, "Response Code: " + responseCode);
+                Log.d(TAG, "Response Code: " + responseCode);
             }
         } catch (IOException e) {
             AppLibrary.error_log(TAG, "fetch failed, url: " + urlString, e);

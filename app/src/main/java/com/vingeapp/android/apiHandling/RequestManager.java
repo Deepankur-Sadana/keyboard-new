@@ -193,7 +193,12 @@ public class RequestManager implements ServerKeyIDS{
     private static String SERVER_HOST_URL =  "https://www.mypulse.tv/android/" ;
 
     private static String getUrlFromType(ServerRequestType url_type) {
-        return null;
+        String url = SERVER_HOST_URL + APP_VERSION_CODE + "/";
+        switch (url_type){
+            case CREATE_USER_REQUEST:
+                url += "users/create";
+        }
+        return url;
     }
     private static String getUrlFromType(int url_type) {
         String url = SERVER_HOST_URL + APP_VERSION_CODE + "/";

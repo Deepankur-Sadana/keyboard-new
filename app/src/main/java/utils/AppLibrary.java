@@ -35,8 +35,12 @@ import com.facebook.login.LoginManager;
 import com.vingeapp.android.BuildConfig;
 import com.vingeapp.android.MasterClass;
 
+import org.apache.http.Header;
+import org.apache.http.HttpResponse;
+
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.DecimalFormat;
@@ -46,6 +50,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.zip.GZIPInputStream;
 
 import static com.vingeapp.android.preferences.PrefsKeyIds.FILE_NAME;
 
@@ -53,6 +58,7 @@ import static com.vingeapp.android.preferences.PrefsKeyIds.FILE_NAME;
  * Created by admin on 1/12/2015.
  */
 public class AppLibrary {
+    public static final boolean USE_COMPRESSION = false;
 
     public static final String FACEBOOK_ACCESS_TOKEN = "facebook_access_token";
 
@@ -597,7 +603,14 @@ public class AppLibrary {
         return true;
     }
 
-
+    public static InputStream getStream(HttpResponse response) throws IllegalStateException, IOException {
+        InputStream iStream = response.getEntity().getContent();
+        Header contentEncoding = response.getFirstHeader("Content-Encoding");
+        if (contentEncoding != null && contentEncoding.getValue().equalsIgnoreCase("gzip")) {
+            iStream = new GZIPInputStream(iStream);
+        }
+        return iStream;
+    }
     public static SharedPreferences getDefaultSharePrefs(){
         return MasterClass.getGlobalContext().getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
     }

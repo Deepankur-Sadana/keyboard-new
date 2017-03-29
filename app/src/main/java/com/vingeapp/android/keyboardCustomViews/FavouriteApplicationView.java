@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.vingeapp.android.adapters.FavouriteApplicationsListAdapter;
+import com.vingeapp.android.adapters.FavouriteApplicationsListAdapter;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.interfaces.Refreshable;
 
@@ -33,13 +34,13 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
         init(context);
     }
 
-    private FavoureApplicationsListAdapter favouriteApplicationsListAdapter;
+    private FavouriteApplicationsListAdapter favouriteApplicationsListAdapter;
 
     private void init(final Context context) {
         this.setBackgroundColor(Color.WHITE);
         RecyclerView recyclerView = new RecyclerView(context);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
-        favouriteApplicationsListAdapter = new FavoureApplicationsListAdapter(context, new RecyclerViewClickInterface() {
+        favouriteApplicationsListAdapter = new FavouriteApplicationsListAdapter(context, new RecyclerViewClickInterface() {
             @Override
             public void onItemClick(int clickType, int extras, Object data) {
                 String packageName = (String) data;

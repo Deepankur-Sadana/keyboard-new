@@ -2,11 +2,12 @@ package com.vingeapp.android.apiHandling;
 
 import android.os.Bundle;
 
-import com.pulseapp.android.util.AppLibrary;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import utils.AppLibrary;
 
 //import com.instalively.android.data.Category;
 //import com.instalively.android.data.ChannelDetails;
@@ -160,9 +161,9 @@ public class Parser {
     public static Bundle userSignupResponse(JSONObject jsonObject) throws JSONException {
         Bundle args = new Bundle();
         jsonObject = jsonObject.getJSONObject("user");
-        args.putString(AppLibrary.USER_LOGIN, jsonObject.getString("_id"));
-        args.putString(AppLibrary.USER_LOGIN_EMAIL, jsonObject.getString("email"));
-        args.putString(AppLibrary.MOBILE_CHANNEL, jsonObject.getString("mobile_channel"));
+//        args.putString(AppLibrary.USER_LOGIN, jsonObject.getString("_id"));
+//        args.putString(AppLibrary.USER_LOGIN_EMAIL, jsonObject.getString("email"));
+//        args.putString(AppLibrary.MOBILE_CHANNEL, jsonObject.getString("mobile_channel"));
         args.putString("flags",jsonObject.getString("flags"));
         if (jsonObject.optJSONObject("youtube") != null)
             args.putBoolean("enabled_live_stream", jsonObject.getJSONObject("youtube").getBoolean("liveStreamEnabled"));
