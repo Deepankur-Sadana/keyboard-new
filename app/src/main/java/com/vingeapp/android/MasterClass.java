@@ -8,6 +8,7 @@ import android.util.Log;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.vingeapp.android.apiHandling.RequestManager;
 
 import java.lang.ref.WeakReference;
 
@@ -29,6 +30,7 @@ public class MasterClass extends Application {
         super.attachBaseContext(base);
         MultiDex.install(this);
         mContext = new WeakReference<Context>(this);
+        RequestManager.initialize(this);
     }
 
     public static Context getGlobalContext() {

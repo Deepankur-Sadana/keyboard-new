@@ -402,7 +402,7 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
                             Log.d(TAG, "Permissions granted -" + AccessToken.getCurrentAccessToken().getPermissions());
                             Log.d(TAG, "OnSuccess, Facebook Access Token - " + accessToken);
                             Log.d("OnSuccess, FACEBOOK_ID", loginResult.getAccessToken().getUserId());
-                            SharedPreferences prefs = MainSettingsActivity.this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+                            final SharedPreferences prefs = MainSettingsActivity.this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
                             prefs.edit().putString(AppLibrary.FACEBOOK_ACCESS_TOKEN, accessToken).commit();
                             prefs.edit().putBoolean(AppLibrary.FACEBOOK_LOGIN_STATE, true).commit();
@@ -420,11 +420,14 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
                                             try {
                                                 String email = object.getString("email");
                                                 String birthday = object.getString("birthday"); // 01/31/1980 format
-
                                                 Log.d(TAG, "onCompleted: email " + email + " birthday " + birthday);
+                                                prefs.edit().putString(AppLibrary.FACEBOOK_EMAIL, email).commit();
+                                                postFacebookLoginRequest();
+
                                             } catch (JSONException e) {
                                                 Log.d(TAG, "onCompleted: " + e);
                                                 e.printStackTrace();
+                                                postFacebookLoginRequest();
                                             }
                                         }
                                     });
@@ -433,7 +436,6 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
                             request.setParameters(parameters);
                             request.executeAsync();
 
-                            postFacebookLoginRequest();
                         } else {
                             Log.d(TAG, "On Success, Login result not found");
                             Toast.makeText(MainSettingsActivity.this, "Sorry! Something went wrong", Toast.LENGTH_SHORT).show();
@@ -500,21 +502,17 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
         SharedPreferences prefs = MainSettingsActivity.this.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
 
         List<NameValuePair> pairs = new ArrayList<>();
-//        String deviceId = AppLibrary.getDeviceId(this);
-//        if (deviceId != null && !deviceId.equals(""))
-//            pairs.add(new BasicNameValuePair("deviceId", deviceId));
-        pairs.add(new BasicNameValuePair("deviceName", AppLibrary.getDeviceName()));
-        pairs.add(new BasicNameValuePair("token", prefs.getString(AppLibrary.FACEBOOK_ACCESS_TOKEN, "")));
-        pairs.add(new BasicNameValuePair("facebookId", prefs.getString(AppLibrary.FACEBOOK_ID, "")));
-
-        RequestManager.makePostRequest(this, ServerRequestType.CREATE_USER_REQUEST,null, pairs, postLoginCallback);
-//        this.onFirstIntroDone();
+        pairs.add(new BasicNameValuePair("fb_token", prefs.getString(AppLibrary.FACEBOOK_ACCESS_TOKEN, "")));
+        pairs.add(new BasicNameValuePair("email", prefs.getString(AppLibrary.FACEBOOK_EMAIL, "")));
+        RequestManager.makePostRequest(this, ServerRequestType.CREATE_USER_REQUEST, null, pairs, postLoginCallback);
     }
 
     private RequestManager.OnRequestFinishCallback postLoginCallback = new RequestManager.OnRequestFinishCallback() {
         @Override
         public void onBindParams(boolean success, Object response) {
-            Log.d(TAG, "onBindParams: " + response);
+            if (success)
+                onFirstIntroDone();
+            Log.d(TAG, "onBindParams: " + success + " response " + response);
         }
 
         @Override
