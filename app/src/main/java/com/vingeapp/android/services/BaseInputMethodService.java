@@ -125,7 +125,7 @@ public class BaseInputMethodService extends InputMethodService
 
 
     private void changeBrightness(int changeBrightnessByThisMuch) {
-        float curBrightnessValue = 0;
+        int curBrightnessValue = 0;
         try {
             curBrightnessValue = android.provider.Settings.System.getInt(
                     getContentResolver(),

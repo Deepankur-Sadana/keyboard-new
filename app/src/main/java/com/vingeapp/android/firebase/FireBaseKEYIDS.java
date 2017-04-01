@@ -9,5 +9,6 @@ import utils.AppLibrary;
 public interface FireBaseKEYIDS {
     String fireBaseURL = "https://vingeapp.firebaseio.com/";
     String ANCHOR_CLIPBOARD = "clipboard";
+    String ANCHOR_SHORTCUT_APPS = "shortcut_apps";
 
 }

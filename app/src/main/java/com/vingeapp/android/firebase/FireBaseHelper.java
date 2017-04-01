@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Logger;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.vingeapp.android.BuildConfig;
@@ -18,6 +19,8 @@ import com.vingeapp.android.models.ClipBoardItemModel;
 import com.vingeapp.android.utils.DeviceUuidFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 
 import utils.AppLibrary;
 
@@ -221,13 +224,56 @@ public class FireBaseHelper implements FireBaseKEYIDS {
 
     private String getUserId() {
         String facebookId = getFacebookId();
-        if (facebookId !=null)
+        if (facebookId != null)
             return facebookId;
         return new DeviceUuidFactory(MasterClass.getGlobalContext()).getDeviceUuid().toString();
     }
 
-    private String getFacebookId(){
+    private String getFacebookId() {
         SharedPreferences defaultSharePrefs = AppLibrary.getDefaultSharePrefs();
         return defaultSharePrefs.getString(FACEBOOK_ID, null);
+    }
+
+
+    //We are using linked hashset as we don't want duplicate entries and also we want the items to remain ordered.
+    private LinkedHashSet<String> mAllPackageNames = new LinkedHashSet<>();
+
+    public void getAppNames() {
+        getNewFireBase(ANCHOR_SHORTCUT_APPS, new String[]{getUserId()}).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
+                    mAllPackageNames.add(dataSnapshot1.getKey());
+                }
+                if (onShortCutAppChangedListener !=null)
+                    onShortCutAppChangedListener.onListUpdated(mAllPackageNames);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
+    public void deleteAppFromShortcut(String packageName) {
+        getNewFireBase(ANCHOR_SHORTCUT_APPS, new String[]{getUserId(), packageName}).setValue(null);
+
+    }
+
+    public void addPackageNameToPrefs(String packageName) {
+        getNewFireBase(ANCHOR_SHORTCUT_APPS, new String[]{getUserId(), packageName}).setValue(1);
+    }
+
+
+    private OnShortCutAppChangedListener onShortCutAppChangedListener;
+
+    public void setOnShortCutAppChangedListener(OnShortCutAppChangedListener onShortCutAppChangedListener) {
+        this.onShortCutAppChangedListener = onShortCutAppChangedListener;
+    }
+
+    public interface OnShortCutAppChangedListener {
+        void onListUpdated(LinkedHashSet<String> newList);
+
     }
 }

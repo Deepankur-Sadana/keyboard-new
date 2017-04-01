@@ -67,8 +67,9 @@ public class SettingsView extends FrameLayout {
 //                }
 //                float perc = (brightness / (float) 255) * 100;
 //                txtPerc.setText((int) perc + " %");
-                Settings.System.putInt(context.getContentResolver(),
+                boolean b = Settings.System.putInt(context.getContentResolver(),
                         Settings.System.SCREEN_BRIGHTNESS, progress);
+                Log.d(TAG, "onProgressChanged: "+b);
             }
 
             @Override
