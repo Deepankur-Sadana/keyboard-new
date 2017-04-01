@@ -2,6 +2,7 @@ package com.vingeapp.android.adapters;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private ArrayList<PInfo> allPackagesinfo;
     private Context context;
+    private final String TAG = getClass().getSimpleName();
 
     public MyAdapter( Context context,ArrayList<PInfo> allPackagesinfo) {
         this.allPackagesinfo = allPackagesinfo;
@@ -39,18 +41,21 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        PInfo pInfo = allPackagesinfo.get(position);
         if (holder instanceof ViewHolder) {
-            PInfo pInfo = allPackagesinfo.get(position);
-            ((ViewHolder) holder).imageView.setImageDrawable(pInfo.icon);
-            ((ViewHolder) holder).name.setText(pInfo.appname);
-            ((ViewHolder) holder).rootView.setTag(pInfo.pname);
-            ((ViewHolder) holder).checkBox.isChecked();
+            ViewHolder itemHolder = (ViewHolder) holder;
+            itemHolder.imageView.setImageDrawable(pInfo.icon);
+            itemHolder.name.setText(pInfo.appname);
+            itemHolder.rootView.setTag(pInfo.pname);
+            itemHolder.checkBox.isChecked();
         }
 
     }
 
     @Override
     public int getItemCount() {
+        Log.d(TAG, "getItemCount: ");
         return (allPackagesinfo.size());
     }
 
@@ -62,9 +67,8 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         View rootView;
 
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
-
             rootView = itemView;
             checkBox = (CheckBox) rootView.findViewById(R.id.checkbox);
             rootView.setOnClickListener(new View.OnClickListener() {
