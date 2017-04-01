@@ -8,19 +8,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
 import com.vingeapp.android.R;
-//import com.vingeapp.android.cache.ClipBoardCache;
 import com.vingeapp.android.firebase.FireBaseHelper;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.models.ClipBoardItemModel;
 
+import java.util.ArrayList;
+
 import utils.AppLibrary;
 
 import static com.vingeapp.android.adapters.BaseRecylerAdapter.HEADER_HOLDER;
 import static com.vingeapp.android.adapters.BaseRecylerAdapter.ITEM_HOLDER;
+
+//import com.vingeapp.android.cache.ClipBoardCache;
 
 /**
  * Created by deepankursadana on 17/02/17.
@@ -48,7 +49,7 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             ImageView imageView = new ImageView(parent.getContext());
             imageView.setImageResource(R.drawable.add_new);
             int pixel = (int) AppLibrary.convertDpToPixel(8, context);
-            imageView.setPadding(pixel,pixel,pixel,pixel);
+            imageView.setPadding(pixel, pixel, pixel, pixel);
             return new VHHeader(imageView);
         }
         throw new IllegalArgumentException("view type " + viewType + " not supported in: " + TAG);
@@ -69,12 +70,19 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     @Override
     public int getItemCount() {
-        return this.clipBoardItemsList == null ? 1 : this.clipBoardItemsList.size() + 1;
+
+        if (clipBoardItemsList == null) return 1;
+        else return clipBoardItemsList.size() + 1;
+
+//        return this.clipBoardItemsList == null ? 1 : this.clipBoardItemsList.size() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        return position == 0 ? HEADER_HOLDER : ITEM_HOLDER;
+        if (position == 0)
+            return HEADER_HOLDER;
+        else return ITEM_HOLDER;
+//        return position == 0 ? HEADER_HOLDER : ITEM_HOLDER;
     }
 
     private class VHHeader extends RecyclerView.ViewHolder {
