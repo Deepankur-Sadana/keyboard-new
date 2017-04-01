@@ -18,7 +18,7 @@
         android:id="@+id/applicationIV"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="#FF4081" />
+        android:background="#bbffffff" />
 
     <TextView
         android:id="@+id/applicationTV"
