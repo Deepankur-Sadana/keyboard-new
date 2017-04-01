@@ -34,7 +34,6 @@ public class MyActivity extends Activity {
     private LinkedHashSet<String> allPackagesLinkedHashSet;
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,34 +48,21 @@ public class MyActivity extends Activity {
         mRecyclerView.setAdapter(mAdapter);
     }
 
-    private void refreshList() {
-        if (allPackagesLinkedHashSet == null) {
-            Log.d(TAG, "refreshList: allPackagesLinkedHashSet is null returning");
-        }
-        for (int i = 0; i < allPackagesinfo.size(); i++) {
-            PInfo pInfo = allPackagesinfo.get(i);
-            if (allPackagesLinkedHashSet.contains(pInfo.pname)) {
-                allPackagesinfo.get(i).isChecked = true;
-            }
-        }
-    }
-
 
     //using the following boolean we ensure that the method is executed only once no matter what
     static boolean loadingStarted = false;
-    public  synchronized void loadAllThePackages(Context context) {
-        if (loadingStarted)return;
+
+    public synchronized void loadAllThePackages(Context context) {
+        if (loadingStarted) return;
         loadingStarted = true;
         new GetPackageTask(context, allPackagesinfo, null).execute();
     }
 
 
-
-
     /**
      * async code for fetching all the installed app details from the device.
      */
-    private  class GetPackageTask extends AsyncTask<Void, Void, Void> {
+    private class GetPackageTask extends AsyncTask<Void, Void, Void> {
 
         private Context context;
         private ArrayList<PInfo> pInfos;
@@ -88,7 +74,7 @@ public class MyActivity extends Activity {
             this.adapter = adapter;
         }
 
-        private  ArrayList<PInfo> getPackages(Context context) {
+        private ArrayList<PInfo> getPackages(Context context) {
             ArrayList<PInfo> apps = getInstalledApps(context, false); /* false = no system packages */
             final int max = apps.size();
             for (int i = 0; i < max; i++) {
@@ -97,7 +83,7 @@ public class MyActivity extends Activity {
             return apps;
         }
 
-        private  ArrayList<PInfo> getInstalledApps(Context context, boolean getSysPackages) {
+        private ArrayList<PInfo> getInstalledApps(Context context, boolean getSysPackages) {
             ArrayList<PInfo> res = new ArrayList<>();
             List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(0);
             for (int i = 0; i < packs.size(); i++) {
@@ -125,18 +111,38 @@ public class MyActivity extends Activity {
             return null;
         }
 
+        //in post post execute we load the user preferences ie. all those packages that user has selected
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            FireBaseHelper.getInstance(context).setOnShortCutAppChangedListener(onShortCutAppChangedListener);
+            FireBaseHelper.getInstance(context).setOnShortCutAppChangedListener(new FireBaseHelper.OnShortCutAppChangedListener() {
+                @Override
+                public void onListUpdated(LinkedHashSet<String> newList) {
+                    allPackagesLinkedHashSet = newList;
+                    if (allPackagesLinkedHashSet == null) {
+                        Log.d(TAG, "refreshList: allPackagesLinkedHashSet is null returning");
+                    }
+                    for (int i = 0; i < allPackagesinfo.size(); i++) {
+                        PInfo pInfo = allPackagesinfo.get(i);
+                        if (allPackagesLinkedHashSet.contains(pInfo.pname)) {
+                            allPackagesinfo.get(i).isChecked = true;
+                        }
+                    }
+                }
+            });
         }
     }
 
-    public FireBaseHelper.OnShortCutAppChangedListener onShortCutAppChangedListener = new FireBaseHelper.OnShortCutAppChangedListener() {
-        @Override
-        public void onListUpdated(LinkedHashSet<String> newList) {
-            allPackagesLinkedHashSet = newList;
-            refreshList();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        for (int i = 0; i < allPackagesinfo.size(); i++) {
+            PInfo pInfo = allPackagesinfo.get(i);
+            if (pInfo.isChecked)
+                FireBaseHelper.getInstance(this).addPackageNameToPrefs(pInfo.pname);
+            else
+                FireBaseHelper.getInstance(this).deleteAppFromShortcut(pInfo.pname);
+
         }
-    };
+    }
 }
