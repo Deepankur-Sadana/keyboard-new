@@ -12,13 +12,13 @@
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_centerVertical="true"
-        android:padding="8dp"/>
-    
+        android:padding="8dp" />
+
     <ImageView
         android:id="@+id/applicationIV"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:background="#FF4081" />
+        android:background="#bbffffff" />
 
     <TextView
         android:id="@+id/applicationTV"
@@ -28,7 +28,7 @@
         android:layout_marginTop="8dp"
         android:layout_toEndOf="@+id/applicationIV"
         android:text="APPS"
-        android:textColor="#303F9F"/>
+        android:textColor="#303F9F" />
 
 
 </RelativeLayout>

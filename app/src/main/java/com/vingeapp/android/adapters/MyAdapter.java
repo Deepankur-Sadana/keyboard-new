@@ -27,7 +27,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private final String TAG = getClass().getSimpleName();
 
-    public MyAdapter( Context context,ArrayList<PInfo> allPackagesinfo) {
+    public MyAdapter(Context context, ArrayList<PInfo> allPackagesinfo) {
         this.allPackagesinfo = allPackagesinfo;
         this.context = context;
     }
@@ -41,16 +41,15 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         PInfo pInfo = allPackagesinfo.get(position);
+
         if (holder instanceof ViewHolder) {
             ViewHolder itemHolder = (ViewHolder) holder;
             itemHolder.imageView.setImageDrawable(pInfo.icon);
             itemHolder.name.setText(pInfo.appname);
-            itemHolder.rootView.setTag(pInfo.pname);
-            itemHolder.checkBox.isChecked();
+            itemHolder.rootView.setTag(pInfo);
+            itemHolder.checkBox.setChecked(pInfo.isChecked);
         }
-
     }
 
     @Override
@@ -70,15 +69,18 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ViewHolder(View itemView) {
             super(itemView);
             rootView = itemView;
+            imageView = ((ImageView) rootView.findViewById(R.id.applicationIV));
+            name = ((TextView) rootView.findViewById(R.id.applicationTV));
+
             checkBox = (CheckBox) rootView.findViewById(R.id.checkbox);
             rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     checkBox.setChecked(!checkBox.isChecked());
+                    PInfo tag = (PInfo) rootView.getTag();
+                    tag.isChecked=checkBox.isChecked();
                 }
             });
         }
     }
-
-
 }

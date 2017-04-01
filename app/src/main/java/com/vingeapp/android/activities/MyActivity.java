@@ -7,11 +7,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
 
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.MyAdapter;
 import com.vingeapp.android.firebase.FireBaseHelper;
+import com.vingeapp.android.interfaces.AsyncListener;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.models.PInfo;
 
@@ -25,11 +27,11 @@ import de.greenrobot.event.EventBus;
  */
 
 
-public class MyActivity extends Activity implements GreenBotMessageKeyIds{
+public class MyActivity extends Activity implements GreenBotMessageKeyIds {
 
     //array list representing all the packages installed on the system
     public static ArrayList<PInfo> allPackagesinfo = new ArrayList<>();
-    private final String TAG = MyAdapter.class.getSimpleName();
+    private final String TAG = MyActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter mAdapter;
     private LinkedHashSet<String> allPackagesLinkedHashSet;
@@ -49,17 +51,22 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds{
         mRecyclerView.setLayoutManager(mLayoutManager);
         mAdapter = new MyAdapter(this, allPackagesinfo);
         mRecyclerView.setAdapter(mAdapter);
+
         loadAllThePackages(this);
+        if (asyncTask != null) {
+            asyncTask.setAsyncListener(asyncListener);
+            asyncTask.execute();
+        }
     }
 
-
+    static GetPackageTask asyncTask;
     //using the following boolean we ensure that the method is executed only once no matter what
     static boolean loadingStarted = false;
 
     public static synchronized void loadAllThePackages(Context context) {
         if (loadingStarted) return;
         loadingStarted = true;
-        new GetPackageTask(context, allPackagesinfo).execute();
+        asyncTask = new GetPackageTask(context, allPackagesinfo);
     }
 
 
@@ -81,7 +88,24 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds{
     @SuppressWarnings("unused")
     public void onEvent(MessageEvent event) {
         if (event.getMessageType() == FAVOURITE_APPLICATIONS_LIST_CHANGED) {
-            mAdapter.notifyDataSetChanged();
+            if (mAdapter != null)
+                mAdapter.notifyDataSetChanged();
         }
     }
+
+    private AsyncListener asyncListener = new AsyncListener() {
+        @Override
+        public void onPreExecuteCalled() {
+            Log.d(TAG, "onPreExecuteCalled: ");
+            findViewById(R.id.progressBar).setVisibility(View.VISIBLE);
+            findViewById(R.id.recyclerView).setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onPostExecuteCalled() {
+            Log.d(TAG, "onPostExecuteCalled: ");
+            findViewById(R.id.progressBar).setVisibility(View.GONE);
+            findViewById(R.id.recyclerView).setVisibility(View.VISIBLE);
+        }
+    };
 }
