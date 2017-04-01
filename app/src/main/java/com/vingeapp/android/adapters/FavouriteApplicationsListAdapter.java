@@ -3,9 +3,7 @@ package com.vingeapp.android.adapters;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageInfo;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,7 +18,6 @@ import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.models.PInfo;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import utils.AppLibrary;
 
@@ -36,7 +33,7 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     private static final String TAG = "FavouriteApplicationsListAdapter";
 
     private RecyclerViewClickInterface recyclerViewClickInterface;
-    private  ArrayList<PInfo> pInfoArrayList ;
+    private ArrayList<PInfo> pInfoArrayList;
 
     public FavouriteApplicationsListAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
@@ -127,6 +124,7 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
 
     private class VHHeader extends RecyclerView.ViewHolder {
         View rootView;
+
         VHHeader(View itemView) {
             super(itemView);
             rootView = itemView;

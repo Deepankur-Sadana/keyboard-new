@@ -15,6 +15,7 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.vingeapp.android.BuildConfig;
 import com.vingeapp.android.MasterClass;
+import com.vingeapp.android.activities.MyActivity;
 import com.vingeapp.android.models.ClipBoardItemModel;
 import com.vingeapp.android.utils.DeviceUuidFactory;
 
@@ -89,6 +90,7 @@ public class FireBaseHelper implements FireBaseKEYIDS {
 //
 //
 //        loadData();
+        MyActivity.loadAllThePackages(context);
 
     }
 
