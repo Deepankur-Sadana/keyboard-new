@@ -18,7 +18,6 @@ import org.apache.http.NameValuePair;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,8 +28,6 @@ import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import okio.BufferedSink;
-import okio.Okio;
 import utils.AppLibrary;
 
 import static com.vingeapp.android.preferences.PrefsKeyIds.FILE_NAME;
@@ -38,37 +35,8 @@ import static com.vingeapp.android.preferences.PrefsKeyIds.FILE_NAME;
 /**
  * Created by admin on 1/13/2015.
  */
-public class RequestManager implements ServerKeyIDS{
+public class RequestManager implements ServerKeyIDS {
     private static final String TAG = "RequestManager";
-
-    public static final int FACEBOOK_LOGIN_REQUEST = 3001;
-    public static final int NEARBY_MOMENTS_REQUEST = 3002;
-    public static final int LOCATION_TEMPLATES_REQUEST = 3003;
-    public static final int MOMENTS_AROUND_YOU_REQUEST = 3004;
-    public static final int ADD_USER_HANDLE_REQUEST = 3005;
-    public static final int UPDATE_ON_BOARDING_STATUS_REQUEST = 3006;
-    public static final int UPDATE_TOKEN_REQUEST = 3007;
-    public static final int SEARCH_REQUEST = 3008;
-    public static final int GET_CONTRIBUTABLE_MOMENT_REQUEST = 3009;
-    public static final int GET_PROFILE_DATA_REQUEST = 3010;
-    public static final int GET_STREAM_DATA_REQUEST = 3011;
-    public static final int GET_MEDIA_THUMBNAIL_REQUEST = 3012;
-    public static final int FACEBOOK_UPDATE_TOKEN_REQUEST = 3013;
-
-
-    public static final int FACEBOOK_LOGIN_RESPONSE = 5001;
-    public static final int NEARBY_MOMENTS_RESPONSE = 5002;
-    public static final int LOCATION_TEMPLATE_RESPONSE = 5003;
-    public static final int MOMENTS_AROUND_YOU_RESPONSE = 5004;
-    public static final int ADD_USER_HANDLE_RESPONSE = 5005;
-    public static final int UPDATE_ONBOARDING_STATUS_RESPONSE = 5006;
-    public static final int UPDATE_TOKEN_RESPONSE = 5007;
-    public static final int SEARCH_RESPONSE = 5008;
-    public static final int GET_CONTRIBUTABLE_MOMENT_RESPONSE = 5009;
-    public static final int GET_PROFILE_DATA_RESPONSE = 5010;
-    public static final int GET_STREAM_DATA_RESPONSE = 5011;
-    public static final int GET_MEDIA_THUMBNAIL_RESPONSE = 5012;
-    public static final int FACEBOOK_UPDATE_TOKEN_RESPONSE = 5013;
 
     //  private static Context mContext;
     private static SharedPreferences prefs;
@@ -86,7 +54,7 @@ public class RequestManager implements ServerKeyIDS{
     public static final String S3_IMAGE_BUCKET_PATH_PREFIX =
             "https://s3-ap-southeast-1.amazonaws.com/instalively.images/"; //Used for viewing images, so don't change
 
-    public static String APP_VERSION_CODE;
+    public static String APP_VERSION_CODE="v1";
 
     public static void initialize(Context context) {
         //  mContext = context;
@@ -95,7 +63,7 @@ public class RequestManager implements ServerKeyIDS{
         PackageInfo pInfo = null;
         try {
             pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-            APP_VERSION_CODE = Integer.toString(pInfo.versionCode);
+//            APP_VERSION_CODE = Integer.toString(pInfo.versionCode);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
@@ -107,7 +75,7 @@ public class RequestManager implements ServerKeyIDS{
 //      client.setReadTimeout(30, TimeUnit.SECONDS);
     }
 
-    public static void makeGetRequest(Context context,ServerRequestType serverRequestType, List<NameValuePair> pairs, OnRequestFinishCallback mCallback) {
+    public static void makeGetRequest(Context context, ServerRequestType serverRequestType, List<NameValuePair> pairs, OnRequestFinishCallback mCallback) {
         int count = 0;
         do {
             if (Connectivity.isConnected(context)) {
@@ -121,7 +89,7 @@ public class RequestManager implements ServerKeyIDS{
         } while (count <= 4);
     }
 
-//    public static void makePostRequest(Context context, int url_type, int object_type, List<NameValuePair> getParams, List<NameValuePair> pairs, OnRequestFinishCallback mCallback) {
+    //    public static void makePostRequest(Context context, int url_type, int object_type, List<NameValuePair> getParams, List<NameValuePair> pairs, OnRequestFinishCallback mCallback) {
 //        int count = 0;
 //        do {
 //            if (Connectivity.isConnected(context)) {
@@ -156,97 +124,18 @@ public class RequestManager implements ServerKeyIDS{
     private static Object NewParseResponse(JSONObject object, ServerRequestType serverRequestType) throws JSONException {
         return object;
     }
-    private static Object NewParseResponse(JSONObject object, int object_type) throws JSONException {
-        JSONObject jsonObject = object;
-        switch (object_type) {
-            case FACEBOOK_LOGIN_RESPONSE:
-                return jsonObject;
-            case NEARBY_MOMENTS_RESPONSE:
-                return jsonObject;
-            case LOCATION_TEMPLATE_RESPONSE:
-                return jsonObject;
-            case MOMENTS_AROUND_YOU_RESPONSE:
-                return jsonObject;
-            case ADD_USER_HANDLE_RESPONSE:
-                return jsonObject;
-            case UPDATE_ONBOARDING_STATUS_RESPONSE:
-                return jsonObject;
-            case UPDATE_TOKEN_RESPONSE:
-                return jsonObject;
-            case SEARCH_RESPONSE:
-                return jsonObject;
-            case GET_CONTRIBUTABLE_MOMENT_RESPONSE:
-                return jsonObject;
-            case GET_PROFILE_DATA_RESPONSE:
-                return jsonObject;
-            case GET_STREAM_DATA_RESPONSE:
-                return jsonObject;
-            case GET_MEDIA_THUMBNAIL_RESPONSE:
-                return jsonObject;
-            case FACEBOOK_UPDATE_TOKEN_RESPONSE:
-                return jsonObject;
-            default:
-                return jsonObject;
-        }
-    }
 
-    private static String SERVER_HOST_URL =  "https://www.mypulse.tv/android/" ;
+
+    private static String SERVER_HOST_URL = "http://52.76.209.202:3000/api/";
 
     private static String getUrlFromType(ServerRequestType url_type) {
         String url = SERVER_HOST_URL + APP_VERSION_CODE + "/";
-        switch (url_type){
+        switch (url_type) {
             case CREATE_USER_REQUEST:
                 url += "users/create";
         }
+        Log.d(TAG, "getUrlFromType: " + url);
         return url;
-    }
-    private static String getUrlFromType(int url_type) {
-        String url = SERVER_HOST_URL + APP_VERSION_CODE + "/";
-        switch (url_type) {
-
-            case FACEBOOK_LOGIN_REQUEST:
-                url += "facebookLogin";
-                break;
-            case NEARBY_MOMENTS_REQUEST:
-                url += "getMomentsAroundYou";
-                break;
-            case LOCATION_TEMPLATES_REQUEST:
-                url += "getNearByTemplates";
-                break;
-            case MOMENTS_AROUND_YOU_REQUEST:
-                url += "getMomentsAroundYou";
-                break;
-            case ADD_USER_HANDLE_REQUEST:
-                url += "addUserHandle";
-                break;
-            case UPDATE_ON_BOARDING_STATUS_REQUEST:
-                url += "updateOnboardingStatus";
-                break;
-            case UPDATE_TOKEN_REQUEST:
-                url += "updateNotificationId";
-                break;
-            case GET_CONTRIBUTABLE_MOMENT_REQUEST:
-                url += "getNearByContributableMoments";
-                break;
-            case SEARCH_REQUEST:
-                url+="searchReorder";
-                break;
-            case GET_PROFILE_DATA_REQUEST:
-                url+="getProfileData";
-                break;
-            case GET_STREAM_DATA_REQUEST:
-                url+="getMomentData";
-                break;
-            case GET_MEDIA_THUMBNAIL_REQUEST:
-                url+="getMediaThumbnail";
-                break;
-            case FACEBOOK_UPDATE_TOKEN_REQUEST:
-                url += "updateFacebookToken";
-                break;
-            default:
-                break;
-        }
-        return url + "?";
     }
 
     /* hiding constructor */
@@ -280,7 +169,7 @@ public class RequestManager implements ServerKeyIDS{
             TimeUnit.SECONDS, sPoolWorkQueueApi, sThreadFactoryApi, new ThreadPoolExecutor.DiscardPolicy());
 
     private static class PostRequestTask extends AsyncTask<Object, Void, Object> {
-//        int url_type;
+        //        int url_type;
 //        int object_type;
         List<NameValuePair> pairs;
         List<NameValuePair> postParams;
@@ -296,12 +185,11 @@ public class RequestManager implements ServerKeyIDS{
 //        }
 
         public PostRequestTask(ServerRequestType serverRequestType, List<NameValuePair> pairs, List<NameValuePair> postParams, OnRequestFinishCallback mCallback) {
-            this.serverRequestType=serverRequestType;
+            this.serverRequestType = serverRequestType;
             this.pairs = pairs;
             this.postParams = postParams;
             this.mCallback = mCallback;
         }
-
 
 
         @Override
@@ -369,7 +257,7 @@ public class RequestManager implements ServerKeyIDS{
     }
 
     private static class GetRequestTask extends AsyncTask<Object, Void, Object> {
-//        int url_type;
+        //        int url_type;
 //        int object_type;
         List<NameValuePair> pairs;
         OnRequestFinishCallback mCallback;

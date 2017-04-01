@@ -44,8 +44,9 @@ public class MyActivity extends Activity {
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyAdapter();
+        mAdapter = new MyAdapter(this,allPackagesinfo);
         mRecyclerView.setAdapter(mAdapter);
+        loadAllThePackages(this);
     }
 
 
@@ -55,7 +56,7 @@ public class MyActivity extends Activity {
     public synchronized void loadAllThePackages(Context context) {
         if (loadingStarted) return;
         loadingStarted = true;
-        new GetPackageTask(context, allPackagesinfo, null).execute();
+        new GetPackageTask(context, allPackagesinfo).execute();
     }
 
 
@@ -66,12 +67,10 @@ public class MyActivity extends Activity {
 
         private Context context;
         private ArrayList<PInfo> pInfos;
-        private RecyclerView.Adapter adapter;
 
-        GetPackageTask(Context context, ArrayList<PInfo> pInfos, RecyclerView.Adapter adapter) {
+        GetPackageTask(Context context, ArrayList<PInfo> pInfos) {
             this.context = context;
             this.pInfos = pInfos;
-            this.adapter = adapter;
         }
 
         private ArrayList<PInfo> getPackages(Context context) {
@@ -119,15 +118,21 @@ public class MyActivity extends Activity {
                 @Override
                 public void onListUpdated(LinkedHashSet<String> newList) {
                     allPackagesLinkedHashSet = newList;
+
                     if (allPackagesLinkedHashSet == null) {
                         Log.d(TAG, "refreshList: allPackagesLinkedHashSet is null returning");
                     }
+
                     for (int i = 0; i < allPackagesinfo.size(); i++) {
                         PInfo pInfo = allPackagesinfo.get(i);
                         if (allPackagesLinkedHashSet.contains(pInfo.pname)) {
                             allPackagesinfo.get(i).isChecked = true;
                         }
                     }
+
+                    if (mAdapter != null)
+                        mAdapter.notifyDataSetChanged();
+
                 }
             });
         }
@@ -142,7 +147,6 @@ public class MyActivity extends Activity {
                 FireBaseHelper.getInstance(this).addPackageNameToPrefs(pInfo.pname);
             else
                 FireBaseHelper.getInstance(this).deleteAppFromShortcut(pInfo.pname);
-
         }
     }
 }

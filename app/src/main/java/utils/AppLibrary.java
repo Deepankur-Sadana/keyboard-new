@@ -61,6 +61,7 @@ public class AppLibrary {
     public static final boolean USE_COMPRESSION = false;
 
     public static final String FACEBOOK_ACCESS_TOKEN = "facebook_access_token";
+    public static final String FACEBOOK_EMAIL = "facebook_email";
 
     public static final String FACEBOOK_ID = "facebook_id";
     public static final String FACEBOOK_BIO_INFO = "facebook_bio_info";

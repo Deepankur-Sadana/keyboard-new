@@ -23,6 +23,13 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
 
     private ArrayList<PInfo> allPackagesinfo;
+    private Context context;
+
+    public MyAdapter( Context context,ArrayList<PInfo> allPackagesinfo) {
+        this.allPackagesinfo = allPackagesinfo;
+        this.context = context;
+    }
+
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
