@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.firebase.FireBaseHelper;
+import com.vingeapp.android.interfaces.AsyncListener;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.models.PInfo;
 
@@ -19,11 +20,12 @@ import de.greenrobot.event.EventBus;
 /**
  * async code for fetching all the installed app details from the device.
  */
-class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMessageKeyIds{
+class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMessageKeyIds {
 
     private static final String TAG = GetPackageTask.class.getSimpleName();
     private Context context;
     private ArrayList<PInfo> pInfos;
+    private AsyncListener asyncListener;
 
     GetPackageTask(Context context, ArrayList<PInfo> pInfos) {
         this.context = context;
@@ -58,7 +60,12 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMess
         return res;
     }
 
-
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        if (asyncListener != null)
+            asyncListener.onPreExecuteCalled();
+    }
 
     @Override
     protected Void doInBackground(Void... params) {
@@ -76,9 +83,11 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMess
         EventBus.getDefault().post(new MessageEvent(FAVOURITE_APPLICATIONS_LIST_CHANGED, null));
 
         loadUserSettingsFromFireBase();
+        if (asyncListener != null)
+            asyncListener.onPostExecuteCalled();
     }
 
-    private void loadUserSettingsFromFireBase(){
+    private void loadUserSettingsFromFireBase() {
         FireBaseHelper.getInstance(context).setOnShortCutAppChangedListener(new FireBaseHelper.OnShortCutAppChangedListener() {
             @Override
             public void onListUpdated(LinkedHashSet<String> newList) {
@@ -97,5 +106,9 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMess
                 EventBus.getDefault().post(new MessageEvent(FAVOURITE_APPLICATIONS_LIST_CHANGED, null));
             }
         });
+    }
+
+    void setAsyncListener(AsyncListener asyncListener) {
+        this.asyncListener = asyncListener;
     }
 }

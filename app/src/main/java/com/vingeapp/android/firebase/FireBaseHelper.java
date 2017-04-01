@@ -90,7 +90,6 @@ public class FireBaseHelper implements FireBaseKEYIDS {
 //
 //
 //        loadData();
-        MyActivity.loadAllThePackages(context);
 
     }
 
