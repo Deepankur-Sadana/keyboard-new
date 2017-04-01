@@ -11,4 +11,5 @@ public interface GreenBotMessageKeyIds {
     int EDIT_TEXT_FOCUS_CHANGED = 4;
     int SWITCH_TO_QWERTY = 5;
     int FAVOURITE_APPLICATIONS_LIST_CHANGED = 5;
+    int FAVOURITE_APP_PREFERRED_LIST_CHANGED = 6;
 }
