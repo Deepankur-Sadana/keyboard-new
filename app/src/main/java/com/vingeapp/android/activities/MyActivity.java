@@ -44,8 +44,9 @@ public class MyActivity extends Activity {
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mAdapter = new MyAdapter();
+        mAdapter = new MyAdapter(this,allPackagesinfo);
         mRecyclerView.setAdapter(mAdapter);
+        loadAllThePackages(this);
     }
 
 
