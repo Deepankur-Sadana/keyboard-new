@@ -1,7 +1,10 @@
 package com.vingeapp.android.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -11,16 +14,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vingeapp.android.R;
+import com.vingeapp.android.activities.MyActivity;
+import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
+import com.vingeapp.android.models.PInfo;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vingeapp.android.R;
-import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
-import com.vingeapp.android.models.PInfo;
+import utils.AppLibrary;
 
 /**
  * Created by deepankur on 30/4/16.
  */
+@SuppressLint("LongLogTag")
 public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
@@ -46,8 +53,14 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
             return new VHItem(LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.card_favourite_applications, parent, false));
 
-        if (viewType == TYPE_HEADER)
-            return new VHHeader(new TextView(context));
+        else if (viewType == TYPE_HEADER) {
+            ImageView imageView = new ImageView(parent.getContext());
+            imageView.setImageResource(R.drawable.add_new);
+            int pixel = (int) AppLibrary.convertDpToPixel(8, context);
+            imageView.setPadding(pixel, pixel, pixel, pixel);
+            imageView.setBackgroundColor(Color.GRAY);
+            return new VHHeader(imageView);
+        }
 
         throw new RuntimeException("there is no type that matches the type " + viewType + "  wtf ");
     }
@@ -56,7 +69,7 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof VHItem) {
-            PInfo pInfo = pInfoArrayList.get(position);
+            PInfo pInfo = pInfoArrayList.get(position - 1);
             ((VHItem) holder).imageView.setImageDrawable(pInfo.icon);
             ((VHItem) holder).name.setText(pInfo.appname);
             ((VHItem) holder).rootView.setTag(pInfo.pname);
@@ -67,7 +80,8 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
 
     @Override
     public int getItemCount() {
-        return (pInfoArrayList.size());
+        if (pInfoArrayList == null) return 1;
+        else return (pInfoArrayList.size() + 1);
     }
 
     /**
@@ -78,8 +92,12 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
      */
     @Override
     public int getItemViewType(int position) {
-        return TYPE_ITEM;
+        if (position == 0)
+            return TYPE_HEADER;
+        else return TYPE_ITEM;
+
     }
+
 
     public void refresh() {
         Log.d(TAG, "refresh: ");
@@ -103,21 +121,43 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
             imageView = ((ImageView) rootView.findViewById(R.id.fav_applicationIV));
             name = (TextView) rootView.findViewById(R.id.fav_applicationTV);
             rootView.setOnClickListener(new View.OnClickListener() {
+
                 @Override
                 public void onClick(View v) {
+
                     if (recyclerViewClickInterface != null)
-                        recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, -1, rootView.getTag());
+                        recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, TYPE_ITEM, rootView.getTag());
                 }
             });
         }
     }
 
     private class VHHeader extends RecyclerView.ViewHolder {
-        TextView alphabet;
+        //        TextView alphabet;
+        View rootView;
 
         VHHeader(View itemView) {
             super(itemView);
-            alphabet = (TextView) itemView;
+//            alphabet = (TextView) itemView;
+            rootView = itemView;
+            rootView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+
+                    Intent intent = new Intent(context,MyActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                    context.startActivity(intent);
+
+
+
+//
+//                    if (recyclerViewClickInterface != null)
+//                        recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, TYPE_HEADER,null);
+
+                }
+            });
 
         }
     }

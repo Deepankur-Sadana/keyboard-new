@@ -37,12 +37,18 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
     private SearchContactsAdapter searchContactsAdapter;
     ArrayList<ContactsModel> allContacts;
 
+
+
     public SearchContactsView(Context context) {
         super(context);
         init(context);
     }
 
     public SearchContactsView(Context context, AttributeSet attrs) {
+
+
+
+
         super(context, attrs);
         init(context);
     }
