@@ -5,19 +5,23 @@ import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.firebase.FireBaseHelper;
+import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.models.PInfo;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import de.greenrobot.event.EventBus;
+
 /**
  * async code for fetching all the installed app details from the device.
  */
-class GetPackageTask extends AsyncTask<Void, Void, Void> {
+class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMessageKeyIds{
 
-    static final String TAG = GetPackageTask.class.getSimpleName();
+    private static final String TAG = GetPackageTask.class.getSimpleName();
     private Context context;
     private ArrayList<PInfo> pInfos;
 
@@ -67,6 +71,8 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
+        EventBus.getDefault().post(new MessageEvent(FAVOURITE_APPLICATIONS_LIST_CHANGED, null));
+
         loadUserSettingsFromFireBase();
     }
 
@@ -86,6 +92,7 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> {
                         MyActivity.allPackagesinfo.get(i).isChecked = true;
                     }
                 }
+                EventBus.getDefault().post(new MessageEvent(FAVOURITE_APPLICATIONS_LIST_CHANGED, null));
             }
         });
     }

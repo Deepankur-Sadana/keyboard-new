@@ -19,7 +19,6 @@ import com.vingeapp.android.models.ClipBoardItemModel;
 import com.vingeapp.android.utils.DeviceUuidFactory;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 import utils.AppLibrary;
@@ -242,10 +241,10 @@ public class FireBaseHelper implements FireBaseKEYIDS {
         getNewFireBase(ANCHOR_SHORTCUT_APPS, new String[]{getUserId()}).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot dataSnapshot1:dataSnapshot.getChildren()){
-                    mAllPackageNames.add(dataSnapshot1.getKey());
+                for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
+                    mAllPackageNames.add(DecodeString(dataSnapshot1.getKey()));
                 }
-                if (onShortCutAppChangedListener !=null)
+                if (onShortCutAppChangedListener != null)
                     onShortCutAppChangedListener.onListUpdated(mAllPackageNames);
             }
 
@@ -257,11 +256,13 @@ public class FireBaseHelper implements FireBaseKEYIDS {
     }
 
     public void deleteAppFromShortcut(String packageName) {
+        packageName = EncodeString(packageName);
         getNewFireBase(ANCHOR_SHORTCUT_APPS, new String[]{getUserId(), packageName}).setValue(null);
 
     }
 
     public void addPackageNameToPrefs(String packageName) {
+        packageName = EncodeString(packageName);
         getNewFireBase(ANCHOR_SHORTCUT_APPS, new String[]{getUserId(), packageName}).setValue(1);
     }
 
@@ -275,5 +276,13 @@ public class FireBaseHelper implements FireBaseKEYIDS {
     public interface OnShortCutAppChangedListener {
         void onListUpdated(LinkedHashSet<String> newList);
 
+    }
+
+    public static String EncodeString(String string) {
+        return string.replace(".", ",");
+    }
+
+    public static String DecodeString(String string) {
+        return string.replace(",", ".");
     }
 }
