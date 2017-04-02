@@ -33,7 +33,7 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
     public static ArrayList<PInfo> allPackagesinfo = new ArrayList<>();
     private final String TAG = MyActivity.class.getSimpleName();
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private MyAdapter mAdapter;
     private LinkedHashSet<String> allPackagesLinkedHashSet;
 
 
@@ -99,14 +99,18 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
         Log.d(TAG, "onDestroy: ");
         EventBus.getDefault().unregister(this);
 
+        String s = "";
         for (int i = 0; i < allPackagesinfo.size(); i++) {
             PInfo pInfo = allPackagesinfo.get(i);
-//            Log.d(TAG, "onDestroy: " + pInfo.pname);
-            if (pInfo.isChecked)
+            if (pInfo.isChecked) {
                 FireBaseHelper.getInstance(this).addPackageNameToPrefs(pInfo.pname);
-            else
+                s += "\n";
+                s += pInfo.pname;
+            } else {
                 FireBaseHelper.getInstance(this).deleteAppFromShortcut(pInfo.pname);
+            }
         }
+        Log.d(TAG, "onDestroy: " + s);
     }
 
     @SuppressWarnings("unused")

@@ -47,11 +47,16 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
             pInfoArrayList = new ArrayList<>();
         else pInfoArrayList.clear();
 
+        String s ="";
         for (int i = 0; i < MyActivity.allPackagesinfo.size(); i++) {
             PInfo pInfo = MyActivity.allPackagesinfo.get(i);
-            if (pInfo.isChecked)
+            if (pInfo.isChecked) {
                 pInfoArrayList.add(pInfo);
+                s += "\n";
+                s += pInfo.pname;
+            }
         }
+        Log.d(TAG, "setPreferredApps: "+s);
     }
 
     @Override
@@ -105,8 +110,6 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
         else return TYPE_ITEM;
 
     }
-
-
 
 
     private class VHItem extends RecyclerView.ViewHolder {

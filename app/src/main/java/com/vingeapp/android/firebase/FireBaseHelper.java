@@ -2,6 +2,7 @@ package com.vingeapp.android.firebase;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.google.firebase.database.ChildEventListener;
@@ -90,7 +91,7 @@ public class FireBaseHelper implements FireBaseKEYIDS {
 //
 //
 //        loadData();
-
+        loadPrefferedApplications();
     }
 
     /**
@@ -238,7 +239,7 @@ public class FireBaseHelper implements FireBaseKEYIDS {
     //We are using linked hashset as we don't want duplicate entries and also we want the items to remain ordered.
     private LinkedHashSet<String> mAllPackageNames = new LinkedHashSet<>();
 
-    public void getAppNames() {
+    private void loadPrefferedApplications() {
         getNewFireBase(ANCHOR_SHORTCUT_APPS, new String[]{getUserId()}).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -270,8 +271,9 @@ public class FireBaseHelper implements FireBaseKEYIDS {
 
     private OnShortCutAppChangedListener onShortCutAppChangedListener;
 
-    public void setOnShortCutAppChangedListener(OnShortCutAppChangedListener onShortCutAppChangedListener) {
+    public void setOnShortCutAppChangedListener(@NonNull OnShortCutAppChangedListener onShortCutAppChangedListener) {
         this.onShortCutAppChangedListener = onShortCutAppChangedListener;
+        onShortCutAppChangedListener.onListUpdated(mAllPackageNames);
     }
 
     public interface OnShortCutAppChangedListener {
@@ -279,11 +281,11 @@ public class FireBaseHelper implements FireBaseKEYIDS {
 
     }
 
-    public static String EncodeString(String string) {
+    private static String EncodeString(String string) {
         return string.replace(".", ",");
     }
 
-    public static String DecodeString(String string) {
+    private static String DecodeString(String string) {
         return string.replace(",", ".");
     }
 }

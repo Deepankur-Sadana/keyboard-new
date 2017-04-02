@@ -76,9 +76,9 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    checkBox.setChecked(!checkBox.isChecked());
                     PInfo tag = (PInfo) rootView.getTag();
-                    tag.isChecked=checkBox.isChecked();
+                    tag.isChecked = !tag.isChecked;
+                    checkBox.setChecked(tag.isChecked);
                 }
             });
         }
