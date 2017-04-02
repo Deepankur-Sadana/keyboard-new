@@ -5,5 +5,6 @@ package com.vingeapp.android.apiHandling;
  */
 
 public enum ServerRequestType {
-    CREATE_USER_REQUEST
+    CREATE_USER_REQUEST,
+    GOOGLE_MAPS_API
 }
