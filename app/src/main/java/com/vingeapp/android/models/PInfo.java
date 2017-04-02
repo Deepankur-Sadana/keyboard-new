@@ -12,7 +12,7 @@ public class PInfo {
     public String versionName = "";
     public int versionCode = 0;
     public Drawable icon;
-    public boolean isChecked = false;
+    public boolean isChecked ;
 
     @SuppressLint("LongLogTag")
     public void prettyPrint() {

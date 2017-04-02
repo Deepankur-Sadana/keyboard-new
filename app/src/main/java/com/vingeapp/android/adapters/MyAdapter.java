@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -71,16 +72,32 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             rootView = itemView;
             imageView = ((ImageView) rootView.findViewById(R.id.applicationIV));
             name = ((TextView) rootView.findViewById(R.id.applicationTV));
-
             checkBox = (CheckBox) rootView.findViewById(R.id.checkbox);
             rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    PInfo tag = (PInfo) rootView.getTag();
-                    tag.isChecked = !tag.isChecked;
-                    checkBox.setChecked(tag.isChecked);
+                    boolean wasCheckBoxChecked = checkBox.isChecked();
+                    if (wasCheckBoxChecked) {//check box was checked earlier, unchecking it now
+                        checkBox.setChecked(false);
+                    } else {
+                        //check box was unchecked earlier, checking it now
+                        checkBox.setChecked(true);
+                    }
+
+//                    checkBox.setChecked(!checkBox.isChecked());
                 }
             });
+
+            checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                    PInfo tag = (PInfo) rootView.getTag();
+                    tag.isChecked = isChecked;
+                    Log.d(TAG, "onCheckedChanged: " + tag.pname + " isChecked " + isChecked);
+                }
+            });
+
         }
     }
 }

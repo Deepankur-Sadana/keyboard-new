@@ -1,6 +1,7 @@
 package com.vingeapp.android.activities;
 
 import android.content.Context;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -41,14 +42,21 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMess
         return apps;
     }
 
+
     private ArrayList<PInfo> getInstalledApps(Context context, boolean getSysPackages) {
         ArrayList<PInfo> res = new ArrayList<>();
         List<PackageInfo> packs = context.getPackageManager().getInstalledPackages(0);
         for (int i = 0; i < packs.size(); i++) {
             PackageInfo p = packs.get(i);
-            if ((!getSysPackages) && (p.versionName == null)) {
-                continue;
-            }
+
+            if ((p.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
+                String appName = p.applicationInfo.loadLabel(context.getPackageManager()).toString();
+                Log.d(TAG, Integer.toString(i) + "name: " + appName);
+          } else {
+                String appName = p.applicationInfo.loadLabel(context.getPackageManager()).toString();
+                Log.d(TAG, Integer.toString(i) + "system app name: " + appName);
+            continue;}
+
             PInfo newInfo = new PInfo();
             newInfo.appname = p.applicationInfo.loadLabel(context.getPackageManager()).toString();
             newInfo.pname = p.packageName;
@@ -57,7 +65,9 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMess
             newInfo.icon = p.applicationInfo.loadIcon(context.getPackageManager());
             res.add(newInfo);
         }
-        return res;
+        return res ;
+
+
     }
 
     @Override
