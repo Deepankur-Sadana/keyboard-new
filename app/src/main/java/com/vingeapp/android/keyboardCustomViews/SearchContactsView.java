@@ -59,7 +59,7 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
     }
 
     private void init(final Context context) {
-        rootView = inflate(context, R.layout.keyboard_view_search_contacts, null);
+        rootView = inflate(context, R.layout.keyboard_view_search_list, null);
         this.context = context;
         this.mRecycler = (RecyclerView) rootView.findViewById(R.id.contactsRecycler);
         this.mRecycler.setLayoutManager(new LinearLayoutManager(context));

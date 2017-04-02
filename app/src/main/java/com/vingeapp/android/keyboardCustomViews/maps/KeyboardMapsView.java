@@ -25,15 +25,20 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.apiHandling.RequestManager;
 import com.vingeapp.android.apiHandling.ServerRequestType;
+import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+import com.vingeapp.android.models.LocationModel;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -42,14 +47,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 @SuppressWarnings("FieldCanBeLocal")
-public class KeyboardMapsView extends FrameLayout implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyIds, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private static int UPDATE_INTERVAL = 10000; // 10 sec
     private static int FATEST_INTERVAL = 5000; // 5 sec
     private static int DISPLACEMENT = 10; // 10 meters
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mGoogleMap;
-    private View rootView;
+    private View mapContainerView;
     private MapView map;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -72,13 +77,17 @@ public class KeyboardMapsView extends FrameLayout implements GoogleApiClient.Con
         init(context);
     }
 
+    private View searchView;
+
     private void init(final Context context) {
         this.context = context;
-        rootView = inflate(context, R.layout.keyboard_view_maps, null);
-        map = (MapView) rootView.findViewById(R.id.mapView);
+        mapContainerView = inflate(context, R.layout.keyboard_view_maps, null);
+        map = (MapView) mapContainerView.findViewById(R.id.mapView);
 
         map.onCreate(null);
-        this.addView(rootView);
+        this.addView(mapContainerView);
+        searchView = getSearchView(context);
+        this.addView(searchView);
         map.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -114,6 +123,30 @@ public class KeyboardMapsView extends FrameLayout implements GoogleApiClient.Con
             }
         });
 //
+    }
+
+    private void toggleViews (boolean hideSearchView) {
+        if (hideSearchView) {
+            mapContainerView.setVisibility(VISIBLE);
+            searchView.setVisibility(GONE);
+            EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
+
+        } else {
+            mapContainerView.setVisibility(GONE);
+            searchView.setVisibility(VISIBLE);
+        }
+    }
+
+    private View getSearchView(Context context) {
+        SearchMapsView searchMapsView = new SearchMapsView(context);
+
+        searchMapsView.setLocationItemClickedListener(new SearchMapsView.LocationItemClickedListener() {
+            @Override
+            public void onItemClicked(LocationModel locationModel) {
+                toggleViews(true);
+            }
+        });
+        return searchMapsView;
     }
 
     private boolean checkPlayServices() {
