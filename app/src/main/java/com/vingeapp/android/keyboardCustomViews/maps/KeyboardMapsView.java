@@ -192,6 +192,10 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     }
 
     private void updateMyLocationOnMap(Location location) {
+        if (location==null){
+            Log.e(TAG, "updateMyLocationOnMap: location null returning" );
+            return;
+        }
         LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
         mGoogleMap.addMarker(new MarkerOptions().position(myLocation));
 
