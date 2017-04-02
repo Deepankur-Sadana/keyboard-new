@@ -79,7 +79,7 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
                         public void onItemClick(int clickType, int extras, Object data) {
                             ContactsModel contactsModel = (ContactsModel) data;
                             EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
-                            EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, contactsModel.name + " " + contactsModel.number));
+                            EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, contactsModel.name + " " + contactsModel.number));
                         }
                     });
                     mRecycler.setAdapter(searchContactsAdapter);

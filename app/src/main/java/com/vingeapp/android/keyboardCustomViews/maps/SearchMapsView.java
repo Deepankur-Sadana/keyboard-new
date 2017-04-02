@@ -117,7 +117,7 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
             public void onItemClick(int clickType, int extras, Object data) {
                 Result locationModel = (Result) data;
 //                EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
-//                EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, locationModel.displayName));
+//                EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, locationModel.displayName));
                 if (locationItemClickedListener != null)
                     locationItemClickedListener.onItemClicked(locationModel);
             }

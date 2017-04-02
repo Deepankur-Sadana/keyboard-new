@@ -114,6 +114,15 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
 
             }
         });
+
+        locationRl2.findViewById(R.id.shareTV).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, "hello!"));
+                EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
+
+            }
+        });
     }
 
     private void init(final Context context) {
@@ -167,7 +176,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
 //
     }
 
-    private GoogleMap.OnCameraMoveListener onCameraMoveListener= new GoogleMap.OnCameraMoveListener() {
+    private GoogleMap.OnCameraMoveListener onCameraMoveListener = new GoogleMap.OnCameraMoveListener() {
         @Override
         public void onCameraMove() {
 //            Log.d(TAG, "onCameraMove: ");
@@ -182,7 +191,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         }
     };
 
-    private GoogleMap.OnCameraMoveCanceledListener onCameraMoveCanceledListener= new GoogleMap.OnCameraMoveCanceledListener() {
+    private GoogleMap.OnCameraMoveCanceledListener onCameraMoveCanceledListener = new GoogleMap.OnCameraMoveCanceledListener() {
         @Override
         public void onCameraMoveCanceled() {
             Log.d(TAG, "onCameraMoveCanceled: ");
@@ -190,7 +199,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         }
     };
 
-    private GoogleMap.OnCameraMoveStartedListener onCameraMoveStartedListener= new GoogleMap.OnCameraMoveStartedListener() {
+    private GoogleMap.OnCameraMoveStartedListener onCameraMoveStartedListener = new GoogleMap.OnCameraMoveStartedListener() {
         @Override
         public void onCameraMoveStarted(int i) {
             Log.d(TAG, "onCameraMoveStarted: ");
@@ -198,7 +207,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         }
     };
 
-    private GoogleMap.OnIndoorStateChangeListener onIndoorStateChangeListener= new GoogleMap.OnIndoorStateChangeListener() {
+    private GoogleMap.OnIndoorStateChangeListener onIndoorStateChangeListener = new GoogleMap.OnIndoorStateChangeListener() {
         @Override
         public void onIndoorBuildingFocused() {
 
@@ -211,12 +220,11 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     };
 
 
-
-    private void toggleMapView(boolean hideTheViews){
-        if (hideTheViews){
+    private void toggleMapView(boolean hideTheViews) {
+        if (hideTheViews) {
             locationRl1.animate().alpha(0f).setDuration(300).start();
             locationRl2.animate().alpha(0f).setDuration(300).start();
-        }else {
+        } else {
             locationRl1.animate().alpha(1f).setDuration(300).start();
             locationRl2.animate().alpha(1f).setDuration(300).start();
 
