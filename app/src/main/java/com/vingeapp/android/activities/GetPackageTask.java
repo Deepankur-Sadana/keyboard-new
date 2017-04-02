@@ -52,10 +52,11 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMess
             if ((p.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) == 0) {
                 String appName = p.applicationInfo.loadLabel(context.getPackageManager()).toString();
                 Log.d(TAG, Integer.toString(i) + "name: " + appName);
-          } else {
+            } else {
                 String appName = p.applicationInfo.loadLabel(context.getPackageManager()).toString();
                 Log.d(TAG, Integer.toString(i) + "system app name: " + appName);
-            continue;}
+                continue;
+            }
 
             PInfo newInfo = new PInfo();
             newInfo.appname = p.applicationInfo.loadLabel(context.getPackageManager()).toString();
@@ -65,7 +66,9 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMess
             newInfo.icon = p.applicationInfo.loadIcon(context.getPackageManager());
             res.add(newInfo);
         }
-        return res ;
+
+
+        return res;
 
 
     }
