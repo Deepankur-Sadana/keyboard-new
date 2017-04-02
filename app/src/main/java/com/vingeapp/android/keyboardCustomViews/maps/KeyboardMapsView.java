@@ -10,6 +10,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -22,6 +24,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.IndoorBuilding;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -86,10 +89,37 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     }
 
     private SearchMapsView searchView;
+    private RelativeLayout locationRl1, locationRl2;
+
+    void updateLocationInTheView(Result result) {
+        if (result != null) {
+            Log.e(TAG, "updateLocationInTheView: result is null returning");
+
+            if (result.getAddress_components().size() >= 0)
+                ((TextView) locationRl1.findViewById(R.id.TextView1)).setText(result.getAddress_components().get(0).getLong_name());
+            ((TextView) locationRl2.findViewById(R.id.TextView2)).setText(result.getFormatted_address());
+        } else {
+            ((TextView) locationRl1.findViewById(R.id.TextView1)).setText("My location");
+            ((TextView) locationRl2.findViewById(R.id.TextView2)).setText("My location");
+        }
+    }
+
+    void initializeLocationSpecificViews(View mapContainerView) {
+        locationRl1 = (RelativeLayout) mapContainerView.findViewById(R.id.locationRL1);
+        locationRl2 = (RelativeLayout) mapContainerView.findViewById(R.id.locationRL2);
+        locationRl1.findViewById(R.id.backIV).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleViews(false);
+
+            }
+        });
+    }
 
     private void init(final Context context) {
         this.context = context;
         mapContainerView = inflate(context, R.layout.keyboard_view_maps, null);
+        initializeLocationSpecificViews(mapContainerView);
         map = (MapView) mapContainerView.findViewById(R.id.mapView);
 
         map.onCreate(null);
@@ -107,6 +137,10 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
                     e.printStackTrace();
                 }
                 mGoogleMap = googleMap;
+                mGoogleMap.setOnCameraIdleListener(onCameraIdleListener);
+                mGoogleMap.setOnCameraMoveStartedListener(onCameraMoveStartedListener);
+                mGoogleMap.setOnCameraMoveListener(onCameraMoveListener);
+                mGoogleMap.setOnCameraMoveCanceledListener(onCameraMoveCanceledListener);
 
                 if (checkPlayServices()) {
                     buildGoogleApiClient();
@@ -122,8 +156,8 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
                 mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                     @Override
                     public boolean onMarkerClick(Marker arg0) {
-//                        if (arg0.getTitle().equals("10009 - Bt Merah Ctrl"))
-                        Log.d(TAG, "onMarkerClick: " + arg0);
+                        Log.d(TAG, "onMarkerClick: " + arg0.getTitle());
+                        updateLocationInTheView(markerResultHashMap.get(arg0));
                         return true;
                     }
                 });
@@ -131,6 +165,62 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
             }
         });
 //
+    }
+
+    private GoogleMap.OnCameraMoveListener onCameraMoveListener= new GoogleMap.OnCameraMoveListener() {
+        @Override
+        public void onCameraMove() {
+//            Log.d(TAG, "onCameraMove: ");
+        }
+    };
+
+    private GoogleMap.OnCameraIdleListener onCameraIdleListener = new GoogleMap.OnCameraIdleListener() {
+        @Override
+        public void onCameraIdle() {
+            Log.d(TAG, "onCameraIdle: ");
+            toggleMapView(false);
+        }
+    };
+
+    private GoogleMap.OnCameraMoveCanceledListener onCameraMoveCanceledListener= new GoogleMap.OnCameraMoveCanceledListener() {
+        @Override
+        public void onCameraMoveCanceled() {
+            Log.d(TAG, "onCameraMoveCanceled: ");
+            toggleMapView(false);
+        }
+    };
+
+    private GoogleMap.OnCameraMoveStartedListener onCameraMoveStartedListener= new GoogleMap.OnCameraMoveStartedListener() {
+        @Override
+        public void onCameraMoveStarted(int i) {
+            Log.d(TAG, "onCameraMoveStarted: ");
+            toggleMapView(true);
+        }
+    };
+
+    private GoogleMap.OnIndoorStateChangeListener onIndoorStateChangeListener= new GoogleMap.OnIndoorStateChangeListener() {
+        @Override
+        public void onIndoorBuildingFocused() {
+
+        }
+
+        @Override
+        public void onIndoorLevelActivated(IndoorBuilding indoorBuilding) {
+
+        }
+    };
+
+
+
+    private void toggleMapView(boolean hideTheViews){
+        if (hideTheViews){
+            locationRl1.animate().alpha(0f).setDuration(300).start();
+            locationRl2.animate().alpha(0f).setDuration(300).start();
+        }else {
+            locationRl1.animate().alpha(1f).setDuration(300).start();
+            locationRl2.animate().alpha(1f).setDuration(300).start();
+
+        }
     }
 
     private HashMap<Marker, Result> markerResultHashMap = new HashMap<>();
@@ -148,6 +238,9 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         } else {
             mapContainerView.setVisibility(GONE);
             searchView.setVisibility(VISIBLE);
+            searchView.doRefresh();
+            EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+
         }
         mCurrentViewState = hideSearchView ? View_State.MAPS : View_State.SEARCH;
     }
@@ -165,6 +258,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
             public void onItemClicked(Result locationModel) {
                 clickedResults.add(locationModel);
                 toggleViews(true);
+                updateLocationInTheView(locationModel);
                 addLocationOnMap(locationModel.getGeometry().getLocation().getLat(), locationModel.getGeometry().getLocation().getLng(), locationModel);
             }
         });
@@ -214,7 +308,9 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         else
             position.title("!!!!!!!!!");
 
-        mGoogleMap.addMarker(position);
+        Marker marker = mGoogleMap.addMarker(position);
+
+        makeEntry(marker, result);
     }
 
     private Location mLastLocation;

@@ -11,6 +11,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/locationRL1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@android:color/white">
@@ -23,7 +24,7 @@
             android:padding="6dp" />
 
         <ImageView
-            android:id="@+id/IV"
+            android:id="@+id/backIV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/TextView1"
@@ -41,6 +42,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/locationRL2"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_gravity="bottom"
