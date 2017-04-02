@@ -268,6 +268,7 @@ public class RequestManager implements ServerKeyIDS {
             this.pairs = pairs;
             this.mCallback = mCallback;
             this.context = context;
+            this.serverRequestType = serverRequestType;
         }
 
         @Override

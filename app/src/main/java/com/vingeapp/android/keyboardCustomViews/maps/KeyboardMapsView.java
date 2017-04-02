@@ -48,7 +48,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 @SuppressWarnings({"FieldCanBeLocal", "SimplifiableIfStatement"})
-public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyIds, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,Refreshable {
+public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyIds, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener, Refreshable {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private static int UPDATE_INTERVAL = 10000; // 10 sec
     private static int FATEST_INTERVAL = 5000; // 5 sec
@@ -63,9 +63,9 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
 
     @Override
     public boolean doRefresh() {
-       if (searchView!=null){
-           return searchView.doRefresh();
-       }
+        if (searchView != null) {
+            return searchView.doRefresh();
+        }
         return false;
     }
 
@@ -152,7 +152,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     }
 
 
-    public View_State getCurrentViewState(){
+    public View_State getCurrentViewState() {
         return mCurrentViewState;
     }
 
@@ -163,6 +163,8 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
             @Override
             public void onItemClicked(LocationModel locationModel) {
                 toggleViews(true);
+                makeLocationRequest(locationModel.displayName);
+
             }
         });
         return searchMapsView;
@@ -236,15 +238,16 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     }
 
     @SuppressWarnings("deprecation")
-    private void makeLocationRequest() {
+    private void makeLocationRequest(@NonNull String location) {
         List<NameValuePair> pairs = new ArrayList<>();
-        pairs.add(new BasicNameValuePair("address", "delhi"));
+        pairs.add(new BasicNameValuePair("address", location));
         RequestManager.makeGetRequest(getContext(), ServerRequestType.GOOGLE_MAPS_API, pairs, onRequestFinishCallback);
     }
 
     RequestManager.OnRequestFinishCallback onRequestFinishCallback = new RequestManager.OnRequestFinishCallback() {
         @Override
         public void onBindParams(boolean success, Object response) {
+            Log.d(TAG, "onBindParams: success ? " + success + " " + response);
 
         }
 
