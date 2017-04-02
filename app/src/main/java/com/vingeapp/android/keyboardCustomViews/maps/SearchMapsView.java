@@ -56,6 +56,12 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
 
     @Override
     public boolean doRefresh() {
+        if (mEditText != null) {
+            mEditText.setText("");
+            if (!mEditText.hasFocus())
+                mEditText.requestFocus();
+            return true;
+        }
         return false;
     }
 
@@ -132,4 +138,6 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
     public interface LocationItemClickedListener {
         void onItemClicked(LocationModel locationModel);
     }
+
+
 }

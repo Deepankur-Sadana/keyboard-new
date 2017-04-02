@@ -30,6 +30,7 @@ import com.vingeapp.android.R;
 import com.vingeapp.android.apiHandling.RequestManager;
 import com.vingeapp.android.apiHandling.ServerRequestType;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+import com.vingeapp.android.interfaces.Refreshable;
 import com.vingeapp.android.models.LocationModel;
 
 import org.apache.http.NameValuePair;
@@ -46,8 +47,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by deepankursadana on 18/03/17.
  */
 
-@SuppressWarnings("FieldCanBeLocal")
-public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyIds, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+@SuppressWarnings({"FieldCanBeLocal", "SimplifiableIfStatement"})
+public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyIds, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener,Refreshable {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private static int UPDATE_INTERVAL = 10000; // 10 sec
     private static int FATEST_INTERVAL = 5000; // 5 sec
@@ -59,6 +60,18 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
     private Context context;
+
+    @Override
+    public boolean doRefresh() {
+       if (searchView!=null){
+           return searchView.doRefresh();
+       }
+        return false;
+    }
+
+    public enum View_State {MAPS, SEARCH}
+
+    private View_State mCurrentViewState = View_State.SEARCH;
 
 
     public KeyboardMapsView(@NonNull Context context) {
@@ -77,7 +90,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         init(context);
     }
 
-    private View searchView;
+    private SearchMapsView searchView;
 
     private void init(final Context context) {
         this.context = context;
@@ -125,7 +138,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
 //
     }
 
-    private void toggleViews (boolean hideSearchView) {
+    private void toggleViews(boolean hideSearchView) {
         if (hideSearchView) {
             mapContainerView.setVisibility(VISIBLE);
             searchView.setVisibility(GONE);
@@ -135,9 +148,15 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
             mapContainerView.setVisibility(GONE);
             searchView.setVisibility(VISIBLE);
         }
+        mCurrentViewState = hideSearchView ? View_State.MAPS : View_State.SEARCH;
     }
 
-    private View getSearchView(Context context) {
+
+    public View_State getCurrentViewState(){
+        return mCurrentViewState;
+    }
+
+    private SearchMapsView getSearchView(Context context) {
         SearchMapsView searchMapsView = new SearchMapsView(context);
 
         searchMapsView.setLocationItemClickedListener(new SearchMapsView.LocationItemClickedListener() {

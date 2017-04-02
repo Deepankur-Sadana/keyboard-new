@@ -55,6 +55,8 @@ public class  ViewController implements GreenBotMessageKeyIds {
                 return true;
             }
         });
+
+        tabStripView.setViewController(this);
         tabStripView.setOnOptionClickedListener(new TabStripView.OnOptionClickedListener() {
             @Override
             public void onOptionClicked(KeyBoardOptions keyBoardOptions) {
@@ -157,6 +159,10 @@ public class  ViewController implements GreenBotMessageKeyIds {
         }
     }
 
+    public View getViewByTag(KeyBoardOptions tag){
+        FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.fragmentContainerFrame);
+        return frameLayout.findViewWithTag(tag);
+    }
     private void addView(FrameLayout frameLayout, KeyBoardOptions keyBoardOptions) {
         if (keyBoardOptions == KeyBoardOptions.FAVORITE_APPS) {
             final FavouriteApplicationView favouriteApplicationView = new FavouriteApplicationView(context);

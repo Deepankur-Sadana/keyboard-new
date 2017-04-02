@@ -21,6 +21,7 @@ import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.enums.KeyBoardOptions;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+import com.vingeapp.android.keyboardCustomViews.maps.KeyboardMapsView;
 
 import de.greenrobot.event.EventBus;
 import utils.AppLibrary;
@@ -31,6 +32,7 @@ import utils.AppLibrary;
 
 public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds {
     Context context;
+    private ViewController viewController;
 
 
     public TabStripView(Context context) {
@@ -138,7 +140,12 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
                 EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
                 break;
             case MAPS:
-                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+                if (viewController != null) {
+                    KeyboardMapsView keyboardMapsView = (KeyboardMapsView) viewController.getViewByTag(KeyBoardOptions.MAPS);
+                    if (keyboardMapsView == null || keyboardMapsView.getCurrentViewState() == KeyboardMapsView.View_State.SEARCH) {
+                        EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+                    }
+                }
                 break;
             default:
                 break;
@@ -153,6 +160,10 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
 
     public void setOnOptionClickedListener(OnOptionClickedListener onOptionClickedListener) {
         this.onOptionClickedListener = onOptionClickedListener;
+    }
+
+    public void setViewController(ViewController viewController) {
+        this.viewController = viewController;
     }
 
     interface OnOptionClickedListener {
