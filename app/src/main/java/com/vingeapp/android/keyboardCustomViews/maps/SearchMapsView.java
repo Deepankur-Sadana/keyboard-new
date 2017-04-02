@@ -1,6 +1,7 @@
 package com.vingeapp.android.keyboardCustomViews.maps;
 
 import android.content.Context;
+import android.os.Handler;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,15 +16,25 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
+import com.google.gson.Gson;
 import com.vingeapp.android.InAppEditingController;
 import com.vingeapp.android.R;
+import com.vingeapp.android.googleLocationApiResponse.Result;
 import com.vingeapp.android.adapters.SearchMapsAdapter;
+import com.vingeapp.android.apiHandling.RequestManager;
+import com.vingeapp.android.apiHandling.ServerRequestType;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.interfaces.Refreshable;
-import com.vingeapp.android.models.LocationModel;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by deepankursadana on 02/04/17.
@@ -35,7 +46,7 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
     private RecyclerView mRecycler;
     private EditText mEditText;
     private SearchMapsAdapter searchLocationAdapter;
-    ArrayList<LocationModel> suggestedLocationModels;
+    ArrayList<Result> suggestedLocationModels;
 
     String TAG = getClass().getSimpleName();
 
@@ -56,17 +67,24 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
 
     @Override
     public boolean doRefresh() {
+        if (mEditText != null) {
+            mEditText.setText("");
+            if (!mEditText.hasFocus())
+                mEditText.requestFocus();
+            return true;
+        }
         return false;
     }
 
 
-    private void notifyEditTextContentChanged(String newText) {
-        if (suggestedLocationModels != null && suggestedLocationModels.size() >= 1) {
-            suggestedLocationModels.get(0).displayName = newText;
-            if (searchLocationAdapter != null)
-                searchLocationAdapter.notifyItemChanged(0);
+    Handler queryHandler = new Handler();
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            if (mEditText != null)
+                makeLocationRequest(mEditText.getText().toString());
         }
-    }
+    };
 
     private void init(final Context context) {
         rootView = inflate(context, R.layout.keyboard_view_search_list, null);
@@ -88,16 +106,16 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
 
             @Override
             public void afterTextChanged(Editable s) {
-                notifyEditTextContentChanged(s.toString());
+                queryHandler.removeCallbacksAndMessages(null);
+                queryHandler.postDelayed(r, 800);
             }
         });
 
         suggestedLocationModels = new ArrayList<>();
-        suggestedLocationModels.add(new LocationModel());//addind zeroeth item ourselves
         searchLocationAdapter = new SearchMapsAdapter(suggestedLocationModels, context, new RecyclerViewClickInterface() {
             @Override
             public void onItemClick(int clickType, int extras, Object data) {
-                LocationModel locationModel = (LocationModel) data;
+                Result locationModel = (Result) data;
 //                EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
 //                EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, locationModel.displayName));
                 if (locationItemClickedListener != null)
@@ -130,6 +148,49 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
     }
 
     public interface LocationItemClickedListener {
-        void onItemClicked(LocationModel locationModel);
+        void onItemClicked(Result locationModel);
     }
+
+    @SuppressWarnings("deprecation")
+    private void makeLocationRequest(@NonNull String location) {
+        List<NameValuePair> pairs = new ArrayList<>();
+        pairs.add(new BasicNameValuePair("address", location));
+        RequestManager.makeGetRequest(getContext(), ServerRequestType.GOOGLE_MAPS_API, pairs, onRequestFinishCallback);
+    }
+
+    RequestManager.OnRequestFinishCallback onRequestFinishCallback = new RequestManager.OnRequestFinishCallback() {
+        @Override
+        public void onBindParams(boolean success, Object response) {
+            JSONObject object = (JSONObject) response;
+            JSONArray array = null;
+            try {
+                ArrayList<Result> results = new ArrayList<>();
+                array = object.getJSONArray("results");
+
+                for (int i = 0; i < array.length(); i++) {
+                    Object apiResponse = array.get(i);
+                    Result result = new Gson().fromJson(String.valueOf(apiResponse), Result.class);
+                    results.add(result);
+                }
+
+                suggestedLocationModels.clear();
+                suggestedLocationModels.addAll(results);
+                if (searchLocationAdapter != null)
+                    searchLocationAdapter.notifyDataSetChanged();
+                Log.d(TAG, "onBindParams: " + results);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        @Override
+        public boolean isDestroyed() {
+            return false;
+        }
+    };
+
+
 }
