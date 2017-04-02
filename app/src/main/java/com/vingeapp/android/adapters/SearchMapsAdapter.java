@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.vingeapp.android.R;
+import com.vingeapp.android.googleLocationApiResponse.Result;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
-import com.vingeapp.android.models.LocationModel;
 
 import java.util.ArrayList;
 
@@ -19,16 +19,16 @@ import utils.AppLibrary;
  */
 
 public class SearchMapsAdapter extends RecyclerView.Adapter<SearchMapsAdapter.VHItem> {
-    private ArrayList<LocationModel> locationModelArrayList;
+    private ArrayList<Result> locationModelArrayList;
     private Context context;
     private RecyclerViewClickInterface recyclerViewClickInterface;
 
-    public void setContactList(ArrayList<LocationModel> contactList) {
+    public void setContactList(ArrayList<Result> contactList) {
         this.locationModelArrayList = contactList;
         notifyDataSetChanged();
     }
 
-    public SearchMapsAdapter(ArrayList<LocationModel> contactList, Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
+    public SearchMapsAdapter(ArrayList<Result> contactList, Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.locationModelArrayList = contactList;
         this.context = context;
         this.recyclerViewClickInterface = recyclerViewClickInterface;
@@ -42,8 +42,8 @@ public class SearchMapsAdapter extends RecyclerView.Adapter<SearchMapsAdapter.VH
 
     @Override
     public void onBindViewHolder(VHItem holder, int position) {
-        LocationModel locationModel = locationModelArrayList.get(position);
-        holder.itemName.setText(locationModel.displayName);
+        Result locationModel = locationModelArrayList.get(position);
+        holder.itemName.setText(locationModel.getFormatted_address());
         holder.rootView.setTag(locationModel);
     }
 

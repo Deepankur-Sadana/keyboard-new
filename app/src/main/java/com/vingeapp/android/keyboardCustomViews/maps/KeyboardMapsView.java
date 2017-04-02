@@ -27,17 +27,9 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
-import com.vingeapp.android.apiHandling.RequestManager;
-import com.vingeapp.android.apiHandling.ServerRequestType;
+import com.vingeapp.android.googleLocationApiResponse.Result;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.Refreshable;
-import com.vingeapp.android.models.LocationModel;
-
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -161,9 +153,8 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
 
         searchMapsView.setLocationItemClickedListener(new SearchMapsView.LocationItemClickedListener() {
             @Override
-            public void onItemClicked(LocationModel locationModel) {
+            public void onItemClicked(Result locationModel) {
                 toggleViews(true);
-                makeLocationRequest(locationModel.displayName);
 
             }
         });
@@ -237,23 +228,5 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         updateMyLocationOnMap(location);
     }
 
-    @SuppressWarnings("deprecation")
-    private void makeLocationRequest(@NonNull String location) {
-        List<NameValuePair> pairs = new ArrayList<>();
-        pairs.add(new BasicNameValuePair("address", location));
-        RequestManager.makeGetRequest(getContext(), ServerRequestType.GOOGLE_MAPS_API, pairs, onRequestFinishCallback);
-    }
 
-    RequestManager.OnRequestFinishCallback onRequestFinishCallback = new RequestManager.OnRequestFinishCallback() {
-        @Override
-        public void onBindParams(boolean success, Object response) {
-            Log.d(TAG, "onBindParams: success ? " + success + " " + response);
-
-        }
-
-        @Override
-        public boolean isDestroyed() {
-            return false;
-        }
-    };
 }
