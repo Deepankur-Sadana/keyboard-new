@@ -1,14 +1,11 @@
 package com.vingeapp.android.keyboardCustomViews.maps;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -26,8 +23,22 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
+import com.vingeapp.android.apiHandling.RequestManager;
+import com.vingeapp.android.apiHandling.ServerRequestType;
+import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+import com.vingeapp.android.models.LocationModel;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import de.greenrobot.event.EventBus;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -36,14 +47,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 @SuppressWarnings("FieldCanBeLocal")
-public class KeyboardMapsView extends FrameLayout implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
+public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyIds, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, LocationListener {
     private final static int PLAY_SERVICES_RESOLUTION_REQUEST = 1000;
     private static int UPDATE_INTERVAL = 10000; // 10 sec
     private static int FATEST_INTERVAL = 5000; // 5 sec
     private static int DISPLACEMENT = 10; // 10 meters
     private final String TAG = getClass().getSimpleName();
     private GoogleMap mGoogleMap;
-    private View rootView;
+    private View mapContainerView;
     private MapView map;
     private GoogleApiClient mGoogleApiClient;
     private LocationRequest mLocationRequest;
@@ -66,13 +77,17 @@ public class KeyboardMapsView extends FrameLayout implements GoogleApiClient.Con
         init(context);
     }
 
+    private View searchView;
+
     private void init(final Context context) {
         this.context = context;
-        rootView = inflate(context, R.layout.keyboard_view_maps, null);
-        map = (MapView) rootView.findViewById(R.id.mapView);
+        mapContainerView = inflate(context, R.layout.keyboard_view_maps, null);
+        map = (MapView) mapContainerView.findViewById(R.id.mapView);
 
         map.onCreate(null);
-        this.addView(rootView);
+        this.addView(mapContainerView);
+        searchView = getSearchView(context);
+        this.addView(searchView);
         map.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(GoogleMap googleMap) {
@@ -96,9 +111,42 @@ public class KeyboardMapsView extends FrameLayout implements GoogleApiClient.Con
                 if (mGoogleApiClient != null && mGoogleApiClient.isConnected()) {
                     startLocationUpdates();
                 }
+                mGoogleMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker arg0) {
+//                        if (arg0.getTitle().equals("10009 - Bt Merah Ctrl"))
+                        Log.d(TAG, "onMarkerClick: " + arg0);
+                        return true;
+                    }
+                });
+
             }
         });
 //
+    }
+
+    private void toggleViews (boolean hideSearchView) {
+        if (hideSearchView) {
+            mapContainerView.setVisibility(VISIBLE);
+            searchView.setVisibility(GONE);
+            EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
+
+        } else {
+            mapContainerView.setVisibility(GONE);
+            searchView.setVisibility(VISIBLE);
+        }
+    }
+
+    private View getSearchView(Context context) {
+        SearchMapsView searchMapsView = new SearchMapsView(context);
+
+        searchMapsView.setLocationItemClickedListener(new SearchMapsView.LocationItemClickedListener() {
+            @Override
+            public void onItemClicked(LocationModel locationModel) {
+                toggleViews(true);
+            }
+        });
+        return searchMapsView;
     }
 
     private boolean checkPlayServices() {
@@ -140,34 +188,15 @@ public class KeyboardMapsView extends FrameLayout implements GoogleApiClient.Con
     private Location mLastLocation;
 
 
+    @SuppressWarnings("MissingPermission")
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
-        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
         updateMyLocationOnMap(mLastLocation);
     }
 
+    @SuppressWarnings("MissingPermission")
     protected void startLocationUpdates() {
-        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
         LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, (LocationListener) this);
     }
 
@@ -186,4 +215,23 @@ public class KeyboardMapsView extends FrameLayout implements GoogleApiClient.Con
         mLastLocation = location;
         updateMyLocationOnMap(location);
     }
+
+    @SuppressWarnings("deprecation")
+    private void makeLocationRequest() {
+        List<NameValuePair> pairs = new ArrayList<>();
+        pairs.add(new BasicNameValuePair("address", "delhi"));
+        RequestManager.makeGetRequest(getContext(), ServerRequestType.GOOGLE_MAPS_API, pairs, onRequestFinishCallback);
+    }
+
+    RequestManager.OnRequestFinishCallback onRequestFinishCallback = new RequestManager.OnRequestFinishCallback() {
+        @Override
+        public void onBindParams(boolean success, Object response) {
+
+        }
+
+        @Override
+        public boolean isDestroyed() {
+            return false;
+        }
+    };
 }

@@ -94,6 +94,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         }
     }
 
+    @SuppressWarnings("unused")
     public void onEvent(MessageEvent event) {
         if (event.getMessageType() == SWITCH_TO_QWERTY) {
             switchToQwertyMode();
@@ -136,9 +137,9 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
             case CONTACTS:
                 EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
                 break;
-//            case MAPS:
-//                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
-//                break;
+            case MAPS:
+                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+                break;
             default:
                 break;
         }

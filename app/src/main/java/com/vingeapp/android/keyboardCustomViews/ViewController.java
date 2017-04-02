@@ -22,7 +22,7 @@ import de.greenrobot.event.EventBus;
  * Created by deepankur on 2/7/17.
  */
 
-public class ViewController implements GreenBotMessageKeyIds {
+public class  ViewController implements GreenBotMessageKeyIds {
     private TabStripView tabStripView;
     private Context context;
     private View rootView;
@@ -99,6 +99,7 @@ public class ViewController implements GreenBotMessageKeyIds {
         }
     }
 
+    @SuppressWarnings("unused")
     public void onEvent(MessageEvent messageEvent) {
         if (messageEvent.getMessageType() == POPUP_KEYBOARD_FOR_IN_APP_EDITING)
             bringKeyboardToFrameContainerBottom();
