@@ -55,7 +55,11 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
         loadAllThePackages(this);
         if (asyncTask != null) {
             asyncTask.setAsyncListener(asyncListener);
-            asyncTask.execute();
+            try {
+                asyncTask.execute();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -71,13 +75,33 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
 
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume: ");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause: ");
+        EventBus.getDefault().post(new MessageEvent(FAVOURITE_APP_PREFERRED_LIST_CHANGED, null));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop: ");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
+        Log.d(TAG, "onDestroy: ");
         EventBus.getDefault().unregister(this);
 
         for (int i = 0; i < allPackagesinfo.size(); i++) {
             PInfo pInfo = allPackagesinfo.get(i);
-            Log.d(TAG, "onDestroy: " + pInfo.pname);
+//            Log.d(TAG, "onDestroy: " + pInfo.pname);
             if (pInfo.isChecked)
                 FireBaseHelper.getInstance(this).addPackageNameToPrefs(pInfo.pname);
             else

@@ -38,9 +38,20 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     public FavouriteApplicationsListAdapter(Context context, RecyclerViewClickInterface recyclerViewClickInterface) {
         this.context = context;
         this.recyclerViewClickInterface = recyclerViewClickInterface;
-        long l1 = System.currentTimeMillis();
-        pInfoArrayList = MyActivity.allPackagesinfo;
-        Log.d(TAG, "FavouriteApplicationsListAdapter: " + (System.currentTimeMillis() - l1));
+        setPreferredApps();
+    }
+
+
+    public void setPreferredApps() {
+        if (pInfoArrayList == null)
+            pInfoArrayList = new ArrayList<>();
+        else pInfoArrayList.clear();
+
+        for (int i = 0; i < MyActivity.allPackagesinfo.size(); i++) {
+            PInfo pInfo = MyActivity.allPackagesinfo.get(i);
+            if (pInfo.isChecked)
+                pInfoArrayList.add(pInfo);
+        }
     }
 
     @Override
@@ -96,9 +107,6 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     }
 
 
-    public void refresh() {
-        Log.d(TAG, "refresh: ");
-    }
 
 
     private class VHItem extends RecyclerView.ViewHolder {

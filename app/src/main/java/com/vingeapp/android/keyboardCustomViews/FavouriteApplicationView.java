@@ -6,19 +6,25 @@ import android.graphics.Color;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.vingeapp.android.MessageEvent;
+import com.vingeapp.android.activities.MyActivity;
 import com.vingeapp.android.adapters.FavouriteApplicationsListAdapter;
-import com.vingeapp.android.adapters.FavouriteApplicationsListAdapter;
+import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.interfaces.Refreshable;
+
+import de.greenrobot.event.EventBus;
+
 
 /**
  * Created by deepankur on 2/7/17.
  */
 
-public class FavouriteApplicationView extends RelativeLayout implements Refreshable {
+public class FavouriteApplicationView extends RelativeLayout implements Refreshable, GreenBotMessageKeyIds {
     public FavouriteApplicationView(Context context) {
         super(context);
         init(context);
@@ -38,6 +44,7 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
 
     private void init(final Context context) {
         this.setBackgroundColor(Color.WHITE);
+        EventBus.getDefault().register(this);
         RecyclerView recyclerView = new RecyclerView(context);
         recyclerView.setLayoutManager(new GridLayoutManager(context, 3));
         favouriteApplicationsListAdapter = new FavouriteApplicationsListAdapter(context, new RecyclerViewClickInterface() {
@@ -57,10 +64,28 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
     @Override
     public boolean doRefresh() {
         if (favouriteApplicationsListAdapter != null) {
-            favouriteApplicationsListAdapter.refresh();
+            favouriteApplicationsListAdapter.setPreferredApps();
             favouriteApplicationsListAdapter.notifyDataSetChanged();
             return true;
         }
         return false;
+    }
+
+    private final String TAG = getClass().getSimpleName();
+
+    /**
+     * Called by {@link MyActivity#onPause()}
+     *
+     * @param messageEvent
+     */
+    @SuppressWarnings("unused")
+    public void onEvent(MessageEvent messageEvent) {
+        Log.d(TAG, "onEvent: " + messageEvent.getMessageType());
+        if (messageEvent.getMessageType() == FAVOURITE_APP_PREFERRED_LIST_CHANGED) {
+            if (favouriteApplicationsListAdapter != null) {
+                favouriteApplicationsListAdapter.setPreferredApps();
+                favouriteApplicationsListAdapter.notifyDataSetChanged();
+            }
+        }
     }
 }
