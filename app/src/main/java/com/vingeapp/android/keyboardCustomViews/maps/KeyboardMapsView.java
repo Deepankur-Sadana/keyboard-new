@@ -31,6 +31,9 @@ import com.vingeapp.android.googleLocationApiResponse.Result;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.Refreshable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import de.greenrobot.event.EventBus;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -130,6 +133,12 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
 //
     }
 
+    private HashMap<Marker, Result> markerResultHashMap = new HashMap<>();
+
+    private void makeEntry(Marker marker, Result result) {
+        markerResultHashMap.put(marker, result);
+    }
+
     private void toggleViews(boolean hideSearchView) {
         if (hideSearchView) {
             mapContainerView.setVisibility(VISIBLE);
@@ -154,12 +163,15 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         searchMapsView.setLocationItemClickedListener(new SearchMapsView.LocationItemClickedListener() {
             @Override
             public void onItemClicked(Result locationModel) {
+                clickedResults.add(locationModel);
                 toggleViews(true);
-
+                addLocationOnMap(locationModel.getGeometry().getLocation().getLat(), locationModel.getGeometry().getLocation().getLng(), locationModel);
             }
         });
         return searchMapsView;
     }
+
+    private ArrayList<Result> clickedResults = new ArrayList<>();
 
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
@@ -191,14 +203,18 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         mLocationRequest.setSmallestDisplacement(DISPLACEMENT);
     }
 
-    private void updateMyLocationOnMap(Location location) {
-        if (location==null){
-            Log.e(TAG, "updateMyLocationOnMap: location null returning" );
-            return;
-        }
-        LatLng myLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        mGoogleMap.addMarker(new MarkerOptions().position(myLocation));
 
+    private void addLocationOnMap(double lat, double lng, Result result) {
+
+        LatLng latLng = new LatLng(lat, lng);
+        MarkerOptions position = new MarkerOptions().position(latLng);
+
+        if (result != null)
+            position.title(result.getFormatted_address());
+        else
+            position.title("!!!!!!!!!");
+
+        mGoogleMap.addMarker(position);
     }
 
     private Location mLastLocation;
@@ -208,7 +224,8 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     @Override
     public void onConnected(@Nullable Bundle bundle) {
         mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        updateMyLocationOnMap(mLastLocation);
+        if (mLastLocation != null)
+            addLocationOnMap(mLastLocation.getLatitude(), mLastLocation.getLongitude(), null);
     }
 
     @SuppressWarnings("MissingPermission")
@@ -229,7 +246,8 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     @Override
     public void onLocationChanged(Location location) {
         mLastLocation = location;
-        updateMyLocationOnMap(location);
+        if (mLastLocation != null)
+            addLocationOnMap(mLastLocation.getLatitude(), mLastLocation.getLongitude(), null);
     }
 
 
