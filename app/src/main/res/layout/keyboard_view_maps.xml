@@ -20,7 +20,6 @@
             android:id="@+id/TextView1"
             android:layout_width="match_parent"
             android:text="Location"
-
             android:textColor="#565656"
             android:layout_height="wrap_content"
             android:padding="6dp"
@@ -59,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingStart="8dp"
-            android:layout_marginRight="60dp"
+            android:layout_toStartOf="@id/shareTV"
             android:text="Location"
             android:textColor="#565656"/>
 
