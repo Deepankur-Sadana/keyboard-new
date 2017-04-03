@@ -19,15 +19,19 @@
         <TextView
             android:id="@+id/TextView1"
             android:layout_width="match_parent"
+            android:text="Location"
+
+            android:textColor="#565656"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:padding="6dp" />
+            android:padding="6dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/backIV"
+            android:layout_marginStart="10dp" />
 
         <ImageView
             android:id="@+id/backIV"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignStart="@+id/TextView1"
             android:layout_centerVertical="true"
             android:src="@drawable/ic_arrow_back_black_24dp" />
 
@@ -49,12 +53,14 @@
         android:background="@android:color/white">
 
         <TextView
+
             android:id="@+id/TextView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingStart="8dp"
-            android:text="Location" />
+            android:text="Location"
+            android:textColor="#565656"/>
 
         <TextView
             android:id="@+id/shareTV"
