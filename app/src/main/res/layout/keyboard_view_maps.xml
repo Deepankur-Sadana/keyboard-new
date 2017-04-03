@@ -59,6 +59,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:paddingStart="8dp"
+            android:layout_marginRight="60dp"
             android:text="Location"
             android:textColor="#565656"/>
 

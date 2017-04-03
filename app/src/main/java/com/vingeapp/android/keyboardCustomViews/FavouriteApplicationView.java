@@ -12,10 +12,12 @@ import android.widget.RelativeLayout;
 
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.activities.MyActivity;
+import com.vingeapp.android.adapters.BaseRecylerAdapter;
 import com.vingeapp.android.adapters.FavouriteApplicationsListAdapter;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.interfaces.Refreshable;
+import com.vingeapp.android.models.PInfo;
 
 import de.greenrobot.event.EventBus;
 
@@ -25,6 +27,7 @@ import de.greenrobot.event.EventBus;
  */
 
 public class FavouriteApplicationView extends RelativeLayout implements Refreshable, GreenBotMessageKeyIds {
+
     public FavouriteApplicationView(Context context) {
         super(context);
         init(context);
@@ -50,6 +53,8 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
         favouriteApplicationsListAdapter = new FavouriteApplicationsListAdapter(context, new RecyclerViewClickInterface() {
             @Override
             public void onItemClick(int clickType, int extras, Object data) {
+                Log.d(TAG, "onItemClick: clickType" + clickType + "extras" + extras + "data" + data);
+
                 String packageName = (String) data;
                 Intent LaunchIntent = context.getPackageManager().getLaunchIntentForPackage(packageName);
                 context.startActivity(LaunchIntent);
@@ -88,4 +93,6 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
             }
         }
     }
+
+
 }
