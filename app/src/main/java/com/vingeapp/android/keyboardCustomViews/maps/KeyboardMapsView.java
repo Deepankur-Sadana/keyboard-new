@@ -90,6 +90,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
 
     private SearchMapsView searchView;
     private RelativeLayout locationRl1, locationRl2;
+    String lat = "", lng = "";
 
     void updateLocationInTheView(Result result) {
         if (result != null) {
@@ -98,9 +99,16 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
             if (result.getAddress_components().size() >= 0)
                 ((TextView) locationRl1.findViewById(R.id.TextView1)).setText(result.getAddress_components().get(0).getLong_name());
             ((TextView) locationRl2.findViewById(R.id.TextView2)).setText(result.getFormatted_address());
+            lat = String.valueOf(result.getGeometry().getLocation().getLat());
+            lng = String.valueOf(result.getGeometry().getLocation().getLng());
         } else {
             ((TextView) locationRl1.findViewById(R.id.TextView1)).setText("My location");
             ((TextView) locationRl2.findViewById(R.id.TextView2)).setText("My location");
+
+            if (mLastLocation != null) {
+                lat = String.valueOf(mLastLocation.getLatitude());
+                lng = String.valueOf(mLastLocation.getLongitude());
+            }
         }
     }
 
@@ -118,7 +126,8 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         locationRl2.findViewById(R.id.shareTV).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, "hello!"));
+                String s = "http://maps.google.com/?q=" + lat + "," + lng + "&hl=en&gl=us";
+                EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, s));
                 EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
 
             }
