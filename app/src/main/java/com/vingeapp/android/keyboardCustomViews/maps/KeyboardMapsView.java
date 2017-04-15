@@ -34,7 +34,6 @@ import com.vingeapp.android.googleLocationApiResponse.Result;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.Refreshable;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import de.greenrobot.event.EventBus;
@@ -92,10 +91,13 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     private RelativeLayout locationRl1, locationRl2;
     String lat = "", lng = "";
 
+    /**
+     * for writing names and address of the location,,
+     *
+     * @param result is null if passing current location
+     */
     void updateLocationInTheView(Result result) {
         if (result != null) {
-            Log.e(TAG, "updateLocationInTheView: result is null returning");
-
             if (result.getAddress_components().size() >= 0)
                 ((TextView) locationRl1.findViewById(R.id.TextView1)).setText(result.getAddress_components().get(0).getLong_name());
             ((TextView) locationRl2.findViewById(R.id.TextView2)).setText(result.getFormatted_address());
@@ -247,7 +249,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     }
 
     private void toggleViews(boolean hideSearchView) {
-        if (hideSearchView) {
+        if (hideSearchView == true) {
             mapContainerView.setVisibility(VISIBLE);
             searchView.setVisibility(GONE);
             EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
@@ -273,7 +275,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         searchMapsView.setLocationItemClickedListener(new SearchMapsView.LocationItemClickedListener() {
             @Override
             public void onItemClicked(Result locationModel) {
-                clickedResults.add(locationModel);
+//                clickedResults.add(locationModel);
                 toggleViews(true);
                 updateLocationInTheView(locationModel);
                 addLocationOnMap(locationModel.getGeometry().getLocation().getLat(), locationModel.getGeometry().getLocation().getLng(), locationModel);
@@ -282,7 +284,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         return searchMapsView;
     }
 
-    private ArrayList<Result> clickedResults = new ArrayList<>();
+//    private ArrayList<Result> clickedResults = new ArrayList<>();
 
     private boolean checkPlayServices() {
         int resultCode = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getContext());
@@ -315,17 +317,23 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     }
 
 
-    private void addLocationOnMap(double lat, double lng, Result result) {
+    /**
+     * @param lat    of the location
+     * @param lng    of the location
+     * @param result :- will be null if passing "my location"
+     */
+    private void addLocationOnMap(double lat, double lng, @Nullable Result result) {
 
         LatLng latLng = new LatLng(lat, lng);
-        MarkerOptions position = new MarkerOptions().position(latLng);
+        MarkerOptions p = new MarkerOptions();
+        p.position(latLng);
 
         if (result != null)
-            position.title(result.getFormatted_address());
+            p.title(result.getFormatted_address());
         else
-            position.title("!!!!!!!!!");
+            p.title("!!!!!!!!!");
 
-        Marker marker = mGoogleMap.addMarker(position);
+        Marker marker = mGoogleMap.addMarker(p);
 
         makeEntry(marker, result);
     }

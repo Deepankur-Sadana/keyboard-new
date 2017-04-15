@@ -55,7 +55,7 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     @Override
     public int getItemCount() {
-        Log.d(TAG, "getItemCount: ");
+        Log.d(TAG, "getItemCount: " + allPackagesinfo.size());
         return (allPackagesinfo.size());
     }
 
@@ -79,9 +79,11 @@ public class MyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                     boolean wasCheckBoxChecked = checkBox.isChecked();
                     if (wasCheckBoxChecked) {//check box was checked earlier, unchecking it now
                         checkBox.setChecked(false);
+                        Log.d(TAG, "onClick: unchecked");
                     } else {
                         //check box was unchecked earlier, checking it now
                         checkBox.setChecked(true);
+                        Log.d(TAG, "onClick: checked");
                     }
 
 //                    checkBox.setChecked(!checkBox.isChecked());

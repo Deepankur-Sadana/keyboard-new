@@ -78,7 +78,7 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
 
 
     Handler queryHandler = new Handler();
-    Runnable r = new Runnable() {
+    Runnable queryRunnable = new Runnable() {
         @Override
         public void run() {
             if (mEditText != null)
@@ -107,11 +107,12 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
             @Override
             public void afterTextChanged(Editable s) {
                 queryHandler.removeCallbacksAndMessages(null);
-                queryHandler.postDelayed(r, 800);
+                queryHandler.postDelayed(queryRunnable, 800);
             }
         });
 
         suggestedLocationModels = new ArrayList<>();
+
         searchLocationAdapter = new SearchMapsAdapter(suggestedLocationModels, context, new RecyclerViewClickInterface() {
             @Override
             public void onItemClick(int clickType, int extras, Object data) {
@@ -152,7 +153,7 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
     }
 
     @SuppressWarnings("deprecation")
-    private void makeLocationRequest(@NonNull String location) {
+    private void makeLocationRequest( String location) {
         List<NameValuePair> pairs = new ArrayList<>();
         pairs.add(new BasicNameValuePair("address", location));
         RequestManager.makeGetRequest(getContext(), ServerRequestType.GOOGLE_MAPS_API, pairs, onRequestFinishCallback);
