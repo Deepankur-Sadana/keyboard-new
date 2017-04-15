@@ -65,12 +65,16 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
             imageView.setImageResource(getResourceIdForTabStrip(keyBoardOptions[i]));
             imageView.setTag(keyBoardOptions[i]);
             imageView.setOnClickListener(onClickListener);
-            imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? 1f : 0.6f);
+            imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? SELECTED_ALPHA : UNSELECTED_ALPHA);
+            imageView.setScaleX(1.3f);
+            imageView.setScaleY(1.3f);
             this.addView(imageView);
             ((LayoutParams) imageView.getLayoutParams()).leftMargin = getMargin(i);
             ((LayoutParams) imageView.getLayoutParams()).rightMargin = getMargin(i);
         }
     }
+
+    private final float SELECTED_ALPHA = 1f, UNSELECTED_ALPHA = 0.5f;
 
     int getMargin(int index) {
         return (int) AppLibrary.convertDpToPixel(6, getContext());
@@ -133,7 +137,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         for (int i = 0; i < TabStripView.this.getChildCount(); i++) {
             ImageView imageView = (ImageView) TabStripView.this.getChildAt(i);
             KeyBoardOptions tag1 = (KeyBoardOptions) imageView.getTag();
-            imageView.setAlpha(tag == tag1 ? 1f : 0.6f);
+            imageView.setAlpha(tag == tag1 ? SELECTED_ALPHA : UNSELECTED_ALPHA);
         }
         switch (tag) {
             case CONTACTS:
