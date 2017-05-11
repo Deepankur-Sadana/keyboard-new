@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -30,7 +31,7 @@ import utils.AppLibrary;
  * Created by deepankur on 2/6/17.
  */
 
-public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds {
+public class TabStripView extends HorizontalScrollView implements GreenBotMessageKeyIds {
     Context context;
     private ViewController viewController;
 
@@ -56,9 +57,12 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
 
     private void init(Context context) {
         this.context = context;
+        this.setHorizontalScrollBarEnabled(false);
         EventBus.getDefault().register(this);
         int pixel = (int) AppLibrary.convertDpToPixel(8, context);
-        this.setGravity(Gravity.CENTER);
+        LinearLayout ll = new LinearLayout(context);
+        this.addView(ll);
+        ll.setGravity(Gravity.CENTER);
         for (int i = 0; i < keyBoardOptions.length; i++) {
             ImageView imageView = new ImageView(context);
             imageView.setPadding(pixel, pixel, pixel, pixel);
@@ -68,9 +72,9 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
             imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? SELECTED_ALPHA : UNSELECTED_ALPHA);
             imageView.setScaleX(1.3f);
             imageView.setScaleY(1.3f);
-            this.addView(imageView);
-            ((LayoutParams) imageView.getLayoutParams()).leftMargin = getMargin(i);
-            ((LayoutParams) imageView.getLayoutParams()).rightMargin = getMargin(i);
+            ll.addView(imageView);
+           ((LinearLayout.LayoutParams) imageView.getLayoutParams()).leftMargin = getMargin(i);
+            ((LinearLayout.LayoutParams) imageView.getLayoutParams()).rightMargin = getMargin(i);
         }
     }
 
@@ -135,9 +139,9 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         if (onOptionClickedListener != null)
             onOptionClickedListener.onOptionClicked(tag);
         for (int i = 0; i < TabStripView.this.getChildCount(); i++) {
-            ImageView imageView = (ImageView) TabStripView.this.getChildAt(i);
-            KeyBoardOptions tag1 = (KeyBoardOptions) imageView.getTag();
-            imageView.setAlpha(tag == tag1 ? SELECTED_ALPHA : UNSELECTED_ALPHA);
+            LinearLayout ll = (LinearLayout) TabStripView.this.getChildAt(i);
+            KeyBoardOptions tag1 = (KeyBoardOptions) ll.getTag();
+            ll.setAlpha(tag == tag1 ? SELECTED_ALPHA : UNSELECTED_ALPHA);
         }
         switch (tag) {
             case CONTACTS:
