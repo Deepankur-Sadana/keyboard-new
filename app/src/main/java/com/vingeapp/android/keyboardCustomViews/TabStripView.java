@@ -52,7 +52,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
     }
 
     private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
-            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.MY_PROFILE, KeyBoardOptions.SETTINGS
+            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.MY_PROFILE, KeyBoardOptions.SETTINGS, KeyBoardOptions.DICTIONARY
     };
 
     private void init(Context context) {
@@ -98,6 +98,8 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
                 return android.R.drawable.ic_menu_add;
             case SETTINGS:
                 return android.R.drawable.ic_menu_add;
+            case DICTIONARY:
+                return android.R.drawable.ic_menu_add;
             default:
                 return android.R.drawable.ic_menu_add;
 
@@ -138,10 +140,11 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
         mCurrentKeyboardOption = tag;
         if (onOptionClickedListener != null)
             onOptionClickedListener.onOptionClicked(tag);
-        for (int i = 0; i < TabStripView.this.getChildCount(); i++) {
-            LinearLayout ll = (LinearLayout) TabStripView.this.getChildAt(i);
-            KeyBoardOptions tag1 = (KeyBoardOptions) ll.getTag();
-            ll.setAlpha(tag == tag1 ? SELECTED_ALPHA : UNSELECTED_ALPHA);
+        LinearLayout ll = (LinearLayout) TabStripView.this.getChildAt(0);
+        for (int i = 0; i < ll.getChildCount(); i++) {
+            View ImageView = (ImageView) ll.getChildAt(i);
+            KeyBoardOptions tag1 = (KeyBoardOptions) ImageView.getTag();
+            ImageView.setAlpha(tag == tag1 ? SELECTED_ALPHA : UNSELECTED_ALPHA);
         }
         switch (tag) {
             case CONTACTS:
@@ -155,6 +158,10 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
                     }
                 }
                 break;
+            case DICTIONARY:
+                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+                break;
+
             default:
                 break;
         }
