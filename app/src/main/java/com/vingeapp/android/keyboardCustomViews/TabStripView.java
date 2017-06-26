@@ -49,7 +49,8 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     }
 
     private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
-            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.MY_PROFILE, KeyBoardOptions.SETTINGS
+            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.WEB_VIEW
+//            KeyBoardOptions.MY_PROFILE, KeyBoardOptions.SETTINGS
     };
 
     private void init(Context context) {
@@ -94,6 +95,7 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         }
     }
 
+    @SuppressWarnings("unused")
     public void onEvent(MessageEvent event) {
         if (event.getMessageType() == SWITCH_TO_QWERTY) {
             switchToQwertyMode();
