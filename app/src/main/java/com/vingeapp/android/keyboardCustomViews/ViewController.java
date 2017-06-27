@@ -189,13 +189,16 @@ public class  ViewController implements GreenBotMessageKeyIds {
             final SettingsView settingsView = new SettingsView(context);
             settingsView.setTag(keyBoardOptions);
             frameLayout.addView(settingsView);
-        } else if (keyBoardOptions == KeyBoardOptions.DICTIONARY);{
+
+        } else if (keyBoardOptions == KeyBoardOptions.DICTIONARY){
             final  DictionaryView dictionaryView = new DictionaryView(context);
             dictionaryView.setTag(keyBoardOptions);
             frameLayout.addView(dictionaryView);
+        } else if (keyBoardOptions == KeyBoardOptions.WEB_VIEW) {
+            final SearchContactsView contactsView = new SearchContactsView(context);
+            contactsView.setTag(keyBoardOptions);
+            frameLayout.addView(contactsView);
         }
-
-
 
     }
 

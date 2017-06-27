@@ -103,6 +103,8 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
                 return android.R.drawable.ic_menu_add;
             case DICTIONARY:
                 return android.R.drawable.ic_menu_add;
+            case WEB_VIEW:
+                return android.R.drawable.ic_menu_search;
             default:
                 return android.R.drawable.ic_menu_add;
 
@@ -153,6 +155,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
             case CONTACTS:
                 EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
                 break;
+
             case MAPS:
                 if (viewController != null) {
                     KeyboardMapsView keyboardMapsView = (KeyboardMapsView) viewController.getViewByTag(KeyBoardOptions.MAPS);
@@ -165,6 +168,9 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
                 EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
                 break;
 
+            case WEB_VIEW:
+                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+                break;
             default:
                 break;
         }
