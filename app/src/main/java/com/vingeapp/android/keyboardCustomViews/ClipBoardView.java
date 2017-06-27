@@ -21,7 +21,6 @@ import com.vingeapp.android.interfaces.Refreshable;
 import com.vingeapp.android.models.ClipBoardItemModel;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import de.greenrobot.event.EventBus;
 
@@ -75,7 +74,7 @@ public class ClipBoardView extends FrameLayout implements Refreshable, Recyclabl
 
             } else if (holderType == BaseRecylerAdapter.ITEM_HOLDER) {
                 if (clickType == CLICK_TYPE_NORMAL) {
-                    EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, ((ClipBoardItemModel) data).getDescription()));
+                    EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, ((ClipBoardItemModel) data).getDescription()));
                     EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
 
                 } else if (clickType == CLICK_TYPE_LONG_PRESS) {

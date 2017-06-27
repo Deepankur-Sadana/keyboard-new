@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,4 +9,72 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-</RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/locationRL1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white">
+
+        <TextView
+            android:id="@+id/TextView1"
+            android:layout_width="match_parent"
+            android:text="Location"
+            android:textColor="#565656"
+            android:layout_height="wrap_content"
+            android:padding="6dp"
+            android:layout_alignParentTop="true"
+            android:layout_toEndOf="@+id/backIV"
+            android:layout_marginStart="10dp" />
+
+        <ImageView
+            android:id="@+id/backIV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_arrow_back_black_24dp" />
+
+        <ImageView
+            android:id="@+id/IV1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignEnd="@+id/TextView1"
+            android:layout_centerVertical="true"
+            android:src="@drawable/ic_clear_black_24dp" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/locationRL2"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        android:layout_gravity="bottom"
+        android:background="@android:color/white">
+
+        <TextView
+
+            android:id="@+id/TextView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:paddingStart="8dp"
+            android:layout_toStartOf="@+id/shareTV"
+            android:text="Location"
+            android:textColor="#565656"/>
+
+        <TextView
+            android:id="@+id/shareTV"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="8dp"
+            android:background="#0072bc"
+            android:gravity="center"
+            android:padding="8dp"
+            android:text="Share"
+            android:textAllCaps="false"
+            android:textColor="#bbffffff" />
+    </RelativeLayout>
+</FrameLayout>
+

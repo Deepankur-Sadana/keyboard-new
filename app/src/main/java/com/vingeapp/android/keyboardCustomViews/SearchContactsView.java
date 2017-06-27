@@ -59,7 +59,7 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
     }
 
     private void init(final Context context) {
-        rootView = inflate(context, R.layout.keyboard_view_search_contacts, null);
+        rootView = inflate(context, R.layout.keyboard_view_search_list, null);
         this.context = context;
         this.mRecycler = (RecyclerView) rootView.findViewById(R.id.contactsRecycler);
         this.mRecycler.setLayoutManager(new LinearLayoutManager(context));
@@ -79,7 +79,7 @@ public class SearchContactsView extends FrameLayout implements GreenBotMessageKe
                         public void onItemClick(int clickType, int extras, Object data) {
                             ContactsModel contactsModel = (ContactsModel) data;
                             EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
-                            EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, contactsModel.name + " " + contactsModel.number));
+                            EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, contactsModel.name + " " + contactsModel.number));
                         }
                     });
                     mRecycler.setAdapter(searchContactsAdapter);

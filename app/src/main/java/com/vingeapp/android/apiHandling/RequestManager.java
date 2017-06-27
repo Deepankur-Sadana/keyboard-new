@@ -54,7 +54,7 @@ public class RequestManager implements ServerKeyIDS {
     public static final String S3_IMAGE_BUCKET_PATH_PREFIX =
             "https://s3-ap-southeast-1.amazonaws.com/instalively.images/"; //Used for viewing images, so don't change
 
-    public static String APP_VERSION_CODE="v1";
+    private static String APP_VERSION_CODE="v1";
 
     public static void initialize(Context context) {
         //  mContext = context;
@@ -133,6 +133,8 @@ public class RequestManager implements ServerKeyIDS {
         switch (url_type) {
             case CREATE_USER_REQUEST:
                 url += "users/create";
+            case GOOGLE_MAPS_API:
+                url = "http://maps.googleapis.com/maps/api/geocode/json?";
         }
         Log.d(TAG, "getUrlFromType: " + url);
         return url;
@@ -257,19 +259,16 @@ public class RequestManager implements ServerKeyIDS {
     }
 
     private static class GetRequestTask extends AsyncTask<Object, Void, Object> {
-        //        int url_type;
-//        int object_type;
         List<NameValuePair> pairs;
         OnRequestFinishCallback mCallback;
         Context context;
         ServerRequestType serverRequestType;
 
-        public GetRequestTask(ServerRequestType serverRequestType, List<NameValuePair> pairs, OnRequestFinishCallback mCallback, Context context) {
-//            this.url_type = url_type;
-//            this.object_type = object_type;
+        GetRequestTask(ServerRequestType serverRequestType, List<NameValuePair> pairs, OnRequestFinishCallback mCallback, Context context) {
             this.pairs = pairs;
             this.mCallback = mCallback;
             this.context = context;
+            this.serverRequestType = serverRequestType;
         }
 
         @Override
@@ -336,8 +335,8 @@ public class RequestManager implements ServerKeyIDS {
     }
 
     public interface OnRequestFinishCallback {
-        public void onBindParams(boolean success, Object response);
+        void onBindParams(boolean success, Object response);
 
-        public boolean isDestroyed();
+        boolean isDestroyed();
     }
 }

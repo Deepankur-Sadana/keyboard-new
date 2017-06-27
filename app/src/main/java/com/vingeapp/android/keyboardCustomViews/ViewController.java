@@ -22,7 +22,7 @@ import de.greenrobot.event.EventBus;
  * Created by deepankur on 2/7/17.
  */
 
-public class ViewController implements GreenBotMessageKeyIds {
+public class  ViewController implements GreenBotMessageKeyIds {
     private TabStripView tabStripView;
     private Context context;
     private View rootView;
@@ -55,6 +55,8 @@ public class ViewController implements GreenBotMessageKeyIds {
                 return true;
             }
         });
+
+        tabStripView.setViewController(this);
         tabStripView.setOnOptionClickedListener(new TabStripView.OnOptionClickedListener() {
             @Override
             public void onOptionClicked(KeyBoardOptions keyBoardOptions) {
@@ -99,6 +101,7 @@ public class ViewController implements GreenBotMessageKeyIds {
         }
     }
 
+    @SuppressWarnings("unused")
     public void onEvent(MessageEvent messageEvent) {
         if (messageEvent.getMessageType() == POPUP_KEYBOARD_FOR_IN_APP_EDITING)
             bringKeyboardToFrameContainerBottom();
@@ -156,6 +159,10 @@ public class ViewController implements GreenBotMessageKeyIds {
         }
     }
 
+    public View getViewByTag(KeyBoardOptions tag){
+        FrameLayout frameLayout = (FrameLayout) rootView.findViewById(R.id.fragmentContainerFrame);
+        return frameLayout.findViewWithTag(tag);
+    }
     private void addView(FrameLayout frameLayout, KeyBoardOptions keyBoardOptions) {
         if (keyBoardOptions == KeyBoardOptions.FAVORITE_APPS) {
             final FavouriteApplicationView favouriteApplicationView = new FavouriteApplicationView(context);
@@ -182,9 +189,13 @@ public class ViewController implements GreenBotMessageKeyIds {
             final SettingsView settingsView = new SettingsView(context);
             settingsView.setTag(keyBoardOptions);
             frameLayout.addView(settingsView);
-
-
+        } else if (keyBoardOptions == KeyBoardOptions.DICTIONARY);{
+            final  DictionaryView dictionaryView = new DictionaryView(context);
+            dictionaryView.setTag(keyBoardOptions);
+            frameLayout.addView(dictionaryView);
         }
+
+
 
     }
 

@@ -13,6 +13,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -21,6 +22,7 @@ import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.enums.KeyBoardOptions;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+import com.vingeapp.android.keyboardCustomViews.maps.KeyboardMapsView;
 
 import de.greenrobot.event.EventBus;
 import utils.AppLibrary;
@@ -29,8 +31,9 @@ import utils.AppLibrary;
  * Created by deepankur on 2/6/17.
  */
 
-public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds {
+public class TabStripView extends HorizontalScrollView implements GreenBotMessageKeyIds {
     Context context;
+    private ViewController viewController;
 
 
     public TabStripView(Context context) {
@@ -49,27 +52,36 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
     }
 
     private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
+
             , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.WEB_VIEW
 //            KeyBoardOptions.MY_PROFILE, KeyBoardOptions.SETTINGS
+
     };
 
     private void init(Context context) {
         this.context = context;
+        this.setHorizontalScrollBarEnabled(false);
         EventBus.getDefault().register(this);
         int pixel = (int) AppLibrary.convertDpToPixel(8, context);
-        this.setGravity(Gravity.CENTER);
+        LinearLayout ll = new LinearLayout(context);
+        this.addView(ll);
+        ll.setGravity(Gravity.CENTER);
         for (int i = 0; i < keyBoardOptions.length; i++) {
             ImageView imageView = new ImageView(context);
             imageView.setPadding(pixel, pixel, pixel, pixel);
             imageView.setImageResource(getResourceIdForTabStrip(keyBoardOptions[i]));
             imageView.setTag(keyBoardOptions[i]);
             imageView.setOnClickListener(onClickListener);
-            imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? 0.9f : 0.2f);
-            this.addView(imageView);
-            ((LayoutParams) imageView.getLayoutParams()).leftMargin = getMargin(i);
-            ((LayoutParams) imageView.getLayoutParams()).rightMargin = getMargin(i);
+            imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? SELECTED_ALPHA : UNSELECTED_ALPHA);
+            imageView.setScaleX(1.3f);
+            imageView.setScaleY(1.3f);
+            ll.addView(imageView);
+           ((LinearLayout.LayoutParams) imageView.getLayoutParams()).leftMargin = getMargin(i);
+            ((LinearLayout.LayoutParams) imageView.getLayoutParams()).rightMargin = getMargin(i);
         }
     }
+
+    private final float SELECTED_ALPHA = 1f, UNSELECTED_ALPHA = 0.5f;
 
     int getMargin(int index) {
         return (int) AppLibrary.convertDpToPixel(6, getContext());
@@ -88,6 +100,8 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
             case MY_PROFILE:
                 return android.R.drawable.ic_menu_add;
             case SETTINGS:
+                return android.R.drawable.ic_menu_add;
+            case DICTIONARY:
                 return android.R.drawable.ic_menu_add;
             default:
                 return android.R.drawable.ic_menu_add;
@@ -129,18 +143,28 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
         mCurrentKeyboardOption = tag;
         if (onOptionClickedListener != null)
             onOptionClickedListener.onOptionClicked(tag);
-        for (int i = 0; i < TabStripView.this.getChildCount(); i++) {
-            ImageView imageView = (ImageView) TabStripView.this.getChildAt(i);
-            KeyBoardOptions tag1 = (KeyBoardOptions) imageView.getTag();
-            imageView.setAlpha(tag == tag1 ? 0.9f : 0.2f);
+        LinearLayout ll = (LinearLayout) TabStripView.this.getChildAt(0);
+        for (int i = 0; i < ll.getChildCount(); i++) {
+            View ImageView = (ImageView) ll.getChildAt(i);
+            KeyBoardOptions tag1 = (KeyBoardOptions) ImageView.getTag();
+            ImageView.setAlpha(tag == tag1 ? SELECTED_ALPHA : UNSELECTED_ALPHA);
         }
         switch (tag) {
             case CONTACTS:
                 EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
                 break;
-//            case MAPS:
-//                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
-//                break;
+            case MAPS:
+                if (viewController != null) {
+                    KeyboardMapsView keyboardMapsView = (KeyboardMapsView) viewController.getViewByTag(KeyBoardOptions.MAPS);
+                    if (keyboardMapsView == null || keyboardMapsView.getCurrentViewState() == KeyboardMapsView.View_State.SEARCH) {
+                        EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+                    }
+                }
+                break;
+            case DICTIONARY:
+                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+                break;
+
             default:
                 break;
         }
@@ -154,6 +178,10 @@ public class TabStripView extends LinearLayout implements GreenBotMessageKeyIds 
 
     public void setOnOptionClickedListener(OnOptionClickedListener onOptionClickedListener) {
         this.onOptionClickedListener = onOptionClickedListener;
+    }
+
+    public void setViewController(ViewController viewController) {
+        this.viewController = viewController;
     }
 
     interface OnOptionClickedListener {
