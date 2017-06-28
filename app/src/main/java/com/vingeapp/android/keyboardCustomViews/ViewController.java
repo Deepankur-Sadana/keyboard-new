@@ -194,9 +194,9 @@ public class  ViewController implements GreenBotMessageKeyIds {
             dictionaryView.setTag(keyBoardOptions);
             frameLayout.addView(dictionaryView);
         } else if (keyBoardOptions == KeyBoardOptions.GOOGLE_SEARCH) {
-            final GoogleSearchView googleSearchView = new GoogleSearchView(context);
-            googleSearchView.setTag(keyBoardOptions);
-            frameLayout.addView(googleSearchView);
+            final KeyboardGoogleView keyboardGoogleView = new KeyboardGoogleView(context);
+            keyboardGoogleView.setTag(keyBoardOptions);
+            frameLayout.addView(keyboardGoogleView);
         }
 
     }

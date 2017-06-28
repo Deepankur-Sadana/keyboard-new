@@ -171,7 +171,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
 
             case GOOGLE_SEARCH:
                 if (viewController != null) {
-                    GoogleSearchView googleSearchView = (GoogleSearchView) viewController.getViewByTag(KeyBoardOptions.GOOGLE_SEARCH);
+                    KeyboardGoogleView googleSearchView = (KeyboardGoogleView) viewController.getViewByTag(KeyBoardOptions.GOOGLE_SEARCH);
                     if (googleSearchView == null || googleSearchView.getCurrentViewState() == View_State.SEARCH) {
                         EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
                     }
