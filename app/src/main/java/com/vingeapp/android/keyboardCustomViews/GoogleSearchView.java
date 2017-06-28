@@ -21,6 +21,7 @@ import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.SearchContactsAdapter;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
+import com.vingeapp.android.interfaces.View_State;
 import com.vingeapp.android.models.ContactsModel;
 
 import java.util.ArrayList;
@@ -38,63 +39,32 @@ public class GoogleSearchView extends FrameLayout implements GreenBotMessageKeyI
     private Context context;
     private RecyclerView mRecycler;
     private EditText mEditText;
-    private SearchContactsAdapter searchContactsAdapter;
     private final String TAG = getClass().getSimpleName();
 
 
-    ArrayList<ContactsModel> allContacts;  public GoogleSearchView(@NonNull Context context) {
+    ArrayList<ContactsModel> allContacts;
+    private View_State currentViewState= View_State.SEARCH;;
+
+    public GoogleSearchView(@NonNull Context context) {
         super(context);
+        init(context);
     }
 
     public GoogleSearchView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        init(context);
     }
 
     public GoogleSearchView(@NonNull Context context, @Nullable AttributeSet attrs, @AttrRes int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init(context);
     }
 
     private void init(final Context context) {
-        rootView = inflate(context, R.layout.keyboard_view_search_contacts, null);
+        rootView = inflate(context, R.layout.keyboard_view_google_search, null);
+        mRecycler = (RecyclerView) rootView.findViewById(R.id.searchResultRecycler);
         this.context = context;
-        this.mRecycler = (RecyclerView) rootView.findViewById(R.id.contactsRecycler);
-        this.mRecycler.setLayoutManager(new LinearLayoutManager(context));
-        this.mEditText = (EditText) rootView.findViewById(R.id.searchET);
-        this.mEditText.addTextChangedListener(textWatcher);
-//        mEditText.setOnFocusChangeListener(focusChangeListener);
 
-        long t1 = System.currentTimeMillis();
-        if (allContacts == null || allContacts.size() == 0) {
-            ContactFetcher fetcher = new ContactFetcher();
-            fetcher.loadContactsInBackground(context, new ContactFetcher.ContactListener() {
-                @Override
-                public void onListLoaded(ArrayList<ContactsModel> contactsModels) {
-                    allContacts = contactsModels;
-                    searchContactsAdapter = new SearchContactsAdapter(allContacts, context, new RecyclerViewClickInterface() {
-                        @Override
-                        public void onItemClick(int clickType, int extras, Object data) {
-                            ContactsModel contactsModel = (ContactsModel) data;
-                            EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
-                            EventBus.getDefault().post(new MessageEvent(ON_CLIPBOARD_ITEM_SELECTED, contactsModel.name + " " + contactsModel.number));
-                        }
-                    });
-                    mRecycler.setAdapter(searchContactsAdapter);
-
-                }
-            });
-        }
-
-        mEditText.setOnFocusChangeListener(new OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus)
-                    InAppEditingController.getInstance().setEditText((EditText) v);
-            }
-        });
-
-        Log.d(TAG, "init: fetching contacts took " + (System.currentTimeMillis() - t1));
-        this.addView(rootView);
-        mEditText.requestFocus();
 
     }
 
@@ -116,4 +86,7 @@ public class GoogleSearchView extends FrameLayout implements GreenBotMessageKeyI
         }
     };
 
+    public View_State getCurrentViewState() {
+        return currentViewState;
+    }
 }

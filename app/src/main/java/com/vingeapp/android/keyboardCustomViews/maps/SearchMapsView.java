@@ -87,7 +87,7 @@ public class SearchMapsView extends FrameLayout implements GreenBotMessageKeyIds
     };
 
     private void init(final Context context) {
-        rootView = inflate(context, R.layout.keyboard_view_search_list, null);
+        rootView = inflate(context, R.layout.keyboard_view_maps, null);
         ((ImageView) rootView.findViewById(R.id.contactIV)).setImageResource(R.drawable.ic_maps);
         this.context = context;
         this.mRecycler = (RecyclerView) rootView.findViewById(R.id.contactsRecycler);

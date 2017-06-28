@@ -33,6 +33,7 @@ import com.vingeapp.android.R;
 import com.vingeapp.android.googleLocationApiResponse.Result;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.Refreshable;
+import com.vingeapp.android.interfaces.View_State;
 
 import java.util.HashMap;
 
@@ -65,8 +66,6 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
         }
         return false;
     }
-
-    public enum View_State {MAPS, SEARCH}
 
     private View_State mCurrentViewState = View_State.SEARCH;
 
@@ -249,7 +248,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
     }
 
     private void toggleViews(boolean hideSearchView) {
-        if (hideSearchView == true) {
+        if (hideSearchView) {
             mapContainerView.setVisibility(VISIBLE);
             searchView.setVisibility(GONE);
             EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
@@ -261,7 +260,7 @@ public class KeyboardMapsView extends FrameLayout implements GreenBotMessageKeyI
             EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
 
         }
-        mCurrentViewState = hideSearchView ? View_State.MAPS : View_State.SEARCH;
+        mCurrentViewState = hideSearchView ? View_State.NORMAL : View_State.SEARCH;
     }
 
 

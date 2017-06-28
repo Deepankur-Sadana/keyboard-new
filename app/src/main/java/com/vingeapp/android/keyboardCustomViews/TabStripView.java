@@ -22,6 +22,7 @@ import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.enums.KeyBoardOptions;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+import com.vingeapp.android.interfaces.View_State;
 import com.vingeapp.android.keyboardCustomViews.maps.KeyboardMapsView;
 
 import de.greenrobot.event.EventBus;
@@ -53,7 +54,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
 
     private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
 
-            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.WEB_VIEW
+            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.GOOGLE_SEARCH
 //            KeyBoardOptions.MY_PROFILE, KeyBoardOptions.SETTINGS
 
     };
@@ -103,7 +104,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
                 return android.R.drawable.ic_menu_add;
             case DICTIONARY:
                 return android.R.drawable.ic_menu_add;
-            case WEB_VIEW:
+            case GOOGLE_SEARCH:
                 return android.R.drawable.ic_menu_search;
             default:
                 return android.R.drawable.ic_menu_add;
@@ -159,7 +160,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
             case MAPS:
                 if (viewController != null) {
                     KeyboardMapsView keyboardMapsView = (KeyboardMapsView) viewController.getViewByTag(KeyBoardOptions.MAPS);
-                    if (keyboardMapsView == null || keyboardMapsView.getCurrentViewState() == KeyboardMapsView.View_State.SEARCH) {
+                    if (keyboardMapsView == null || keyboardMapsView.getCurrentViewState() == View_State.SEARCH) {
                         EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
                     }
                 }
@@ -168,8 +169,13 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
                 EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
                 break;
 
-            case WEB_VIEW:
-                EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+            case GOOGLE_SEARCH:
+                if (viewController != null) {
+                    GoogleSearchView googleSearchView = (GoogleSearchView) viewController.getViewByTag(KeyBoardOptions.GOOGLE_SEARCH);
+                    if (googleSearchView == null || googleSearchView.getCurrentViewState() == View_State.SEARCH) {
+                        EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
+                    }
+                }
                 break;
             default:
                 break;

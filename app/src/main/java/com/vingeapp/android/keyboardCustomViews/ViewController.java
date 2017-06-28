@@ -1,7 +1,6 @@
 package com.vingeapp.android.keyboardCustomViews;
 
 import android.content.Context;
-import android.provider.Settings;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -194,10 +193,10 @@ public class  ViewController implements GreenBotMessageKeyIds {
             final  DictionaryView dictionaryView = new DictionaryView(context);
             dictionaryView.setTag(keyBoardOptions);
             frameLayout.addView(dictionaryView);
-        } else if (keyBoardOptions == KeyBoardOptions.WEB_VIEW) {
-            final SearchContactsView contactsView = new SearchContactsView(context);
-            contactsView.setTag(keyBoardOptions);
-            frameLayout.addView(contactsView);
+        } else if (keyBoardOptions == KeyBoardOptions.GOOGLE_SEARCH) {
+            final GoogleSearchView googleSearchView = new GoogleSearchView(context);
+            googleSearchView.setTag(keyBoardOptions);
+            frameLayout.addView(googleSearchView);
         }
 
     }
