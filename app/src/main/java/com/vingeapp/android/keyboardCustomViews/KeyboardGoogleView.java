@@ -2,7 +2,6 @@ package com.vingeapp.android.keyboardCustomViews;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.os.Handler;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -20,10 +19,10 @@ import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.SearchMapsAdapter;
 import com.vingeapp.android.apiHandling.RequestManager;
 import com.vingeapp.android.apiHandling.ServerRequestType;
-import com.vingeapp.android.googleLocationApiResponse.Result;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.Refreshable;
 import com.vingeapp.android.interfaces.View_State;
+import com.vingeapp.android.serverGoogleSearchResponse.Link;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.message.BasicNameValuePair;
@@ -32,6 +31,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
@@ -46,7 +46,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     private RecyclerView mRecycler;
     private EditText mEditText;
     private SearchMapsAdapter searchLocationAdapter;
-    ArrayList<Result> suggestedLocationModels;
+    ArrayList<Link> recommendedLinks;
 
     String TAG = getClass().getSimpleName();
 
@@ -112,47 +112,6 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     };
 
 
-    @SuppressWarnings("deprecation")
-    private void makeLocationRequest(String location) {
-        List<NameValuePair> pairs = new ArrayList<>();
-        pairs.add(new BasicNameValuePair("address", location));
-        RequestManager.makeGetRequest(getContext(), ServerRequestType.GOOGLE_MAPS_API, pairs, onRequestFinishCallback);
-    }
-
-    RequestManager.OnRequestFinishCallback onRequestFinishCallback = new RequestManager.OnRequestFinishCallback() {
-        @Override
-        public void onBindParams(boolean success, Object response) {
-            JSONObject object = (JSONObject) response;
-            JSONArray array = null;
-            try {
-                ArrayList<Result> results = new ArrayList<>();
-                array = object.getJSONArray("results");
-
-                for (int i = 0; i < array.length(); i++) {
-                    Object apiResponse = array.get(i);
-                    Result result = new Gson().fromJson(String.valueOf(apiResponse), Result.class);
-                    results.add(result);
-                }
-
-                suggestedLocationModels.clear();
-                suggestedLocationModels.addAll(results);
-                if (searchLocationAdapter != null)
-                    searchLocationAdapter.notifyDataSetChanged();
-                Log.d(TAG, "onBindParams: " + results);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-        }
-
-        @Override
-        public boolean isDestroyed() {
-            return false;
-        }
-    };
-
     private GoogleVerticalListSearchView getSearchView(Context context) {
         GoogleVerticalListSearchView searchGoogleView = new GoogleVerticalListSearchView(context);
 
@@ -160,6 +119,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
             @Override
             public void onFinalQuerySubmitted(String query) {
                 toggleViews(true);
+                makeWebSearchRequest(query);
             }
         });
         return searchGoogleView;
@@ -188,12 +148,63 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     }
 
 
-    Handler queryHandler = new Handler();
-    Runnable queryRunnable = new Runnable() {
+    @SuppressWarnings("deprecation")
+    private void makeWebSearchRequest(String query) {
+        List<NameValuePair> pairs = new ArrayList<>();
+        pairs.add(new BasicNameValuePair("query", query));
+        RequestManager.makeGetRequest(getContext(), ServerRequestType.WEB_SEARCH, pairs, onRequestFinishCallback);
+    }
+
+    RequestManager.OnRequestFinishCallback onRequestFinishCallback = new RequestManager.OnRequestFinishCallback() {
         @Override
-        public void run() {
-            if (mEditText != null)
-                makeLocationRequest(mEditText.getText().toString());
+        public void onBindParams(boolean success, Object response) {
+            Log.d(TAG, "onBindParams: " + response);
+            JSONObject object = (JSONObject) response;
+            JSONArray array;
+            try {
+                ArrayList<Link> results = new ArrayList<>();
+                array = object.getJSONObject("result").getJSONArray("links");
+
+                for (int i = 0; i < array.length(); i++) {
+                    Object apiResponse = array.get(i);
+                    Link link = new Gson().fromJson(String.valueOf(apiResponse), Link.class);
+                    results.add(link);
+                }
+
+                if (recommendedLinks == null)
+                    recommendedLinks = new ArrayList<>();
+                else
+                    recommendedLinks.clear();
+                recommendedLinks.addAll(results);
+                registerResponseToMap(response);
+                if (searchLocationAdapter != null)
+                    searchLocationAdapter.notifyDataSetChanged();
+                Log.d(TAG, "onBindParams: " + results);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+
+        }
+
+        @Override
+        public boolean isDestroyed() {
+            return false;
         }
     };
+
+    private static final HashMap<String, org.json.JSONObject> cachedResponses = new HashMap<>();
+
+    private void registerResponseToMap(Object response) {
+        JSONObject object = (JSONObject) response;
+        try {
+            String query = object.getJSONObject("result").getString("query");
+            cachedResponses.put(query, object);
+        } catch (JSONException e) {
+
+
+        }
+
+    }
 }

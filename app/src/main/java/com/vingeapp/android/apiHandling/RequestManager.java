@@ -133,8 +133,13 @@ public class RequestManager implements ServerKeyIDS {
         switch (url_type) {
             case CREATE_USER_REQUEST:
                 url += "users/create";
+                break;
             case GOOGLE_MAPS_API:
                 url = "http://maps.googleapis.com/maps/api/geocode/json?";
+                break;
+            case WEB_SEARCH:
+                url = "http://ec2-54-191-214-81.us-west-2.compute.amazonaws.com:5678/googleSearch?";
+                break;
         }
         Log.d(TAG, "getUrlFromType: " + url);
         return url;
