@@ -34,4 +34,14 @@
 
     <color name="fill_color">#6600FFFF</color>
     <color name="stroke_color">#BB00FFFF</color>
+
+
+    <!--url preview-->
+    <color name="soft_grey_select_top">#e0dddd</color>
+    <color name="soft_grey_split">#d0d0d0</color>
+    <color name="soft_grey">#777</color>
+    <color name="soft_grey_choose">#aaa</color>
+    <color name="aa">#ff007de3</color>
+    <!--url preview-->
+
 </resources>
