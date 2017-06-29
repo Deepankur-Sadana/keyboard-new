@@ -1,6 +1,7 @@
 package com.vingeapp.android.keyboardCustomViews;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Handler;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
@@ -86,11 +87,13 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
                 return true;
             }
         });
+
+        this.setBackgroundColor(Color.WHITE);
         searchView = getSearchView(context);
 
         horizontalResultListView = inflate(context, R.layout.keyboard_view_google_search, null);
-        this.addView(searchView);
         this.addView(horizontalResultListView);
+        this.addView(searchView);
 
         horizontalResultListView.findViewById(R.id.backIV).setOnClickListener(new OnClickListener() {
             @Override

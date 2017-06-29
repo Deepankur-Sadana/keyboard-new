@@ -4,13 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:layout_below="@+id/locationRL1"
-        android:id="@+id/searchResultRecycler"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-
     <RelativeLayout
         android:id="@+id/locationRL1"
         android:layout_width="wrap_content"
@@ -43,6 +36,10 @@
             android:layout_centerVertical="true"
             android:src="@drawable/ic_clear_black_24dp" />
     </RelativeLayout>
-
+    <android.support.v7.widget.RecyclerView
+        android:layout_below="@+id/locationRL1"
+        android:id="@+id/searchResultRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 </RelativeLayout>
 

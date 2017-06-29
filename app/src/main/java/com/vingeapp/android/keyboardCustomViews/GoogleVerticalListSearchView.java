@@ -97,6 +97,7 @@ public class GoogleVerticalListSearchView extends FrameLayout implements GreenBo
             }
         });
 
+        this.addView(rootView);
     }
 
     Handler queryHandler = new Handler();
