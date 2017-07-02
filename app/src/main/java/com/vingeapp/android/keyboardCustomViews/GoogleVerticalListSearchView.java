@@ -57,7 +57,7 @@ public class GoogleVerticalListSearchView extends FrameLayout implements GreenBo
 
     private void init(final Context context) {
         rootView = inflate(context, R.layout.google_verticall_search_list, null);
-        mRecycler = (RecyclerView) rootView.findViewById(R.id.searchResultRecycler);
+//        mRecycler = (RecyclerView) rootView.findViewById(R.id.searchResultRecycler);
         this.context = context;
 
 

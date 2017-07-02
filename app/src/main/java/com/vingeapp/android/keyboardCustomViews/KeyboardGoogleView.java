@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -17,6 +18,7 @@ import com.google.gson.Gson;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.SearchMapsAdapter;
+import com.vingeapp.android.adapters.SearchResultPreviewAdapter;
 import com.vingeapp.android.apiHandling.RequestManager;
 import com.vingeapp.android.apiHandling.ServerRequestType;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
@@ -45,7 +47,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     private Context context;
     private RecyclerView mRecycler;
     private EditText mEditText;
-    private SearchMapsAdapter searchLocationAdapter;
+    private SearchResultPreviewAdapter searchLocationAdapter;
     ArrayList<Link> recommendedLinks;
 
     String TAG = getClass().getSimpleName();
@@ -92,6 +94,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
         searchView = getSearchView(context);
 
         horizontalResultListView = inflate(context, R.layout.keyboard_view_google_search, null);
+        mRecycler = (RecyclerView) horizontalResultListView.findViewById(R.id.recyclerView);
         this.addView(horizontalResultListView);
         this.addView(searchView);
 
@@ -103,6 +106,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
         });
 
     }
+
 
     private OnFocusChangeListener focusChangeListener = new OnFocusChangeListener() {
         @Override
@@ -177,10 +181,8 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
                     recommendedLinks.clear();
                 recommendedLinks.addAll(results);
                 registerResponseToMap(response);
-                if (searchLocationAdapter != null)
-                    searchLocationAdapter.notifyDataSetChanged();
                 Log.d(TAG, "onBindParams: " + results);
-
+                initRecycler(recommendedLinks);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -206,5 +208,12 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
 
         }
 
+    }
+
+    private void initRecycler(ArrayList<Link> linkArrayList) {
+        mRecycler.setAdapter(new SearchResultPreviewAdapter(getContext(),linkArrayList));
+        mRecycler.setLayoutManager(new GridLayoutManager(getContext(),3));
+//        if (searchLocationAdapter != null)
+//            searchLocationAdapter.notifyDataSetChanged();
     }
 }
