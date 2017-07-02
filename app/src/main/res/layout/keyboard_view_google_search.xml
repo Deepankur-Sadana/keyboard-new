@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_alignEnd="@+id/TextView1"
             android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_clear_black_24dp" />
+            android:src="@drawable/ic_clear_black_24dp" />
     </RelativeLayout>
     <android.support.v7.widget.RecyclerView
         android:layout_below="@+id/headerRL"

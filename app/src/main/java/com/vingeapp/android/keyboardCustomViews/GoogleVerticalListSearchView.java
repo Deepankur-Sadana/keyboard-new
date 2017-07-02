@@ -108,6 +108,8 @@ public class GoogleVerticalListSearchView extends FrameLayout implements GreenBo
 //                makeLocationRequest(mEditText.getText().toString());
         }
     };
+
+    //// TODO: 03/07/17 for auto complete
     private TextWatcher textWatcher = new TextWatcher() {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -127,6 +129,8 @@ public class GoogleVerticalListSearchView extends FrameLayout implements GreenBo
     };
 
     public void doRefresh() {
+        mEditText.setText("");
+        mEditText.requestFocus();
 
     }
 

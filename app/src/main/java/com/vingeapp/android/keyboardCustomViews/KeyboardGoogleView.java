@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -17,7 +18,6 @@ import android.widget.FrameLayout;
 import com.google.gson.Gson;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
-import com.vingeapp.android.adapters.SearchMapsAdapter;
 import com.vingeapp.android.adapters.SearchResultPreviewAdapter;
 import com.vingeapp.android.apiHandling.RequestManager;
 import com.vingeapp.android.apiHandling.ServerRequestType;
@@ -34,6 +34,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import de.greenrobot.event.EventBus;
@@ -79,7 +80,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     }
 
 
-    GoogleVerticalListSearchView searchView;
+    GoogleVerticalListSearchView mSearchView;
     View horizontalResultListView;
 
     private void init(final Context context) {
@@ -91,17 +92,18 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
         });
 
         this.setBackgroundColor(Color.WHITE);
-        searchView = getSearchView(context);
+        mSearchView = getSearchView(context);
 
         horizontalResultListView = inflate(context, R.layout.keyboard_view_google_search, null);
         mRecycler = (RecyclerView) horizontalResultListView.findViewById(R.id.recyclerView);
         this.addView(horizontalResultListView);
-        this.addView(searchView);
+        this.addView(mSearchView);
 
         horizontalResultListView.findViewById(R.id.backIV).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleViews(false);
+                mSearchView.doRefresh();
             }
         });
 
@@ -132,13 +134,13 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     private void toggleViews(boolean hideSearchView) {
         if (hideSearchView) {
             horizontalResultListView.setVisibility(VISIBLE);
-            searchView.setVisibility(GONE);
+            mSearchView.setVisibility(GONE);
             EventBus.getDefault().post(new MessageEvent(ON_IN_APP_EDITING_FINISHED, null));
 
         } else {
             horizontalResultListView.setVisibility(GONE);
-            searchView.setVisibility(VISIBLE);
-            searchView.doRefresh();
+            mSearchView.setVisibility(VISIBLE);
+            mSearchView.doRefresh();
             EventBus.getDefault().post(new MessageEvent(POPUP_KEYBOARD_FOR_IN_APP_EDITING, null));
 
         }
@@ -180,6 +182,8 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
                 else
                     recommendedLinks.clear();
                 recommendedLinks.addAll(results);
+                filterList(recommendedLinks);
+
                 registerResponseToMap(response);
                 Log.d(TAG, "onBindParams: " + results);
                 initRecycler(recommendedLinks);
@@ -196,6 +200,20 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
         }
     };
 
+    /**
+     * @param unfilteredList which might contain empty/null data
+     * @return cleaned list with no such null data
+     */
+    private ArrayList<Link> filterList(ArrayList<Link> unfilteredList) {
+        Iterator<Link> iterator = unfilteredList.iterator();
+        while (iterator.hasNext()) {
+            Link next = iterator.next();
+            if (TextUtils.isEmpty(next.getDescription()) || TextUtils.isEmpty(next.getTitle()) || TextUtils.isEmpty(next.getLink()))
+                iterator.remove();
+        }
+        return unfilteredList;
+    }
+
     private static final HashMap<String, org.json.JSONObject> cachedResponses = new HashMap<>();
 
     private void registerResponseToMap(Object response) {
@@ -210,10 +228,12 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
 
     }
 
+    SearchResultPreviewAdapter searchResultPreviewAdapter;
+
     private void initRecycler(ArrayList<Link> linkArrayList) {
-        mRecycler.setAdapter(new SearchResultPreviewAdapter(getContext(),linkArrayList));
-        mRecycler.setLayoutManager(new GridLayoutManager(getContext(),3));
-//        if (searchLocationAdapter != null)
-//            searchLocationAdapter.notifyDataSetChanged();
+        mRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        mRecycler.setAdapter(searchResultPreviewAdapter);
+        if (searchResultPreviewAdapter == null)
+            searchResultPreviewAdapter = new SearchResultPreviewAdapter(getContext(), linkArrayList);
     }
 }

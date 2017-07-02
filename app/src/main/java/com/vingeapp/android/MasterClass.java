@@ -3,6 +3,7 @@ package com.vingeapp.android;
 import android.app.Application;
 import android.content.Context;
 import android.support.multidex.MultiDex;
+import android.support.v7.app.AppCompatDelegate;
 import android.util.Log;
 
 import com.facebook.CallbackManager;
@@ -42,6 +43,7 @@ public class MasterClass extends Application {
         super.onCreate();
         Log.d(TAG, "onCreate: ");
         msConfig = new AskPrefsImpl();
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
 
         FacebookSdk.sdkInitialize(getApplicationContext());
         callbackManager = CallbackManager.Factory.create();
