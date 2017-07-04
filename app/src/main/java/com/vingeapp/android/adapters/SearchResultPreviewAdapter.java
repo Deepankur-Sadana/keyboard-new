@@ -31,7 +31,7 @@ import java.util.ArrayList;
 public class SearchResultPreviewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private Context context;
     private ArrayList<Link> linkArrayList;
-    final static int NO_RESULT_TYPE = 11, LINK_TYPE = 44;
+    private final static int NO_RESULT_TYPE = 11, LINK_TYPE = 44;
     private RecyclerViewClickInterface clickInterface;
 
 
@@ -88,6 +88,8 @@ public class SearchResultPreviewAdapter extends RecyclerView.Adapter<RecyclerVie
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (clickInterface!=null)
+                        clickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, -1, view.getTag());
                 }
             });
         }

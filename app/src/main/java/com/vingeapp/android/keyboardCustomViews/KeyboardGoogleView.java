@@ -14,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.vingeapp.android.MessageEvent;
@@ -97,9 +98,10 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
 
         horizontalResultListView = inflate(context, R.layout.keyboard_view_google_search, null);
         mRecycler = (RecyclerView) horizontalResultListView.findViewById(R.id.recyclerView);
+        mRecycler.setBackgroundColor(Color.GRAY);
         this.addView(horizontalResultListView);
         this.addView(mSearchView);
-
+        heaeder = (TextView) horizontalResultListView.findViewById(R.id.TextView1);
         horizontalResultListView.findViewById(R.id.backIV).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +121,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     };
 
 
+    TextView heaeder;
     private GoogleVerticalListSearchView getSearchView(Context context) {
         GoogleVerticalListSearchView searchGoogleView = new GoogleVerticalListSearchView(context);
 
@@ -127,6 +130,8 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
             public void onFinalQuerySubmitted(String query) {
                 toggleViews(true);
                 makeWebSearchRequest(query);
+                if (heaeder != null)
+                    heaeder.setText(query.trim());
             }
         });
         return searchGoogleView;
