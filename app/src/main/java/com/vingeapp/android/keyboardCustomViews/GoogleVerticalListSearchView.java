@@ -16,7 +16,6 @@ import android.widget.FrameLayout;
 import com.vingeapp.android.InAppEditingController;
 import com.vingeapp.android.R;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
-import com.vingeapp.android.interfaces.View_State;
 import com.vingeapp.android.models.ContactsModel;
 
 import java.util.ArrayList;
@@ -36,8 +35,6 @@ public class GoogleVerticalListSearchView extends FrameLayout implements GreenBo
 
 
     ArrayList<ContactsModel> allContacts;
-    private View_State currentViewState = View_State.SEARCH;
-    ;
     private FinalQueryListener finalQueryListener;
 
     public GoogleVerticalListSearchView(@NonNull Context context) {
@@ -139,9 +136,6 @@ public class GoogleVerticalListSearchView extends FrameLayout implements GreenBo
         void onFinalQuerySubmitted(String query);
     }
 
-    public View_State getCurrentViewState() {
-        return currentViewState;
-    }
 
     public void setFinalQueryListener(FinalQueryListener finalQueryListener) {
         this.finalQueryListener = finalQueryListener;

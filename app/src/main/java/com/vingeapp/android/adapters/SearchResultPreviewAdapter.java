@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewCallback;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 import com.vingeapp.android.R;
+import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.library.LinkPreviewCallback;
 import com.vingeapp.android.library.SourceContent;
 import com.vingeapp.android.library.TextCrawler;
@@ -30,11 +32,13 @@ public class SearchResultPreviewAdapter extends RecyclerView.Adapter<RecyclerVie
     private Context context;
     private ArrayList<Link> linkArrayList;
     final static int NO_RESULT_TYPE = 11, LINK_TYPE = 44;
+    private RecyclerViewClickInterface clickInterface;
 
 
-    public SearchResultPreviewAdapter(Context context, ArrayList<Link> linkArrayList) {
+    public SearchResultPreviewAdapter(Context context, ArrayList<Link> linkArrayList,RecyclerViewClickInterface clickInterface) {
         this.context = context;
         this.linkArrayList = linkArrayList;
+        this.clickInterface = clickInterface;
     }
 
     public void setLinkArrayList(ArrayList<Link> linkArrayList) {
@@ -44,12 +48,23 @@ public class SearchResultPreviewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return null;
+        if (viewType==LINK_TYPE)
+        return new VHItem(new FrameLayout(parent.getContext()));
+        else {
+            TextView textView = new TextView(parent.getContext());
+            textView.setText("Sorry, no results found");
+            return new VHNoResults(textView);
+        }
     }
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
+        if (holder instanceof VHItem){
+            Link link = linkArrayList.get(position);
+            VHItem vhItem = (VHItem) holder;
+            vhItem.titleTv.setText(link.getTitle());
+            vhItem.descriptionTv.setText(link.getDescription());
+        }
     }
 
     @Override
@@ -80,10 +95,13 @@ public class SearchResultPreviewAdapter extends RecyclerView.Adapter<RecyclerVie
 
     private class VHItem extends RecyclerView.ViewHolder {
         View rootView;
-
+        TextView titleTv, descriptionTv;
         VHItem(View v) {
             super(v);
             rootView = v;
+            ((ViewGroup) rootView).addView(getLayoutInflater().inflate(R.layout.card_link_preview_pre_load,null));
+            descriptionTv = (TextView) rootView.findViewById(R.id.descriptionTV);
+            titleTv = (TextView) rootView.findViewById(R.id.titleTV);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

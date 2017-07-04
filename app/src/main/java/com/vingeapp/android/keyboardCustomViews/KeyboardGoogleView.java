@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.AttributeSet;
@@ -22,6 +22,7 @@ import com.vingeapp.android.adapters.SearchResultPreviewAdapter;
 import com.vingeapp.android.apiHandling.RequestManager;
 import com.vingeapp.android.apiHandling.ServerRequestType;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.interfaces.Refreshable;
 import com.vingeapp.android.interfaces.View_State;
 import com.vingeapp.android.serverGoogleSearchResponse.Link;
@@ -231,9 +232,22 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     SearchResultPreviewAdapter searchResultPreviewAdapter;
 
     private void initRecycler(ArrayList<Link> linkArrayList) {
-        mRecycler.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        if (mRecycler.getLayoutManager() == null) {
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+            linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+            mRecycler.setLayoutManager(linearLayoutManager);
+        }
+        if (searchResultPreviewAdapter == null) {
+            searchResultPreviewAdapter = new SearchResultPreviewAdapter(getContext(), linkArrayList, new RecyclerViewClickInterface() {
+                @Override
+                public void onItemClick(int clickType, int extras, Object data) {
+
+                }
+            });
+        } else {
+            searchResultPreviewAdapter.setLinkArrayList(linkArrayList);
+        }
         mRecycler.setAdapter(searchResultPreviewAdapter);
-        if (searchResultPreviewAdapter == null)
-            searchResultPreviewAdapter = new SearchResultPreviewAdapter(getContext(), linkArrayList);
+
     }
 }
