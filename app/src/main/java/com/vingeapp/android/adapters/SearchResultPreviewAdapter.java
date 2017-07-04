@@ -64,6 +64,7 @@ public class SearchResultPreviewAdapter extends RecyclerView.Adapter<RecyclerVie
             VHItem vhItem = (VHItem) holder;
             vhItem.titleTv.setText(link.getTitle());
             vhItem.descriptionTv.setText(link.getDescription());
+            ((VHItem) holder).rootView.setTag(link);
         }
     }
 
@@ -101,12 +102,14 @@ public class SearchResultPreviewAdapter extends RecyclerView.Adapter<RecyclerVie
         VHItem(View v) {
             super(v);
             rootView = v;
-            ((ViewGroup) rootView).addView(getLayoutInflater().inflate(R.layout.card_link_preview_pre_load,null));
+            ((ViewGroup) rootView).addView(getLayoutInflater().inflate(R.layout.card_link_preview_pre_load, null));
             descriptionTv = (TextView) rootView.findViewById(R.id.descriptionTV);
             titleTv = (TextView) rootView.findViewById(R.id.titleTV);
             v.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    if (clickInterface != null)
+                        clickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, -1, view.getTag());
                 }
             });
         }

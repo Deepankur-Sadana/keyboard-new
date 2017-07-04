@@ -110,6 +110,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
             }
         });
 
+        progressView = horizontalResultListView.findViewById(R.id.progressView);
     }
 
 
@@ -122,6 +123,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
 
 
     TextView heaeder;
+
     private GoogleVerticalListSearchView getSearchView(Context context) {
         GoogleVerticalListSearchView searchGoogleView = new GoogleVerticalListSearchView(context);
 
@@ -164,6 +166,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     private void makeWebSearchRequest(String query) {
         List<NameValuePair> pairs = new ArrayList<>();
         pairs.add(new BasicNameValuePair("query", query));
+        progressView.setVisibility(VISIBLE);
         RequestManager.makeGetRequest(getContext(), ServerRequestType.WEB_SEARCH, pairs, onRequestFinishCallback);
     }
 
@@ -171,6 +174,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
         @Override
         public void onBindParams(boolean success, Object response) {
             Log.d(TAG, "onBindParams: " + response);
+            progressView.setVisibility(GONE);
             JSONObject object = (JSONObject) response;
             JSONArray array;
             try {
@@ -235,6 +239,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     }
 
     SearchResultPreviewAdapter searchResultPreviewAdapter;
+    View progressView;
 
     private void initRecycler(ArrayList<Link> linkArrayList) {
         if (mRecycler.getLayoutManager() == null) {
@@ -246,7 +251,8 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
             searchResultPreviewAdapter = new SearchResultPreviewAdapter(getContext(), linkArrayList, new RecyclerViewClickInterface() {
                 @Override
                 public void onItemClick(int clickType, int extras, Object data) {
-
+                    EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, ((Link) data).getLink()));
+                    EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
                 }
             });
         } else {
