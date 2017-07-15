@@ -139,6 +139,7 @@ public class RequestManager implements ServerKeyIDS {
                 break;
             case WEB_SEARCH:
                 url = "http://ec2-54-191-214-81.us-west-2.compute.amazonaws.com:5678/googleSearch?";
+                url = "http://ec2-35-154-210-71.ap-south-1.compute.amazonaws.com:5678/googleSearch?";
                 break;
         }
         Log.d(TAG, "getUrlFromType: " + url);
