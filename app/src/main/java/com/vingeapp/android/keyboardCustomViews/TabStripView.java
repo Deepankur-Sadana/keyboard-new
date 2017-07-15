@@ -105,7 +105,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
             case DICTIONARY:
                 return android.R.drawable.ic_menu_add;
             case GOOGLE_SEARCH:
-                return android.R.drawable.ic_menu_search;
+                return R.drawable.google_search;
             default:
                 return android.R.drawable.ic_menu_add;
 
