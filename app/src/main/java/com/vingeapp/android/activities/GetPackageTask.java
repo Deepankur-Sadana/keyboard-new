@@ -104,10 +104,10 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMess
     private void loadUserSettingsFromFireBase() {
 
         Set<String> allProfferedApplications = PreferencesManager.getInstance(context).getAllProfferedApplications(context);
-        for (int i = 0; i < MasterClass.allPackagesinfo.size(); i++) {
-            PInfo pInfo = MasterClass.allPackagesinfo.get(i);
+        for (int i = 0; i < pInfos.size(); i++) {
+            PInfo pInfo = pInfos.get(i);
             if (allProfferedApplications.contains(pInfo.pname)) {
-                MasterClass.allPackagesinfo.get(i).isChecked = true;
+                pInfos.get(i).isChecked = true;
             }
         }
         EventBus.getDefault().post(new MessageEvent(FAVOURITE_APPLICATIONS_LIST_CHANGED, null));
