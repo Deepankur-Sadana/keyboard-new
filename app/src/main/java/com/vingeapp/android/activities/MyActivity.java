@@ -19,7 +19,6 @@ import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.models.PInfo;
 import com.vingeapp.android.preferences.PreferencesManager;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -44,7 +43,14 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
-
+        findViewById(R.id.saveTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PreferencesManager.getInstance(v.getContext()).addPackageName(v.getContext(), getSelectedPackages());
+                EventBus.getDefault().post(new MessageEvent(FAVOURITE_APP_PREFERRED_LIST_CHANGED, null));
+                finish();
+            }
+        });
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
         mRecyclerView.setHasFixedSize(true);
@@ -87,11 +93,17 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
     protected void onPause() {
         super.onPause();
         Log.d(TAG, "onPause: ");
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+
         PreferencesManager.getInstance(this).addPackageName(this, getSelectedPackages());
         EventBus.getDefault().post(new MessageEvent(FAVOURITE_APP_PREFERRED_LIST_CHANGED, null));
     }
 
-    Set<String> getSelectedPackages(){
+    Set<String> getSelectedPackages() {
         Set<String> set = new HashSet<>();
         for (int i = 0; i < MasterClass.allPackagesinfo.size(); i++) {
             PInfo pInfo = MasterClass.allPackagesinfo.get(i);
@@ -126,7 +138,6 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
         }
         Log.d(TAG, "onDestroy: " + s);
     }
-
 
 
     private AsyncListener asyncListener = new AsyncListener() {
