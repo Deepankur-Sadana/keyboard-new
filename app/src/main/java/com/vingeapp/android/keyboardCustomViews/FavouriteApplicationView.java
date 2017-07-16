@@ -67,7 +67,6 @@ public class FavouriteApplicationView extends RelativeLayout implements Refresha
     @Override
     public boolean doRefresh() {
         if (favouriteApplicationsListAdapter != null) {
-            favouriteApplicationsListAdapter.setPreferredApps();
             favouriteApplicationsListAdapter.notifyDataSetChanged();
             return true;
         }
