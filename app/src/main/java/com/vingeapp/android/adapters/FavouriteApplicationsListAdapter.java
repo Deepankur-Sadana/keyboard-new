@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.vingeapp.android.MasterClass;
 import com.vingeapp.android.R;
+import com.vingeapp.android.activities.GetPackageTask;
 import com.vingeapp.android.activities.MyActivity;
+import com.vingeapp.android.interfaces.AsyncListener;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.models.PInfo;
 
@@ -46,8 +48,8 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
 
 
     public void setPreferredApps() {
-        int size=0;
-        if (pInfoArrayList!=null)
+        int size = 0;
+        if (pInfoArrayList != null)
             size = pInfoArrayList.size();
         Log.d(TAG, "setPreferredApps: " + pInfoArrayList + " size " + size);
         if (pInfoArrayList == null)
@@ -55,16 +57,38 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
         else pInfoArrayList.clear();
 
 
-        String s ="";
-        for (int i = 0; i < MasterClass.allPackagesinfo.size(); i++) {
-            PInfo pInfo = MasterClass.allPackagesinfo.get(i);
+        if (MasterClass.allPackagesinfo == null || MasterClass.allPackagesinfo.size() == 0) {
+            loadDevicePackage();
+        } else {
+            addSelectedApplicationsToTheViews(MasterClass.allPackagesinfo);
+        }
+    }
+
+    private void loadDevicePackage() {
+        final ArrayList<PInfo> pInfoArrayList = new ArrayList<>();
+        GetPackageTask getPackageTask = new GetPackageTask(context, pInfoArrayList);
+        getPackageTask.setAsyncListener(new AsyncListener() {
+            @Override
+            public void onPreExecuteCalled() {
+
+            }
+
+            @Override
+            public void onPostExecuteCalled() {
+                addSelectedApplicationsToTheViews(pInfoArrayList);
+                notifyDataSetChanged();
+            }
+        });
+        getPackageTask.execute();
+    }
+
+    private void addSelectedApplicationsToTheViews(ArrayList<PInfo> pInfos) {
+        for (int i = 0; i < pInfos.size(); i++) {
+            PInfo pInfo = pInfos.get(i);
             if (pInfo.isChecked) {
                 pInfoArrayList.add(pInfo);
-                s += "\n";
-                s += pInfo.pname;
             }
         }
-        Log.d(TAG, "setPreferredApps: "+s);
     }
 
     @Override
@@ -79,7 +103,7 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
             ImageView imageView = new ImageView(context);
             PorterDuff.Mode mMode = PorterDuff.Mode.SRC_ATOP;
             Drawable d = context.getResources().getDrawable(R.drawable.add_new);
-            d.setColorFilter(Color.DKGRAY,mMode);
+            d.setColorFilter(Color.DKGRAY, mMode);
             imageView.setImageDrawable(d);
             int pixel = (int) AppLibrary.convertDpToPixel(8, this.context);
             imageView.setPadding(pixel, pixel, pixel, pixel);

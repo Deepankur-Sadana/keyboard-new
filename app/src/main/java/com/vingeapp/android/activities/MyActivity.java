@@ -44,7 +44,6 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.list);
-        EventBus.getDefault().register(this);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
 
@@ -128,13 +127,7 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
         Log.d(TAG, "onDestroy: " + s);
     }
 
-    @SuppressWarnings("unused")
-    public void onEvent(MessageEvent event) {
-        if (event.getMessageType() == FAVOURITE_APPLICATIONS_LIST_CHANGED) {
-            if (mAdapter != null)
-                mAdapter.notifyDataSetChanged();
-        }
-    }
+
 
     private AsyncListener asyncListener = new AsyncListener() {
         @Override
@@ -147,6 +140,8 @@ public class MyActivity extends Activity implements GreenBotMessageKeyIds {
         @Override
         public void onPostExecuteCalled() {
             Log.d(TAG, "onPostExecuteCalled: ");
+            if (mAdapter != null)
+                mAdapter.notifyDataSetChanged();
             findViewById(R.id.progressBar).setVisibility(View.GONE);
             findViewById(R.id.recyclerView).setVisibility(View.VISIBLE);
         }
