@@ -12,12 +12,10 @@ import android.widget.RelativeLayout;
 
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.activities.MyActivity;
-import com.vingeapp.android.adapters.BaseRecylerAdapter;
 import com.vingeapp.android.adapters.FavouriteApplicationsListAdapter;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
 import com.vingeapp.android.interfaces.Refreshable;
-import com.vingeapp.android.models.PInfo;
 
 import de.greenrobot.event.EventBus;
 

@@ -6,15 +6,16 @@ import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import com.vingeapp.android.MasterClass;
 import com.vingeapp.android.MessageEvent;
-import com.vingeapp.android.firebase.FireBaseHelper;
 import com.vingeapp.android.interfaces.AsyncListener;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.models.PInfo;
+import com.vingeapp.android.preferences.PreferencesManager;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 import de.greenrobot.event.EventBus;
 
@@ -101,24 +102,16 @@ class GetPackageTask extends AsyncTask<Void, Void, Void> implements GreenBotMess
     }
 
     private void loadUserSettingsFromFireBase() {
-        FireBaseHelper.getInstance(context).setOnShortCutAppChangedListener(new FireBaseHelper.OnShortCutAppChangedListener() {
-            @Override
-            public void onListUpdated(LinkedHashSet<String> newList) {
 
-                if (newList == null) {
-                    Log.d(TAG, "refreshList: newList is null returning");
-                    return;
-                }
-
-                for (int i = 0; i < MyActivity.allPackagesinfo.size(); i++) {
-                    PInfo pInfo = MyActivity.allPackagesinfo.get(i);
-                    if (newList.contains(pInfo.pname)) {
-                        MyActivity.allPackagesinfo.get(i).isChecked = true;
-                    }
-                }
-                EventBus.getDefault().post(new MessageEvent(FAVOURITE_APPLICATIONS_LIST_CHANGED, null));
+        Set<String> allProfferedApplications = PreferencesManager.getInstance(context).getAllProfferedApplications(context);
+        for (int i = 0; i < MasterClass.allPackagesinfo.size(); i++) {
+            PInfo pInfo = MasterClass.allPackagesinfo.get(i);
+            if (allProfferedApplications.contains(pInfo.pname)) {
+                MasterClass.allPackagesinfo.get(i).isChecked = true;
             }
-        });
+        }
+        EventBus.getDefault().post(new MessageEvent(FAVOURITE_APPLICATIONS_LIST_CHANGED, null));
+
     }
 
     void setAsyncListener(AsyncListener asyncListener) {

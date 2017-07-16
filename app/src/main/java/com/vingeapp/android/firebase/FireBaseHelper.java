@@ -55,6 +55,7 @@ public class FireBaseHelper implements FireBaseKEYIDS {
 
     private FireBaseHelper(Context context) {
         this.mContext = context;
+        Log.d(TAG, "FireBaseHelper: ");
         if (mFireBase == null) {
 
             if (!initializationDone) {
@@ -240,9 +241,11 @@ public class FireBaseHelper implements FireBaseKEYIDS {
     private LinkedHashSet<String> mAllPackageNames = new LinkedHashSet<>();
 
     private void loadPrefferedApplications() {
+        Log.d(TAG, "loadPrefferedApplications: ");
         getNewFireBase(ANCHOR_SHORTCUT_APPS, new String[]{getUserId()}).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "loadPrefferedApplications: " + dataSnapshot);
                 for (DataSnapshot dataSnapshot1 : dataSnapshot.getChildren()) {
                     mAllPackageNames.add(DecodeString(dataSnapshot1.getKey()));
                 }

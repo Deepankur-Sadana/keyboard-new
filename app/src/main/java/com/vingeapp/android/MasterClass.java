@@ -10,8 +10,10 @@ import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
 import com.vingeapp.android.apiHandling.RequestManager;
+import com.vingeapp.android.models.PInfo;
 
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 
 import de.greenrobot.event.EventBus;
 import de.greenrobot.event.EventBusBuilder;
@@ -25,6 +27,7 @@ public class MasterClass extends Application {
     private static WeakReference<Context> mContext;
     public static CallbackManager callbackManager;
 
+    public static ArrayList<PInfo> allPackagesinfo = new ArrayList<>();
 
     @Override
     protected void attachBaseContext(Context base) {

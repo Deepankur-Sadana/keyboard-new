@@ -3,11 +3,14 @@ package com.vingeapp.android.preferences;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by deepankursadana on 05/03/17.
  */
 
-public class PreferencesManager {
+public class PreferencesManager implements PrefsKeyIds {
 
     private static final String PREF_NAME = "com.example.app.PREF_NAME";
     private static final String KEY_VALUE = "com.example.app.KEY_VALUE";
@@ -19,16 +22,11 @@ public class PreferencesManager {
         mPref = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
     }
 
-    public static synchronized void initializeInstance(Context context) {
+
+    public static synchronized PreferencesManager getInstance(Context context) {
+
         if (sInstance == null) {
             sInstance = new PreferencesManager(context);
-        }
-    }
-
-    public static synchronized PreferencesManager getInstance() {
-        if (sInstance == null) {
-            throw new IllegalStateException(PreferencesManager.class.getSimpleName() +
-                    " is not initialized, call initializeInstance(..) method first.");
         }
         return sInstance;
     }
@@ -41,11 +39,25 @@ public class PreferencesManager {
         return mPref.getLong(KEY_VALUE, 0);
     }
 
-    public void remove(String key) {
-        mPref.edit().remove(key).commit();
-    }
 
     public boolean clear() {
         return mPref.edit().clear().commit();
+    }
+
+
+    public void addPackageName(Context context, Set<String> packageName) {
+        // parse Preference file
+        SharedPreferences preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        Set<String> set = preferences.getStringSet(PREFERRED_APPLICATIONS_LIST, null);
+
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putStringSet(PREFERRED_APPLICATIONS_LIST, packageName);
+        editor.commit();
+
+    }
+
+    public Set<String> getAllProfferedApplications(Context context) {
+        SharedPreferences preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
+        return preferences.getStringSet(PREFERRED_APPLICATIONS_LIST, new HashSet<String>());
     }
 }

@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.vingeapp.android.MasterClass;
 import com.vingeapp.android.R;
 import com.vingeapp.android.activities.MyActivity;
 import com.vingeapp.android.interfaces.RecyclerViewClickInterface;
@@ -45,13 +46,18 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
 
 
     public void setPreferredApps() {
+        int size=0;
+        if (pInfoArrayList!=null)
+            size = pInfoArrayList.size();
+        Log.d(TAG, "setPreferredApps: " + pInfoArrayList + " size " + size);
         if (pInfoArrayList == null)
             pInfoArrayList = new ArrayList<>();
         else pInfoArrayList.clear();
 
+
         String s ="";
-        for (int i = 0; i < MyActivity.allPackagesinfo.size(); i++) {
-            PInfo pInfo = MyActivity.allPackagesinfo.get(i);
+        for (int i = 0; i < MasterClass.allPackagesinfo.size(); i++) {
+            PInfo pInfo = MasterClass.allPackagesinfo.get(i);
             if (pInfo.isChecked) {
                 pInfoArrayList.add(pInfo);
                 s += "\n";
