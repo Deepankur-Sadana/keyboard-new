@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -62,16 +64,19 @@ public class FavouriteApplicationsListAdapter extends RecyclerView.Adapter<Recyc
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
+        Context context = parent.getContext();
         if (viewType == TYPE_ITEM)
-            return new VHItem(LayoutInflater.from(parent.getContext())
+            return new VHItem(LayoutInflater.from(context)
                     .inflate(R.layout.card_favourite_applications, parent, false));
 
         else if (viewType == TYPE_HEADER) {
-            ImageView imageView = new ImageView(parent.getContext());
-            imageView.setImageResource(R.drawable.add_new);
-            int pixel = (int) AppLibrary.convertDpToPixel(8, context);
+            ImageView imageView = new ImageView(context);
+            PorterDuff.Mode mMode = PorterDuff.Mode.SRC_ATOP;
+            Drawable d = context.getResources().getDrawable(R.drawable.add_new);
+            d.setColorFilter(Color.DKGRAY,mMode);
+            imageView.setImageDrawable(d);
+            int pixel = (int) AppLibrary.convertDpToPixel(8, this.context);
             imageView.setPadding(pixel, pixel, pixel, pixel);
-            imageView.setBackgroundColor(Color.GRAY);
             return new VHHeader(imageView);
         }
 
