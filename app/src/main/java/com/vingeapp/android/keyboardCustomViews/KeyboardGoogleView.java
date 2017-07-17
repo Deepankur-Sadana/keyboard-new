@@ -1,7 +1,9 @@
 package com.vingeapp.android.keyboardCustomViews;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.support.annotation.AttrRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.vingeapp.android.MessageEvent;
@@ -80,6 +83,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
     View horizontalResultListView;
 
     private void init(final Context context) {
+        this.context = context;
         this.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -245,8 +249,25 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
             searchResultPreviewAdapter = new SearchResultPreviewAdapter(getContext(), linkArrayList, new RecyclerViewClickInterface() {
                 @Override
                 public void onItemClick(int clickType, int extras, Object data) {
-                    EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, ((Link) data).getLink()));
-                    EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
+                    Log.d(TAG, "onItemClick: clickType " + clickType);
+                    if (clickType == CLICK_TYPE_NORMAL) {
+                        EventBus.getDefault().post(new MessageEvent(BROADCAST_STRING_TO_CONNECTED_APPLICATION, ((Link) data).getLink()));
+                        EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
+
+                        try {
+                            final Intent intent = new Intent(Intent.ACTION_VIEW).setData(Uri.parse(((Link) data).getLink()));
+                            context.startActivity(intent);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            Toast.makeText(context, "oops, some error with the link", Toast.LENGTH_SHORT).show();
+                        }
+                        EventBus.getDefault().post(new MessageEvent(SWITCH_TO_QWERTY, null));
+
+                    } else if (clickType == CLICK_TYPE_LONG_PRESS) {
+
+
+
+                    }
                 }
             });
         } else {

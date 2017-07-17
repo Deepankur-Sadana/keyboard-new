@@ -93,6 +93,16 @@ public class SearchResultPreviewAdapter extends RecyclerView.Adapter<RecyclerVie
                         clickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_NORMAL, -1, view.getTag());
                 }
             });
+
+            v.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    if (clickInterface != null)
+                        clickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_LONG_PRESS, -1, v.getTag());
+                    return true;
+                }
+            });
         }
     }
 

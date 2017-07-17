@@ -127,6 +127,17 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                     return true;
                 }
             });
+
+
+
+            v.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+                    Log.d(TAG, "onLongClick: " + rootView.getTag());
+                    recyclerViewClickInterface.onItemClick(RecyclerViewClickInterface.CLICK_TYPE_LONG_PRESS, ITEM_HOLDER, rootView.getTag());
+                    return true;
+                }
+            });
         }
     }
 }
