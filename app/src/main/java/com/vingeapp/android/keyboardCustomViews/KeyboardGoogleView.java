@@ -96,7 +96,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
         this.addView(horizontalResultListView);
         this.addView(mSearchView);
         heaeder = (TextView) horizontalResultListView.findViewById(R.id.TextView1);
-        horizontalResultListView.findViewById(R.id.backIV).setOnClickListener(new OnClickListener() {
+        horizontalResultListView.findViewById(R.id.headerRL).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleViews(false);
