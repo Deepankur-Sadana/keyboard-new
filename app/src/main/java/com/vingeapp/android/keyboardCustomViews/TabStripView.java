@@ -140,7 +140,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
             return;
 
         if (isViewLocked(tag)) {
-            // Log.d(TAG, "notifyItemClicked: view is locked somehow, ignoring the click");
+            Log.d(TAG, "notifyItemClicked: view is locked somehow, ignoring the click on " + mCurrentKeyboardOption);
             return;
         }
         mCurrentKeyboardOption = tag;

@@ -16,6 +16,7 @@ import android.widget.FrameLayout;
 import com.vingeapp.android.InAppEditingController;
 import com.vingeapp.android.R;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
+import com.vingeapp.android.interfaces.Refreshable;
 import com.vingeapp.android.models.ContactsModel;
 
 import java.util.ArrayList;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
  * Created by deepankursadana on 27/06/17.
  */
 
-public class GoogleVerticalListSearchView extends FrameLayout implements GreenBotMessageKeyIds {
+public class GoogleVerticalListSearchView extends FrameLayout implements GreenBotMessageKeyIds,Refreshable {
 
 
     private View rootView;
@@ -52,6 +53,16 @@ public class GoogleVerticalListSearchView extends FrameLayout implements GreenBo
         init(context);
     }
 
+    @Override
+    public boolean doRefresh() {
+        if (mEditText != null) {
+            mEditText.setText("");
+            if (!mEditText.hasFocus())
+                mEditText.requestFocus();
+            return true;
+        }
+        return false;
+    }
     private void init(final Context context) {
         rootView = inflate(context, R.layout.google_verticall_search_list, null);
 //        mRecycler = (RecyclerView) rootView.findViewById(R.id.searchResultRecycler);
@@ -125,11 +136,6 @@ public class GoogleVerticalListSearchView extends FrameLayout implements GreenBo
         }
     };
 
-    public void doRefresh() {
-        mEditText.setText("");
-        mEditText.requestFocus();
-
-    }
 
 
     interface FinalQueryListener {

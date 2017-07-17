@@ -72,13 +72,7 @@ public class KeyboardGoogleView extends FrameLayout implements GreenBotMessageKe
 
     @Override
     public boolean doRefresh() {
-        if (mEditText != null) {
-            mEditText.setText("");
-            if (!mEditText.hasFocus())
-                mEditText.requestFocus();
-            return true;
-        }
-        return false;
+        return mSearchView != null && mSearchView.doRefresh();
     }
 
 
