@@ -1,6 +1,9 @@
 package com.vingeapp.android.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -47,7 +50,16 @@ public class ClipboardAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             return new VHItem(View.inflate(parent.getContext(), R.layout.card_clipboard, null));
         else if (viewType == HEADER_HOLDER) {
             ImageView imageView = new ImageView(parent.getContext());
-            imageView.setImageResource(R.drawable.add_new);
+
+
+            PorterDuff.Mode mMode = PorterDuff.Mode.SRC_ATOP;
+            Drawable d = context.getResources().getDrawable(R.drawable.add_new);
+            d.setColorFilter(Color.WHITE, mMode);
+            imageView.setImageDrawable(d);
+
+
+
+
             int pixel = (int) AppLibrary.convertDpToPixel(8, context);
             imageView.setPadding(pixel, pixel, pixel, pixel);
             return new VHHeader(imageView);
