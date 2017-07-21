@@ -16,7 +16,6 @@ import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 import com.vingeapp.android.BuildConfig;
 import com.vingeapp.android.MasterClass;
-import com.vingeapp.android.activities.MyActivity;
 import com.vingeapp.android.models.ClipBoardItemModel;
 import com.vingeapp.android.utils.DeviceUuidFactory;
 
@@ -42,6 +41,7 @@ public class FireBaseHelper implements FireBaseKEYIDS {
             sFireBaseHelper = new FireBaseHelper(context.getApplicationContext());
             Log.i(TAG, "initialized fireBase ");
         }
+        sFireBaseHelper.checkdebug();
         return sFireBaseHelper;
     }
 
@@ -93,6 +93,23 @@ public class FireBaseHelper implements FireBaseKEYIDS {
 //
 //        loadData();
         loadPrefferedApplications();
+    }
+
+    private void checkdebug() {
+        Log.d(TAG, "FireBaseHelper: 11111 ");
+        getNewFireBase("test_exception", null).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "FireBaseHelper: 3333  ");
+                if (dataSnapshot.getValue(String.class).equals("test_exception"))
+                throw new NullPointerException();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     /**

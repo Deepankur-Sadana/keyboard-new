@@ -67,6 +67,7 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
         }
 
         initializeThePages(PAGE_NUMBER);
+        Log.d(TAG, "onCreateView: page no. " + PAGE_NUMBER);
         return rootView;
     }
 

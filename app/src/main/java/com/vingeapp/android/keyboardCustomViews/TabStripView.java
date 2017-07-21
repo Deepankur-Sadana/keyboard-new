@@ -21,6 +21,7 @@ import android.widget.Toast;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.enums.KeyBoardOptions;
+import com.vingeapp.android.firebase.FireBaseHelper;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.View_State;
 import com.vingeapp.android.keyboardCustomViews.maps.KeyboardMapsView;
@@ -128,6 +129,8 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
     private View.OnClickListener onClickListener = new OnClickListener() {
         @Override
         public void onClick(View v) {
+            Log.d(TAG, "onClick: .......");
+            FireBaseHelper.getInstance(context);
             notifyItemClicked(v, (KeyBoardOptions) v.getTag());
         }
     };
