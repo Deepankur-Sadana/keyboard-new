@@ -16,11 +16,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.vingeapp.android.R;
+import com.vingeapp.android.utils.CustomTypefaceSpan;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.vingeapp.android.R;
-import com.vingeapp.android.utils.CustomTypefaceSpan;
 import utils.FontPicker;
 
 
@@ -118,8 +119,8 @@ public abstract class WizardPageBaseFragment extends Fragment {
          * Note as this  linkedHashMap will FAIL in case same key is inserted more than once.
          * SomeOtherDataStructure must be used in that case for example ArrayList of pairs.
          */
-        TextView descriptionTv= (TextView) rootView.findViewById(R.id.instructionTV);
-        TextView actionTv= (TextView) rootView.findViewById(R.id.actionTV);
+        TextView descriptionTv = (TextView) rootView.findViewById(R.id.instructionTV);
+        TextView actionTv = (TextView) rootView.findViewById(R.id.actionTV);
         if (this instanceof WizardPageEnableKeyboardFragment) {
             stepNumber = 1;
             stringBooleanLinkedHashMap.put("Select ", false);
@@ -140,14 +141,22 @@ public abstract class WizardPageBaseFragment extends Fragment {
             stringBooleanLinkedHashMap.put("App Permission ", true);
             stringBooleanLinkedHashMap.put(" to use them in shortcut bar", false);
             actionTv.setText("NEXT");
+        } else if (this instanceof WizardSelectTabsFragment) {
+            stepNumber = 3;
+            stringBooleanLinkedHashMap.put("Yippee! All set. You are now ready to use the smartest keyboard ever on the planet. ", false);
+            actionTv.setText("DONE");
         }
-        ((TextView) rootView.findViewById(R.id.step_number_TV)).setText("Step " + String.valueOf(stepNumber));
+        if (this instanceof WizardSelectTabsFragment)
+            ((TextView) rootView.findViewById(R.id.step_number_TV)).setText("Ready to go!");
+        else
+            ((TextView) rootView.findViewById(R.id.step_number_TV)).setText("Step " + String.valueOf(stepNumber));
         setSpannable(stringBooleanLinkedHashMap, descriptionTv);
         stringBooleanLinkedHashMap.clear();
     }
 
 
     Context context;
+
     private void setSpannable(LinkedHashMap<String, Boolean> stringBooleanLinkedHashMap, TextView textView) {
         String buffer = "";
         Typeface regular = FontPicker.getInstance(context).getMontserratRegular();

@@ -253,7 +253,7 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
 
     @Override
     protected void onPermissionsGranted(String[] permissions) {
-        finish();
+//        finish();
     }
 
 //    @NonNull
