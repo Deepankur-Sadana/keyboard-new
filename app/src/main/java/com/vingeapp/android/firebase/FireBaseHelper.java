@@ -136,6 +136,13 @@ public class FireBaseHelper implements FireBaseKEYIDS {
 
     private final String TAG = FireBaseHelper.class.getSimpleName();
 
+    private boolean doesClipboardItemAlreadyExists(String id) {
+        for (int i = 0; i < clipBoardItemModelArrayList.size(); i++) {
+            if (clipBoardItemModelArrayList.get(i).id.equals(id))
+                return true;
+        }
+        return false;
+    }
     public void loadClipboardItems() {
         if (clipBoardItemModelArrayList != null) {
             Log.d(TAG, "loadClipboardItems: only one call allowed to this method");
@@ -146,8 +153,10 @@ public class FireBaseHelper implements FireBaseKEYIDS {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 ClipBoardItemModel model = dataSnapshot.getValue(ClipBoardItemModel.class);
                 model.id = dataSnapshot.getKey();
+                if (!doesClipboardItemAlreadyExists(model.id)){
                 clipBoardItemModelArrayList.add(model);
                 awakeAllListeners();
+                }
             }
 
             @Override
