@@ -25,6 +25,9 @@ import com.vingeapp.android.firebase.FireBaseHelper;
 import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.interfaces.View_State;
 import com.vingeapp.android.keyboardCustomViews.maps.KeyboardMapsView;
+import com.vingeapp.android.preferences.PreferencesManager;
+
+import java.util.Set;
 
 import de.greenrobot.event.EventBus;
 import utils.AppLibrary;
@@ -53,12 +56,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
         init(context);
     }
 
-    private KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
 
-            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.GOOGLE_SEARCH
-//            KeyBoardOptions.MY_PROFILE, KeyBoardOptions.SETTINGS
-
-    };
 
     private void init(Context context) {
         this.context = context;
@@ -77,10 +75,19 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
             imageView.setAlpha(keyBoardOptions[i] == KeyBoardOptions.QWERTY ? SELECTED_ALPHA : UNSELECTED_ALPHA);
             imageView.setScaleX(1.3f);
             imageView.setScaleY(1.3f);
-            ll.addView(imageView);
-           ((LinearLayout.LayoutParams) imageView.getLayoutParams()).leftMargin = getMargin(i);
-            ((LinearLayout.LayoutParams) imageView.getLayoutParams()).rightMargin = getMargin(i);
+            if (shouldAddThisView(keyBoardOptions[i])) {
+                ll.addView(imageView);
+                ((LinearLayout.LayoutParams) imageView.getLayoutParams()).leftMargin = getMargin(i);
+                ((LinearLayout.LayoutParams) imageView.getLayoutParams()).rightMargin = getMargin(i);
+            }
         }
+    }
+
+    boolean shouldAddThisView(KeyBoardOptions keyBoardOptions){
+       if (keyBoardOptions==KeyBoardOptions.QWERTY) return true;
+        Set<String> allSelectedTabs = PreferencesManager.getInstance(context).getAllSelectedTabs(context);
+        return allSelectedTabs.contains(keyBoardOptions.toString());
+
     }
 
     private final float SELECTED_ALPHA = 1f, UNSELECTED_ALPHA = 0.5f;
@@ -89,29 +96,6 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
         return (int) AppLibrary.convertDpToPixel(6, getContext());
     }
 
-    private int getResourceIdForTabStrip(KeyBoardOptions option) {
-        switch (option) {
-            case CONTACTS:
-                return R.drawable.contacts;
-            case CLIP_BOARD:
-                return R.drawable.ic_clipboard;
-            case QWERTY:
-                return R.drawable.ic_aa;
-            case MAPS:
-                return R.drawable.ic_maps;
-            case MY_PROFILE:
-                return android.R.drawable.ic_menu_add;
-            case SETTINGS:
-                return android.R.drawable.ic_menu_add;
-            case DICTIONARY:
-                return android.R.drawable.ic_menu_add;
-            case GOOGLE_SEARCH:
-                return R.drawable.google_search;
-            default:
-                return android.R.drawable.ic_menu_add;
-
-        }
-    }
 
     @SuppressWarnings("unused")
     public void onEvent(MessageEvent event) {
@@ -266,5 +250,35 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
     }
+
+    public static KeyBoardOptions[] keyBoardOptions = {KeyBoardOptions.QWERTY, KeyBoardOptions.FAVORITE_APPS, KeyBoardOptions.CLIP_BOARD
+
+            , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.GOOGLE_SEARCH
+
+    };
+    public static int getResourceIdForTabStrip(KeyBoardOptions option) {
+        switch (option) {
+            case CONTACTS:
+                return R.drawable.contacts;
+            case CLIP_BOARD:
+                return R.drawable.ic_clipboard;
+            case QWERTY:
+                return R.drawable.ic_aa;
+            case MAPS:
+                return R.drawable.ic_maps;
+            case MY_PROFILE:
+                return android.R.drawable.ic_menu_add;
+            case SETTINGS:
+                return android.R.drawable.ic_menu_add;
+            case DICTIONARY:
+                return android.R.drawable.ic_menu_add;
+            case GOOGLE_SEARCH:
+                return R.drawable.google_search;
+            default:
+                return android.R.drawable.ic_menu_add;
+
+        }
+    }
+
 }
 

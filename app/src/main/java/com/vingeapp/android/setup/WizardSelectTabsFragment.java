@@ -4,11 +4,21 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.vingeapp.android.R;
+import com.vingeapp.android.adapters.SelectTabsAdapter;
+import com.vingeapp.android.enums.KeyBoardOptions;
+import com.vingeapp.android.keyboardCustomViews.TabStripView;
+import com.vingeapp.android.models.TabModel;
+import com.vingeapp.android.preferences.PreferencesManager;
+
+import java.util.ArrayList;
+import java.util.Set;
 
 import utils.AppLibrary;
 
@@ -17,6 +27,8 @@ import utils.AppLibrary;
  */
 
 public class WizardSelectTabsFragment extends WizardPageBaseFragment {
+    SelectTabsAdapter selectTabsAdapter;
+
     @Override
     protected boolean isStepCompleted(@NonNull Context context) {
         return false;
@@ -37,8 +49,21 @@ public class WizardSelectTabsFragment extends WizardPageBaseFragment {
 
         ((TextView) view.findViewById(R.id.step_number_TV)).setText("Ready to go!");
         ((RelativeLayout.LayoutParams) (view.findViewById(R.id.logo)).getLayoutParams()).topMargin = AppLibrary.convertDpToPixels(view.getContext(), 50);
-        view.findViewById(R.id.recyclerView).setVisibility(View.VISIBLE);
 
+        view.findViewById(R.id.actionTV).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (selectTabsAdapter != null)
+                    PreferencesManager.getInstance(v.getContext()).addPrefferedTab(v.getContext(), selectTabsAdapter.getSelectedApps());
+                getActivity().finish();
+
+            }
+        });
+        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
+        selectTabsAdapter = new SelectTabsAdapter(getArrayList());
+        recyclerView.setAdapter(selectTabsAdapter);
     }
 
     @Override
@@ -65,4 +90,21 @@ public class WizardSelectTabsFragment extends WizardPageBaseFragment {
     void nextStepNeedsSetup() {
 
     }
+
+    public ArrayList<TabModel> getArrayList() {
+        Set<String> allProfferedApplications = PreferencesManager.getInstance(context).getAllProfferedApplications(context);
+        ArrayList<TabModel> list = new ArrayList<>();
+
+        for (KeyBoardOptions keyBoardOptions : TabStripView.keyBoardOptions) {
+            if (keyBoardOptions == KeyBoardOptions.QWERTY)
+                continue;
+            list.add(new TabModel(TabStripView.getResourceIdForTabStrip(keyBoardOptions),
+                    keyBoardOptions,
+                    allProfferedApplications.contains(keyBoardOptions.toString())));
+        }
+
+        return list;
+    }
+
+
 }
