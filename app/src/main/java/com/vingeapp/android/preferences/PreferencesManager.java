@@ -62,13 +62,13 @@ public class PreferencesManager implements PrefsKeyIds {
     }
 
 
-    public void addPrefferedTab(Context context, Set<String> packageName) {
+    public void addPrefferedTab(Context context, Set<String> tabs) {
         // parse Preference file
         SharedPreferences preferences = context.getSharedPreferences(FILE_NAME, Context.MODE_PRIVATE);
         Set<String> set = preferences.getStringSet(PREFERRED_TABS_LIST, null);
 
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet(PREFERRED_TABS_LIST, packageName);
+        editor.putStringSet(PREFERRED_TABS_LIST, tabs);
         editor.commit();
 
     }

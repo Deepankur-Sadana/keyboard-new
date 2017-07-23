@@ -3,6 +3,7 @@ package com.vingeapp.android.adapters;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ public class SelectTabsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
         ItemHolder itemHolder = (ItemHolder) holder;
         TabModel tabModel = tabModels.get(position);
         itemHolder.itemImage.setImageResource(tabModel.getResourceId());
+        itemHolder.itemSwitch.setTag(tabModel);
         itemHolder.itemSwitch.setChecked(tabModel.isSelected());
         itemHolder.itemName.setText(tabModel.getKeyBoardOptions().toString());
 
@@ -66,7 +68,13 @@ public class SelectTabsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHol
             itemImage = (ImageView) itemView.findViewById(R.id.tabIV);
             itemSwitch = (Switch) itemView.findViewById(R.id.itemSwitch);
 
-
+            itemSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    TabModel tabModel= (TabModel) buttonView.getTag();
+                    tabModel.setSelected(isChecked);
+                }
+            });
         }
     }
 }

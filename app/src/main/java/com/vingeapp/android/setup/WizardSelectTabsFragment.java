@@ -92,7 +92,7 @@ public class WizardSelectTabsFragment extends WizardPageBaseFragment {
     }
 
     public ArrayList<TabModel> getArrayList() {
-        Set<String> allProfferedApplications = PreferencesManager.getInstance(context).getAllProfferedApplications(context);
+        Set<String> allProfferedApplications = PreferencesManager.getInstance(context).getAllSelectedTabs(context);
         ArrayList<TabModel> list = new ArrayList<>();
 
         for (KeyBoardOptions keyBoardOptions : TabStripView.keyBoardOptions) {
