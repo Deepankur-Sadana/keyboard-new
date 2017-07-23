@@ -27,22 +27,28 @@
         android:textSize="24sp" />
 
     <TextView
-        android:gravity="center"
         android:id="@+id/instructionTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/step_number_TV"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
+        android:gravity="center"
         android:text="Select Vinge Keyboard in your Language Input settings"
         android:textColor="@color/deep_aqua"
         android:textSize="14sp" />
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:visibility="gone"
+        android:layout_below="@+id/instructionTV"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
     <TextView
         android:id="@+id/actionTV"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/instructionTV"
+        android:layout_below="@+id/recyclerView"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
         android:background="@drawable/onboarding_round_bg_gradient"
@@ -57,6 +63,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"></LinearLayout>
+        android:layout_marginBottom="40dp" />
 
 </RelativeLayout>

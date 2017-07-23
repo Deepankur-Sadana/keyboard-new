@@ -144,10 +144,10 @@ public abstract class WizardPageBaseFragment extends Fragment {
         } else if (this instanceof WizardSelectTabsFragment) {
             stepNumber = 3;
             stringBooleanLinkedHashMap.put("Yippee! All set. You are now ready to use the smartest keyboard ever on the planet. ", false);
-            actionTv.setText("DONE");
         }
-        if (this instanceof WizardSelectTabsFragment)
-            ((TextView) rootView.findViewById(R.id.step_number_TV)).setText("Ready to go!");
+        if (this instanceof WizardSelectTabsFragment){
+            //skip
+        }
         else
             ((TextView) rootView.findViewById(R.id.step_number_TV)).setText("Step " + String.valueOf(stepNumber));
         setSpannable(stringBooleanLinkedHashMap, descriptionTv);
