@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.vingeapp.android.MasterClass;
 import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.enums.KeyBoardOptions;
@@ -62,6 +63,10 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
         this.context = context;
         this.setHorizontalScrollBarEnabled(false);
         EventBus.getDefault().register(this);
+        addTabs(context);
+    }
+
+    private void addTabs(Context context){
         int pixel = (int) AppLibrary.convertDpToPixel(8, context);
         LinearLayout ll = new LinearLayout(context);
         this.addView(ll);
@@ -82,35 +87,37 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
             }
         }
     }
-
     private void onListChanged() {
 
-        LinearLayout ll = (LinearLayout) this.getChildAt(0);
-        if (ll == null) {
-            return;
-        }
-        Set<String> allSelectedTabs = PreferencesManager.getInstance(getContext()).getAllSelectedTabs(getContext());
-        ArrayList<View> views = new ArrayList<>();
-        for (int i = 0; i < ll.getChildCount(); i++) {
-            View childAt = ll.getChildAt(i);
-            KeyBoardOptions keyboardOption = (KeyBoardOptions) childAt.getTag();
-            if (keyboardOption == KeyBoardOptions.QWERTY)
-                continue;
-            if (allSelectedTabs.contains(keyboardOption.toString())){
-                continue;
-            }
-            View viewWithTag = ll.findViewWithTag(keyboardOption);
-            if (viewWithTag!=null)
-                views.add(viewWithTag);
+        this.removeAllViews();
+        addTabs(MasterClass.getGlobalContext());
 
-        }
-
-        for (int i = 0; i < views.size(); i++) {
-            ll.removeView(views.get(i));
-            invalidate();
-            requestLayout();
-
-        }
+//        LinearLayout ll = (LinearLayout) this.getChildAt(0);
+//        if (ll == null) {
+//            return;
+//        }
+//        Set<String> allSelectedTabs = PreferencesManager.getInstance(getContext()).getAllSelectedTabs(getContext());
+//        ArrayList<View> views = new ArrayList<>();
+//        for (int i = 0; i < ll.getChildCount(); i++) {
+//            View childAt = ll.getChildAt(i);
+//            KeyBoardOptions keyboardOption = (KeyBoardOptions) childAt.getTag();
+//            if (keyboardOption == KeyBoardOptions.QWERTY)
+//                continue;
+//            if (allSelectedTabs.contains(keyboardOption.toString())){
+//                continue;
+//            }
+//            View viewWithTag = ll.findViewWithTag(keyboardOption);
+//            if (viewWithTag!=null)
+//                views.add(viewWithTag);
+//
+//        }
+//
+//        for (int i = 0; i < views.size(); i++) {
+//            ll.removeView(views.get(i));
+//            invalidate();
+//            requestLayout();
+//
+//        }
     }
 
     boolean shouldAddThisView(KeyBoardOptions keyBoardOptions) {
