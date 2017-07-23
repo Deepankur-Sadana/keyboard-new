@@ -114,6 +114,14 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
         boolean firstIntroFragment = checkAndLaunchFirstIntroFragment();
         if (!firstIntroFragment) {
             boolean launchSetUpFragment = checkAndLaunchSetUpFragment(this);
+            if (!launchSetUpFragment){
+                WizardSelectTabsFragment fragment = new WizardSelectTabsFragment();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.add(R.id.main_ui_content, fragment, SetUpKeyboardWizardFragment.class.getSimpleName());
+                fragmentTransaction.addToBackStack(SetUpKeyboardWizardFragment.class.getSimpleName());
+                fragmentTransaction.commitAllowingStateLoss();
+            }
         }
 
     }
