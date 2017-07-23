@@ -56,11 +56,12 @@ public class WizardSelectTabsFragment extends WizardPageBaseFragment implements 
         view.findViewById(R.id.actionTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EventBus.getDefault().post(new MessageEvent(TABS_LIST_CHANGED, null));
 
                 if (selectTabsAdapter != null)
                     PreferencesManager.getInstance(v.getContext()).addPrefferedTab(v.getContext(), selectTabsAdapter.getSelectedApps());
                 getActivity().finish();
+                EventBus.getDefault().post(new MessageEvent(TABS_LIST_CHANGED, null));
+
 
             }
         });
