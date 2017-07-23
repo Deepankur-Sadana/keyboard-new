@@ -10,9 +10,11 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.vingeapp.android.MessageEvent;
 import com.vingeapp.android.R;
 import com.vingeapp.android.adapters.SelectTabsAdapter;
 import com.vingeapp.android.enums.KeyBoardOptions;
+import com.vingeapp.android.interfaces.GreenBotMessageKeyIds;
 import com.vingeapp.android.keyboardCustomViews.TabStripView;
 import com.vingeapp.android.models.TabModel;
 import com.vingeapp.android.preferences.PreferencesManager;
@@ -20,13 +22,14 @@ import com.vingeapp.android.preferences.PreferencesManager;
 import java.util.ArrayList;
 import java.util.Set;
 
+import de.greenrobot.event.EventBus;
 import utils.AppLibrary;
 
 /**
  * Created by deepankursadana on 23/07/17.
  */
 
-public class WizardSelectTabsFragment extends WizardPageBaseFragment {
+public class WizardSelectTabsFragment extends WizardPageBaseFragment implements GreenBotMessageKeyIds{
     SelectTabsAdapter selectTabsAdapter;
 
     @Override
@@ -53,6 +56,8 @@ public class WizardSelectTabsFragment extends WizardPageBaseFragment {
         view.findViewById(R.id.actionTV).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                EventBus.getDefault().post(new MessageEvent(TABS_LIST_CHANGED, null));
+
                 if (selectTabsAdapter != null)
                     PreferencesManager.getInstance(v.getContext()).addPrefferedTab(v.getContext(), selectTabsAdapter.getSelectedApps());
                 getActivity().finish();

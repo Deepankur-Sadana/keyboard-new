@@ -27,6 +27,7 @@ import com.vingeapp.android.interfaces.View_State;
 import com.vingeapp.android.keyboardCustomViews.maps.KeyboardMapsView;
 import com.vingeapp.android.preferences.PreferencesManager;
 
+import java.util.ArrayList;
 import java.util.Set;
 
 import de.greenrobot.event.EventBus;
@@ -57,7 +58,6 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
     }
 
 
-
     private void init(Context context) {
         this.context = context;
         this.setHorizontalScrollBarEnabled(false);
@@ -83,8 +83,38 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
         }
     }
 
-    boolean shouldAddThisView(KeyBoardOptions keyBoardOptions){
-       if (keyBoardOptions==KeyBoardOptions.QWERTY) return true;
+    private void onListChanged() {
+
+        LinearLayout ll = (LinearLayout) this.getChildAt(0);
+        if (ll == null) {
+            return;
+        }
+        Set<String> allSelectedTabs = PreferencesManager.getInstance(getContext()).getAllSelectedTabs(getContext());
+        ArrayList<View> views = new ArrayList<>();
+        for (int i = 0; i < ll.getChildCount(); i++) {
+            View childAt = ll.getChildAt(i);
+            KeyBoardOptions keyboardOption = (KeyBoardOptions) childAt.getTag();
+            if (keyboardOption == KeyBoardOptions.QWERTY)
+                continue;
+            if (allSelectedTabs.contains(keyboardOption.toString())){
+                continue;
+            }
+            View viewWithTag = ll.findViewWithTag(keyboardOption);
+            if (viewWithTag!=null)
+                views.add(viewWithTag);
+
+        }
+
+        for (int i = 0; i < views.size(); i++) {
+            ll.removeView(views.get(i));
+            invalidate();
+            requestLayout();
+
+        }
+    }
+
+    boolean shouldAddThisView(KeyBoardOptions keyBoardOptions) {
+        if (keyBoardOptions == KeyBoardOptions.QWERTY) return true;
         Set<String> allSelectedTabs = PreferencesManager.getInstance(context).getAllSelectedTabs(context);
         return allSelectedTabs.contains(keyBoardOptions.toString());
 
@@ -101,6 +131,8 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
     public void onEvent(MessageEvent event) {
         if (event.getMessageType() == SWITCH_TO_QWERTY) {
             switchToQwertyMode();
+        } else if (event.getMessageType() == TABS_LIST_CHANGED) {
+            onListChanged();
         }
     }
 
@@ -256,6 +288,7 @@ public class TabStripView extends HorizontalScrollView implements GreenBotMessag
             , KeyBoardOptions.CONTACTS, KeyBoardOptions.MAPS, KeyBoardOptions.GOOGLE_SEARCH
 
     };
+
     public static int getResourceIdForTabStrip(KeyBoardOptions option) {
         switch (option) {
             case CONTACTS:
