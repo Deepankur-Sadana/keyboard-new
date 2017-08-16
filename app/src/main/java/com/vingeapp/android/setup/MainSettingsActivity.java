@@ -422,8 +422,8 @@ public class MainSettingsActivity extends BaseActivity implements PrefsKeyIds {
                                     new GraphRequest.GraphJSONObjectCallback() {
                                         @Override
                                         public void onCompleted(JSONObject object, GraphResponse response) {
+                                            onFirstIntroDone();
                                             Log.v("LoginActivity", response.toString());
-
                                             // Application code
                                             try {
                                                 String email = object.getString("email");
