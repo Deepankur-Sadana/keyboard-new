@@ -21,7 +21,6 @@
     <application
         android:name="com.vingeapp.android.MasterClass"
         android:allowBackup="true"
-        android:debuggable="true"
         android:icon="@drawable/vinge_logo"
         android:label="@string/app_name"
         android:supportsRtl="true"

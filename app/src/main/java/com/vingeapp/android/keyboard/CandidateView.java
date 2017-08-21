@@ -16,6 +16,7 @@
 
 package com.vingeapp.android.keyboard;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Canvas;
@@ -238,6 +239,7 @@ public class CandidateView extends View {
         invalidate();
     }
     
+    @SuppressLint("WrongCall")
     public void setSuggestions(List<String> suggestions, boolean completions,
                                boolean typedWordValid) {
         clear();
@@ -301,20 +303,7 @@ public class CandidateView extends View {
         return true;
     }
     
-    /**
-     * For flick through from keyboard, call this method with the x coordinate of the flick 
-     * gesture.
-     * @param x
-     */
-    public void takeSuggestionAt(float x) {
-        mTouchX = (int) x;
-        // To detect candidate
-        onDraw(null);
-        if (mSelectedIndex >= 0) {
-            mService.pickSuggestionManually(mSelectedIndex);
-        }
-        invalidate();
-    }
+
 
     private void removeHighlight() {
         mTouchX = OUT_OF_BOUNDS;

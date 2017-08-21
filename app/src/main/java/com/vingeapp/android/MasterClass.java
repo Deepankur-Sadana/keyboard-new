@@ -9,6 +9,7 @@ import android.util.Log;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.vingeapp.android.apiHandling.RequestManager;
 import com.vingeapp.android.models.PInfo;
 
