@@ -74,7 +74,7 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
     private void initializeThePages(int pageNumber) {
 
         if (pageNumber == 0 || pageNumber == 3) {
-            if (pageNumber ==0) {
+            if (pageNumber == 0) {
                 TextView zero_screenTv = (TextView) rootView.findViewById(R.id.zero_screenTV);
                 applyGradient(zero_screenTv, HORIZONTAL);
             }
@@ -84,13 +84,16 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
 
         ImageView introIv = (ImageView) rootView.findViewById(R.id.introIV);
         TextView introTv = (TextView) rootView.findViewById(R.id.introTV);
+        TextView description = (TextView) rootView.findViewById(R.id.descriptionTV);
         applyGradient(introTv, VERTICAL);
-      if (pageNumber == 1) {
+        if (pageNumber == 1) {
             introIv.setImageResource(R.drawable.image_f_0_0_2);
             introTv.setText("Intuitive shortcut bar");
+            description.setText(" Access your favourite apps from the keyboard itself. Supports Google Maps, Search, Address Boo");
         } else if (pageNumber == 2) {
             introIv.setImageResource(R.drawable.image_f_0_0_3);
             introTv.setText("Access to useful apps");
+            description.setText("Launch any app on your phone from the Vinge keyboard");
         }
     }
 

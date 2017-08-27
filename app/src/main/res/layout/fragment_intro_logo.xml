@@ -29,5 +29,18 @@
             android:textColor="@color/turquoise"
             android:textSize="24sp" />
 
+    <TextView
+        android:id="@+id/descriptionTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="92dp"
+        android:gravity="center"
+        android:maxLines="2"
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp"
+        android:text="What if your keyboard could save you 15 minutes every day?"
+        android:textColor="@color/indigo"
+        android:textSize="16sp" />
 
     </RelativeLayout>
