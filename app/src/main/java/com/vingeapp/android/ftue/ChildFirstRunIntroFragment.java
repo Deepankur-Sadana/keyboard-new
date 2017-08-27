@@ -48,13 +48,13 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
 
         if (PAGE_NUMBER == 0) {//first page
             id = R.layout.fragment_intro_logo;
-        } else if (PAGE_NUMBER == 4) {//last page
+        } else if (PAGE_NUMBER == 3) {//last page
             id = R.layout.fragment_facebook_login;
         } else {//all the pages in between
             id = R.layout.fragment_keyboard_intro;
         }
         rootView = inflater.inflate(id, container, false);
-        if (PAGE_NUMBER == 4) {
+        if (PAGE_NUMBER == 3) {
             rootView.findViewById(R.id.facebook_login_button).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -73,7 +73,7 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
 
     private void initializeThePages(int pageNumber) {
 
-        if (pageNumber == 0 || pageNumber == 4) {
+        if (pageNumber == 0 || pageNumber == 3) {
             if (pageNumber ==0) {
                 TextView zero_screenTv = (TextView) rootView.findViewById(R.id.zero_screenTV);
                 applyGradient(zero_screenTv, HORIZONTAL);
@@ -85,13 +85,10 @@ public class ChildFirstRunIntroFragment extends BaseFragment {
         ImageView introIv = (ImageView) rootView.findViewById(R.id.introIV);
         TextView introTv = (TextView) rootView.findViewById(R.id.introTV);
         applyGradient(introTv, VERTICAL);
-        if (pageNumber == 1) {
-            introIv.setImageResource(R.drawable.image_f_0_0_1);
-            introTv.setText("Clean Layout");
-        } else if (pageNumber == 2) {
+      if (pageNumber == 1) {
             introIv.setImageResource(R.drawable.image_f_0_0_2);
             introTv.setText("Intuitive shortcut bar");
-        } else if (pageNumber == 3) {
+        } else if (pageNumber == 2) {
             introIv.setImageResource(R.drawable.image_f_0_0_3);
             introTv.setText("Access to useful apps");
         }
